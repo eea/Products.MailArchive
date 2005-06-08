@@ -1,0 +1,30 @@
+<span tal:replace="structure here/standard_html_header" />
+
+<h1 tal:content="here/title_or_id" />
+
+<table width="70%" border="2" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>Archive</th>
+        <th>View by:</th>
+        <th>Download</th>
+    </tr>
+
+    <tal:block define="archives here/getArchives" repeat="archive archives">
+	<tr>
+        <td tal:content="archive/title_or_id" />
+        <td>
+            <a tal:attributes="href string:${archive/absolute_url}?sort=thread">[ Thread ]</a>
+            <a tal:attributes="href string:${archive/absolute_url}?sort=subject">[ Subject ]</a>
+            <a tal:attributes="href string:${archive/absolute_url}?sort=author">[ Author ]</a>
+            <a tal:attributes="href string:${archive/absolute_url}?sort=date">[ Date ]</a>
+        </td>
+        <td>
+            <a tal:define="zip string:${archive/id}.zip" tal:attributes="href string:${zip}">
+				<span tal:replace="string:${archive/id}.zip" />
+				<!-- <span tal:replace="python:here.showSizeKb(archive.getMboxSize())"/> Kb ] --></a>
+        </td>
+    </tr>
+    </tal:block>
+    
+</table>
+<span tal:replace="structure here/standard_html_footer" />

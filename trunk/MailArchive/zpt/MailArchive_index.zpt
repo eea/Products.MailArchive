@@ -1,0 +1,32 @@
+<span tal:replace="structure here/standard_html_header" />
+
+<tal:block tal:define="sort_by python:request.get('sort', 'subject');
+						items python:here.sortMboxMsgs(sort_by);
+						url here/absolute_url">
+<h1 tal:content="here/title_or_id" />
+<ul>
+	<li>
+		<strong i18n:translate="">Messages sorted by</strong>:
+		<a tal:condition="python:sort_by != 'thread'" tal:attributes="href string:${url}/?sort=thread" i18n:translate="">[ thread ]</a>
+		<a tal:condition="python:sort_by != 'subject'" tal:attributes="href string:${url}/?sort=subject" i18n:translate="">[ subject ]</a>
+		<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
+		<a tal:condition="python:sort_by != 'author'" tal:attributes="href string:${url}/?sort=author" i18n:translate="">[ author ]</a>
+	</li>
+</ul>
+<strong i18n:translate="">Starting</strong>: <em tal:content="python:here.tupleToDate(here.starting)" /><br />
+<strong i18n:translate="">Ending</strong>: <em tal:content="python:here.tupleToDate(here.ending)" /><br />
+<strong i18n:translate="">Messages</strong>: <span tal:replace="python:len(items)" />
+<ul><li tal:repeat="item items"><a tal:define="item_id python:here.get_msg_index(item)" tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(item)" /> <em tal:content="python:here.get_msg_from(item)" /></li></ul>
+<strong i18n:translate="">Last message date</strong>: <em tal:content="python:here.tupleToDate(here.ending)" /><br />
+<ul>
+	<li>
+		<strong i18n:translate="">Messages sorted by</strong>:
+		<a tal:condition="python:sort_by != 'thread'" tal:attributes="href string:${url}/?sort=thread" i18n:translate="">[ thread ]</a>
+		<a tal:condition="python:sort_by != 'subject'" tal:attributes="href string:${url}/?sort=subject" i18n:translate="">[ subject ]</a>
+		<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
+		<a tal:condition="python:sort_by != 'author'" tal:attributes="href string:${url}/?sort=author" i18n:translate="">[ author ]</a>
+	</li>
+</ul>
+</tal:block>
+
+<span tal:replace="structure here/standard_html_footer" />

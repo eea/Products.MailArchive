@@ -1,0 +1,27 @@
+<span tal:replace="structure here/manage_page_header"/>
+<span tal:replace="structure here/manage_tabs"/>
+
+<p class="form-help">
+    Change properties.
+</p>
+
+<form action="manageProperties" method="post" name="frmProperties">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>Title</th>
+        <td>
+            <input type="text" size="40" name="title:utf8:ustring" tal:attributes="value here/title" />
+        </td>
+    </tr>
+    <tr>
+        <th>Path</th>
+        <td>
+            <input type="text" name="path" size="40" tal:attributes="value here/getPath" />
+            <p tal:condition="python: not here.validPath()">Invalid path</p>
+        </td>
+    </tr>
+</table>
+<input name="Save" type="submit" id="Save" value="Save changes" />
+</form>
+
+<span tal:replace="structure here/manage_page_footer"/>
