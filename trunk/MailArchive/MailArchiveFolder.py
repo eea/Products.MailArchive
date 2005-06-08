@@ -48,7 +48,7 @@ class MailArchiveFolder(Folder, Utils):
     """ """
     meta_type = 'MailArchiveFolder'
     product_name = 'MailArchive'
-    icon='misc_/MailArchive/folder.jpg'
+    icon='misc_/MailArchive/folder.gif'
     
     manage_options = (
         Folder.manage_options[:2]

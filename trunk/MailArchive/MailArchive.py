@@ -46,7 +46,7 @@ class MailArchive(Folder, mbox):
 
     meta_type = 'MailArchive'
     product_name = 'MailArchive'
-    icon = 'misc_/MailArchive/archive.jpg'
+    icon = 'misc_/MailArchive/archive.gif'
 
     def __init__(self, id, title, path):
         #constructor
