@@ -84,7 +84,7 @@ class MailArchiveFolder(Folder, Utils):
         mbx = []
         for f in os.listdir(self._path):
             if f.endswith('.mbx'):
-                abs_path = "%s\%s" % (self._path, f)
+                abs_path = os.path.join(self._path, f)
                 addMailArchive(self, f[:-4], '', abs_path)
 
     def _getOb(self, id, default=_marker):

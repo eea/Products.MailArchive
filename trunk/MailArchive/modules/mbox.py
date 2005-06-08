@@ -62,14 +62,14 @@ class mbox:
     def get_msg_from(self, msg): return msg[5]
 
     def get_mbox_file(self):
-        return file(self.path, 'rb').read()
+        return open(self.path, 'rb').read()
 
     def get_mbox_msg(self, index):
         #given the message index in messages list returns the message body
         msg_body = ''
         cache_item = self.cache.get(index, None)
         if cache_item is not None:
-            f = file(self.path, 'rb')
+            f = open(self.path, 'rb')
             f.seek(self.get_msg_offset(cache_item))
             msg_body = f.read(self.get_msg_size(cache_item))
             f.close()
