@@ -39,13 +39,6 @@ class mbox_email:
         res.extend(mail.findall(s))
         return res
 
-    def _extract_author(self, s):
-        """ Extract author names. """
-        res = []
-        author = re.compile(r'"(.+)"')
-        res.extend(author.findall(s))
-        return res
-
     def getTo(self):
         buf = self._msg.get('to', None)
         if buf is None:
@@ -59,9 +52,12 @@ class mbox_email:
         return buf
 
     def getAuthor(self):
-        buf = self._extract_author(self.getFrom())
-        if len(buf) >= 1: return buf[0]
-        else: return ''
+        buf = self.getFrom()
+        buf = buf.replace('<', '')
+        buf = buf.replace(self.getEmailFrom(), '')
+        buf = buf.replace('>', '')
+        buf = buf.replace('"', '')
+        return buf.strip()
 
     def getEmailFrom(self):
         buf = self._extract_email(self.getFrom())
