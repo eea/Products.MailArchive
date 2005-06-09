@@ -16,7 +16,7 @@
 				msg_prev python:msgsprevnext[0];
 				msg_next python:msgsprevnext[1]">
 	<h1 tal:content="msg_subject" />
-	<strong tal:content="msg_author" /> <a tal:attributes="href string:#" tal:content="msg_email" /><br />
+	<strong tal:content="msg_author" /> <span tal:replace="structure python:here.antispam(msg_email)" /><br />
 	<em tal:content="python:here.tupleToDate(msg_date)" />
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">

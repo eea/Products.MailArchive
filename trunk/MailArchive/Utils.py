@@ -22,6 +22,7 @@
 
 
 import time
+from whrandom import choice
 from os.path import join
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from StringIO import StringIO
@@ -57,3 +58,11 @@ class Utils:
 
     def quote_attachment(self, name):
         return name.replace(' ', '_')
+
+    def antispam(self, addr):
+        """ All email adresses will be obfuscated. """
+        buf = map(None, addr)
+        for i in range(0, len(addr), choice((2,3,4))):
+            buf[i] = '&#%d;' % ord(buf[i])
+        return '<a href="mailto:%s">%s</A>' % (''.join(buf), ''.join(buf))
+
