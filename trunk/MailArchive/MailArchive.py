@@ -70,9 +70,13 @@ class MailArchive(Folder, mbox):
         if sort_by == 'subject': n = 2
         elif sort_by == 'date': n = 3
         elif sort_by == 'author': n = 4
-        elif sort_by == 'thread': n = 3
+        elif sort_by == 'thread': n = 5
         if n > -1:
-            return self.sort_mbox_msgs(n)
+            if n == 5:
+                #return self.get_mbox_thread(self.sort_mbox_msgs(3))
+                return self.sort_mbox_msgs(3)
+            else:
+                return self.sort_mbox_msgs(n)
         else:
             return self.get_mbox_msgs()
 
@@ -132,7 +136,6 @@ class MailArchive(Folder, mbox):
         else:
             return default
 
-    
     security.declareProtected('View', 'index_html')
     index_html = PageTemplateFile('zpt/MailArchive_index', globals())
 

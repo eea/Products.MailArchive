@@ -47,7 +47,7 @@ class mbox:
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
                     msg.get('Subject'), d, msg.getaddr('From')[0],
-                    msg.getaddr('Message-ID'), msg.getaddr('In-Reply-To')
+                    msg.get('Message-ID'), msg.get('In-Reply-To')
                 )
                 if index == 1: self.starting = d
                 self.ending = d
@@ -78,6 +78,15 @@ class mbox:
             f.close()
             f = None
         return msg_body
+
+    def get_mbox_thread(self, msgs, node=None):
+        tree = []
+        l = [msg for msg in msgs if msg[7] == node]
+        map(msgs.remove, l)
+        for msg in l:
+            tree.append(msg)
+            tree.extend(self.get_mbox_thread(msgs, msg[6]))
+        return tree
 
     def get_mbox_msgs(self):
         #returns the list of messages
