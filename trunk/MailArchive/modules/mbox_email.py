@@ -39,27 +39,34 @@ class mbox_email:
         res.extend(mail.findall(s))
         return res
 
+    def _extract_author(self, s):
+        """ Extract author names. """
+        res = []
+        author = re.compile(r'"(.+)"')
+        res.extend(author.findall(s))
+        return res
+
     def getTo(self):
         buf = self._msg.get('to', None)
         if buf is None:
             return None
         return self._extract_email(buf)
 
-    def getAuthor(self):
-        buf = self.getFrom()
-        e = self._extract_email(buf)[0]
-        buf = buf.replace(e, '')
-        return buf.replace('"', '')
-    
-    def getEmailFrom(self):
-        buf = self.getFrom()
-        return self._extract_email(buf)
-        
     def getFrom(self):
         buf = self._msg.get('from', None)
         if buf is None:
             return None
         return buf
+
+    def getAuthor(self):
+        buf = self._extract_author(self.getFrom())
+        if len(buf) >= 1: return buf[0]
+        else: return ''
+
+    def getEmailFrom(self):
+        buf = self._extract_email(self.getFrom())
+        if len(buf) >= 1: return buf[0]
+        else: return ''
 
     def getSubject(self):
         return self._msg.get('subject', None)
@@ -80,10 +87,10 @@ class mbox_email:
         for part in self._msg.walk():
             if part.get_content_type() in ['text/plain', 'text/html']:
                 cont = part.get_payload(decode=1)
-                cont.replace('<x-html>', '')
-                cont.replace('</x-html>', '')
-                cont.replace('<x-flowed>', '')
-                cont.replace('</x-flowed>', '')
+                cont = cont.replace('<x-html>', '')
+                cont = cont.replace('</x-html>', '')
+                cont = cont.replace('<x-flowed>', '')
+                cont = cont.replace('</x-flowed>', '')
                 return cont
 
     def getAttachments(self):
