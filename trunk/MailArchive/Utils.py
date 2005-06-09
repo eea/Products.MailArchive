@@ -22,6 +22,8 @@
 
 
 import time
+import re
+
 from whrandom import choice
 from os.path import join
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
@@ -50,7 +52,7 @@ class Utils:
         info.compress_type = ZIP_DEFLATED
         zp.writestr(info, data)
         zp.close()
-        return file(path, 'rb').read(), path
+        return open(path, 'rb').read(), path
 
     def showSizeKb(self, p_size):
         #transform a file size in Kb
@@ -66,3 +68,7 @@ class Utils:
             buf[i] = '&#%d;' % ord(buf[i])
         return '<a href="mailto:%s">%s</A>' % (''.join(buf), ''.join(buf))
 
+    def extractUrl(self, msg):
+        """ Functions to identify and extract URLs"""
+        pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
+        return [u[0] for u in re.findall(pat_url, msg)]

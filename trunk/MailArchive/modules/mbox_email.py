@@ -82,12 +82,7 @@ class mbox_email:
     def getContent(self):
         for part in self._msg.walk():
             if part.get_content_type() in ['text/plain', 'text/html']:
-                cont = part.get_payload(decode=1)
-                cont = cont.replace('<x-html>', '')
-                cont = cont.replace('</x-html>', '')
-                cont = cont.replace('<x-flowed>', '')
-                cont = cont.replace('</x-flowed>', '')
-                return cont
+                return part.get_payload(decode=1)
 
     def getAttachments(self):
         atts = []

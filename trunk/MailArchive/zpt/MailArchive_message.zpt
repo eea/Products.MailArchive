@@ -39,7 +39,7 @@
 		</li>
 	</ul>
 	<div style="font-family: monospace; border-top: 1px dotted black; border-bottom: 1px dotted black;">
-	<span tal:replace="structure python:here.newlineToBr(msg_body)" />
+	<span tal:replace="structure msg_body" />
 	</div>
 	<span tal:condition="python:len(msg_atts) > 0"> Download attachments: </span><br/>
 	<tal:block repeat="attachment msg_atts"

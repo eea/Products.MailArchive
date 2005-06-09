@@ -80,10 +80,24 @@ class MailArchive(Folder, mbox):
         #returns the body of the given message id
         if id is not None:
             m = mbox_email(self.get_mbox_msg(id))
-            return (m.getAuthor(), m.getEmailFrom(), m.getSubject(), m.getDateTime(), m.getContent(),m.getAttachments())
+            return (m.getAuthor(), m.getEmailFrom(), m.getSubject(), m.getDateTime(), \
+                    self.parseContent(m.getContent()), m.getAttachments())
         else:
             return None
 
+    def parseContent(self, msg):
+        junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
+        #get rid of junks
+        map(msg.replace, junks, ('',)*len(junks))
+        msg = self.newlineToBr(msg)
+        urls = self.extractUrl(msg)
+        hrefs = []
+        [hrefs.append('<a href="%s">%s</a>' % (url, url)) for url in urls]
+        #replace urls with hrefs
+        res = map(msg.replace, urls, hrefs)
+        if res: return res[-1]
+        return msg
+    
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message
         l = self.sortMboxMsgs(sort_by)
