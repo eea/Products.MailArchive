@@ -45,11 +45,21 @@ class mbox_email:
             return None
         return self._extract_email(buf)
 
+    def getAuthor(self):
+        buf = self.getFrom()
+        e = self._extract_email(buf)[0]
+        buf = buf.replace(e, '')
+        return buf.replace('"', '')
+    
+    def getEmailFrom(self):
+        buf = self.getFrom()
+        return self._extract_email(buf)
+        
     def getFrom(self):
         buf = self._msg.get('from', None)
         if buf is None:
             return None
-        return self._extract_email(buf)
+        return buf
 
     def getSubject(self):
         return self._msg.get('subject', None)
@@ -69,7 +79,12 @@ class mbox_email:
     def getContent(self):
         for part in self._msg.walk():
             if part.get_content_type() in ['text/plain', 'text/html']:
-                return part.get_payload(decode=1)
+                cont = part.get_payload(decode=1)
+                cont.replace('<x-html>', '')
+                cont.replace('</x-html>', '')
+                cont.replace('<x-flowed>', '')
+                cont.replace('</x-flowed>', '')
+                return cont
 
     def getAttachments(self):
         atts = []
@@ -77,6 +92,8 @@ class mbox_email:
             if part.get_content_maintype() == 'multipart':
                 continue
             filename = part.get_filename()
+            if filename:
+                atts.append(filename)
             #if not filename:
             #    ext = mimetypes.guess_extension(part.get_type())
             #    if not ext:
@@ -84,7 +101,6 @@ class mbox_email:
             #        ext = '.bin'
             #        filename = 'unknown%03d%s' % (counter, ext)
             #counter += 1
-            atts.append(filename)
         return atts
     
     def getAttachment(self, filename):

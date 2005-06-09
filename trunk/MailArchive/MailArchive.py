@@ -80,7 +80,7 @@ class MailArchive(Folder, mbox):
         #returns the body of the given message id
         if id is not None:
             m = mbox_email(self.get_mbox_msg(id))
-            return (m.getFrom(), m.getSubject(), m.getDateTime(), m.getContent(),m.getAttachments())
+            return (m.getAuthor(), m.getEmailFrom(), m.getSubject(), m.getDateTime(), m.getContent(),m.getAttachments())
         else:
             return None
 

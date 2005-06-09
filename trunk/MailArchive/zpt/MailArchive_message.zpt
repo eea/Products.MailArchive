@@ -6,17 +6,17 @@
 						msg python:here.getMsg(id);
 						url here/absolute_url">
 <tal:block tal:condition="msg"
-	tal:define="msg_from python:msg[0];
-				msg_subject python:msg[1];
-				msg_date python:msg[2];
-				msg_author python:msg[0];
-				msg_body python:msg[3];
-				msg_atts python:msg[4];
+	tal:define="msg_author python:msg[0];
+				msg_email python:msg[1];
+				msg_subject python:msg[2];
+				msg_date python:msg[3];
+				msg_body python:msg[4];
+				msg_atts python:msg[5];
 				msgsprevnext python:here.getPrevNext(id, sort_by);
 				msg_prev python:msgsprevnext[0];
 				msg_next python:msgsprevnext[1]">
 	<h1 tal:content="msg_subject" />
-	<strong tal:content="msg_author" /> <a tal:attributes="href string:#" tal:content="msg_from" /><br />
+	<strong tal:content="msg_author" /> <a tal:attributes="href string:#" tal:content="msg_email" /><br />
 	<em tal:content="python:here.tupleToDate(msg_date)" />
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
@@ -40,7 +40,7 @@
 	</ul>
 	<hr />
 	<span tal:replace="structure python:here.newlineToBr(msg_body)" />
-	<span tal:condition="msg_atts"> Download attachments: </span><br/>
+	<span tal:condition="python:len(msg_atts) > 0"> Download attachments: </span><br/>
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
 		<a tal:attributes="href string:${id}+++${attachment}" tal:content="attachment"/><br/>
