@@ -35,7 +35,7 @@ class Utils:
         pass
 
     def newlineToBr(self, p_string):
-        return p_string.replace('\n', '<br />')
+        return html_quote(p_string).replace('\n', '<br />')
 
     def tupleToDate(self, p_tuple):
         try: return time.strftime('%a %b %d %H:%M:%S %Z %Y', p_tuple)
