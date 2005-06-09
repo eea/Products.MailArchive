@@ -46,7 +46,8 @@ class mbox:
                 d = msg.getdate('Date')
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    msg.get('Subject'), d, msg.getaddr('From')[0], msg.getaddr('In-Reply-To')
+                    msg.get('Subject'), d, msg.getaddr('From')[0],
+                    msg.getaddr('Message-ID'), msg.getaddr('In-Reply-To')
                 )
                 if index == 1: self.starting = d
                 self.ending = d
@@ -60,6 +61,8 @@ class mbox:
     def get_msg_subject(self, msg): return msg[3]
     def get_msg_date(self, msg): return msg[4]
     def get_msg_from(self, msg): return msg[5]
+    def get_msg_id(self, msg): return msg[6]
+    def get_msg_inreplyto(self, msg): return msg[7]
 
     def get_mbox_file(self):
         return open(self.path, 'rb').read()

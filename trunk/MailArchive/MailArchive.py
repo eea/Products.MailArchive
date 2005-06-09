@@ -56,6 +56,10 @@ class MailArchive(Folder, mbox):
 
     manage_options = (
         SimpleItem.manage_options
+        +
+        (
+            {'label' : 'View', 'action' : 'index_html'},
+        )
     )
 
     security = ClassSecurityInfo()
@@ -88,16 +92,15 @@ class MailArchive(Folder, mbox):
     def parseContent(self, msg):
         junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
         #get rid of junks
-        map(msg.replace, junks, ('',)*len(junks))
+        for j in junks: msg = msg.replace(j, '')
         msg = self.newlineToBr(msg)
-        urls = self.extractUrl(msg)
-        hrefs = []
-        [hrefs.append('<a href="%s">%s</a>' % (url, url)) for url in urls]
+        urls, hrefs = self.extractUrl(msg), []
+        for url in urls: hrefs.append('<a href="%s">%s</a>' % (url, url))
         #replace urls with hrefs
-        res = map(msg.replace, urls, hrefs)
-        if res: return res[-1]
+        for i in range(0, len(urls)):
+            msg = msg.replace(urls[i], hrefs[i])
         return msg
-    
+
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message
         l = self.sortMboxMsgs(sort_by)
