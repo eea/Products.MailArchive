@@ -25,6 +25,13 @@ import email
 import re
 from os.path import join
 
+charset_table = {
+     "window-1252": "cp1252",
+     "windows-1252": "cp1252",
+     "nil": "Latin-1",
+     "default_charset": "Latin-1",
+     "x-unknown": "Latin-1",
+}
 
 class mbox_email:
     """ wrapper for email """
@@ -80,9 +87,17 @@ class mbox_email:
         return self._msg.get('Message-ID', None)
 
     def getContent(self):
+        payloads = []
         for part in self._msg.walk():
             if part.get_content_type() in ['text/plain', 'text/html']:
-                return part.get_payload(decode=1)
+                p = part.get_payload(decode=1)
+                charset = self._msg.get_param("charset")
+                if charset is None:
+                    charset = "Latin-1"
+                charset = charset.lower()
+                charset = charset_table.get(charset, charset)
+                payloads.append(unicode(p, charset).encode('utf-8'))
+                return "".join(payloads)
 
     def getAttachments(self):
         atts = []
