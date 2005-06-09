@@ -64,7 +64,9 @@ class MailArchiveFolder(Folder, Utils):
         self.id = id
         self.title = title
         self._path = path
-    
+
+    def get_mailarchivefolder_path(self, p=0): return self.absolute_url(p)
+
     def getPath(self):
         return self._path
 

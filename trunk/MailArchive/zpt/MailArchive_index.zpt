@@ -12,6 +12,9 @@
 		<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
 		<a tal:condition="python:sort_by != 'author'" tal:attributes="href string:${url}/?sort=author" i18n:translate="">[ author ]</a>
 	</li>
+	<li>
+		<a tal:attributes="href here/get_mailarchivefolder_path"><strong>Mail archive folder</strong></a>
+	</li>
 </ul>
 <strong i18n:translate="">Starting</strong>: <em tal:content="python:here.tupleToDate(here.starting)" /><br />
 <strong i18n:translate="">Ending</strong>: <em tal:content="python:here.tupleToDate(here.ending)" /><br />
@@ -25,6 +28,9 @@
 		<a tal:condition="python:sort_by != 'subject'" tal:attributes="href string:${url}/?sort=subject" i18n:translate="">[ subject ]</a>
 		<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
 		<a tal:condition="python:sort_by != 'author'" tal:attributes="href string:${url}/?sort=author" i18n:translate="">[ author ]</a>
+	</li>
+	<li>
+		<a tal:attributes="href here/get_mailarchivefolder_path"><strong>Mail archive folder</strong></a>
 	</li>
 </ul>
 </tal:block>
