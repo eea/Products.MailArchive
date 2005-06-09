@@ -93,8 +93,8 @@ class MailArchive(Folder, mbox):
         junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
         #get rid of junks
         for j in junks: msg = msg.replace(j, '')
-        msg = self.newlineToBr(msg)
         urls, hrefs = self.extractUrl(msg), []
+        msg = self.newlineToBr(msg)
         for url in urls: hrefs.append('<a href="%s">%s</a>' % (url, url))
         #replace urls with hrefs
         for i in range(0, len(urls)):
