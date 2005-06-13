@@ -29,6 +29,7 @@ class mbox:
     def __init__(self, path):
         self.path = path
         self.size = os.path.getsize(self.path)
+        self.last_modified = os.path.getmtime(self.path)
         self.cache = {}
         self.starting = None
         self.ending = None

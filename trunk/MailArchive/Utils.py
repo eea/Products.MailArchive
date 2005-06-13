@@ -25,7 +25,7 @@ import time
 import re
 
 from whrandom import choice
-from os.path import join
+from os.path import join, getmtime
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from StringIO import StringIO
 
@@ -70,5 +70,12 @@ class Utils:
 
     def extractUrl(self, msg):
         """ Functions to identify and extract URLs"""
-        pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
-        return [u[0] for u in re.findall(pat_url, msg)]
+        #pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
+        #return [u[0] for u in re.findall(pat_url, msg)]
+        strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
+                      r'<a href="\g<url>">\g<url></a>', msg)
+        return strg.strip()
+
+    def get_last_modif(self, path):
+        """ Return the time of last modification of path """
+        return getmtime(path)

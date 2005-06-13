@@ -97,20 +97,8 @@ class MailArchive(Folder, mbox):
         junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
         #get rid of junks
         for j in junks: msg = msg.replace(j, '')
-        urls, hrefs = self.extractUrl(msg), []
         msg = self.newlineToBr(msg)
-        udict = {}
-        [udict.setdefault(url, None) for url in urls]  #remove duplicates
-        for url in udict.keys():
-            el = '<a href="%s">%s</a>' % (url, url)
-            if el not in hrefs: hrefs.append(el)
-            
-        print udict.keys()
-        print hrefs
-        #replace urls with hrefs
-        for i in range(0, len(udict.keys())):
-            msg = msg.replace(udict.keys()[i], hrefs[i])
-        return msg
+        return self.extractUrl(msg)
 
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message

@@ -87,7 +87,16 @@ class MailArchiveFolder(Folder, Utils):
         for f in os.listdir(self._path):
             if f.endswith('.mbx'):
                 abs_path = os.path.join(self._path, f)
-                addMailArchive(self, f[:-4], '', abs_path)
+                id = f[:-4] #cut mbox extension
+                try:
+                    addMailArchive(self, id, '', abs_path)
+                except:
+                    zobj = self._getOb(id)
+                    if zobj.last_modified != self.get_last_modif(self._path):
+                        self._delObject(id)
+                        addMailArchive(self, id, '', abs_path)
+                    else:
+                        pass
 
     def _getOb(self, id, default=_marker):
         if id.endswith(".zip"):

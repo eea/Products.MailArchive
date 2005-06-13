@@ -2,7 +2,8 @@
 <span tal:replace="structure here/manage_tabs"/>
 
 <p class="form-help">
-    Change properties.
+    To change property values, edit the values and click "Save Changes".
+    Upon saving changes, the archive will be reloaded.
 </p>
 
 <form action="manageProperties" method="post" name="frmProperties">
@@ -16,7 +17,7 @@
     <tr>
         <th>Path</th>
         <td>
-            <input type="text" name="path" size="40" tal:attributes="value here/getPath" />
+            <input type="text" name="path" size="40" tal:attributes="value here/getPath" /><em>(to archive directory)</em>
             <p tal:condition="python: not here.validPath()">Invalid path</p>
         </td>
     </tr>
