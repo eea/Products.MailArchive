@@ -80,14 +80,21 @@ class mbox:
             f = None
         return msg_body
 
-    def get_mbox_thread(self, msgs, node=None):
+    def __get_mbox_thread(self, msgs, node, depth):
         tree = []
         l = [msg for msg in msgs if msg[7] == node]
         map(msgs.remove, l)
         for msg in l:
-            tree.append(msg)
-            tree.extend(self.get_mbox_thread(msgs, msg[6]))
+            tree.append((depth, msg))
+            tree.extend(self.__get_mbox_thread(msgs, msg[6], depth+1))
         return tree
+
+    def get_mbox_thread(self, msgs):
+        #builds threads
+        r = self.__get_mbox_thread(msgs, None, 0)
+        for x in msgs:
+            r.append((0, x))
+        return r
 
     def get_mbox_msgs(self):
         #returns the list of messages

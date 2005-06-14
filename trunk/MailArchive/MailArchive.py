@@ -73,12 +73,12 @@ class MailArchive(Folder, mbox):
         elif sort_by == 'thread': n = 5
         if n > -1:
             if n == 5:
-                #return self.get_mbox_thread(self.sort_mbox_msgs(3))
-                return self.sort_mbox_msgs(3)
+                return self.get_mbox_thread(self.sort_mbox_msgs(3))
+                #return self.sort_mbox_msgs(3)
             else:
-                return self.sort_mbox_msgs(n)
+                return [(0, x) for x in self.sort_mbox_msgs(n)]
         else:
-            return self.get_mbox_msgs()
+            return [(0, x) for x in self.get_mbox_msgs()]
 
     def processId(self, REQUEST):
         try: return abs(int(REQUEST.get('id', '')))

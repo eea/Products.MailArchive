@@ -19,7 +19,17 @@
 <strong i18n:translate="">Starting</strong>: <em tal:content="python:here.tupleToDate(here.starting)" /><br />
 <strong i18n:translate="">Ending</strong>: <em tal:content="python:here.tupleToDate(here.ending)" /><br />
 <strong i18n:translate="">Messages</strong>: <span tal:replace="python:len(items)" />
-<ul><li tal:repeat="item items"><a tal:define="item_id python:here.get_msg_index(item)" tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(item)" /> <em tal:content="python:here.get_msg_from(item)" /></li></ul>
+<ul>
+	<li tal:repeat="tuple items">
+		<tal:block tal:define="depth python:tuple[0]; item python:tuple[1]">
+		<tal:block tal:repeat="x python:range(0, depth)"> ------ </tal:block>
+		<a tal:define="item_id python:here.get_msg_index(item)"
+			tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}"
+			tal:content="python:here.get_msg_subject(item)" />
+			<em tal:content="python:here.get_msg_from(item)" />
+		</tal:block>
+	</li>
+</ul>
 <strong i18n:translate="">Last message date</strong>: <em tal:content="python:here.tupleToDate(here.ending)" /><br />
 <ul>
 	<li>
