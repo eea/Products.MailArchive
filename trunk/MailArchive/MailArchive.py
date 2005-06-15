@@ -102,7 +102,7 @@ class MailArchive(Folder, mbox):
 
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message
-        l = self.sortMboxMsgs(sort_by)
+        l = [x[1] for x in self.sortMboxMsgs(sort_by)]
         t = [x[0] for x in l]
         index = t.index(id)
         if index > 0: prev = l[index-1]
