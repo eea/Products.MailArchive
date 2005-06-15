@@ -126,13 +126,12 @@ class HTMLCleaner(SGMLParser):
             self.unknown_entityref(name)
             return
 
-conn = open('testdata')
-if not conn:
-    raise IOError, "Failure in open"
-data = conn.read()
-conn.close()
+if __name__ == '__main__':
+    conn = open('testdata')
+    if not conn:
+        raise IOError, "Failure in open"
+    data = conn.read()
+    conn.close()
 
-mycleaner = HTMLCleaner('iso8859-1')
-print mycleaner.clean(data)
-
-
+    mycleaner = HTMLCleaner('iso8859-1')
+    print mycleaner.clean(data)
