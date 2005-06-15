@@ -85,9 +85,13 @@ class MailArchiveFolder(Folder, Utils):
             return
         mbx = []
         for f in os.listdir(self._path):
-            if f.endswith('.mbx'):
-                abs_path = os.path.join(self._path, f)
-                id = f[:-4] #cut mbox extension
+            abs_path = os.path.join(self._path, f)
+            if f[0] == '.':    # Drop 'hidden' files
+                continue
+            if not os.path.isfile(abs_path):
+                continue
+            if open(abs_path).read(5) == "From ":
+                id = f
                 try:
                     addMailArchive(self, id, '', abs_path)
                 except:
@@ -105,7 +109,7 @@ class MailArchiveFolder(Folder, Utils):
             obj = self._getOb(mbox_id)
             mbox = obj.get_mbox_file()
             #zip mbox content
-            original = "%s.mbx" % mbox_id
+            original = "%s_mbx" % mbox_id
             zf, path = self.zip_file(id, original, mbox)
             os.unlink(path)
             self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
