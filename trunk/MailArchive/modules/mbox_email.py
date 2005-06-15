@@ -33,6 +33,22 @@ charset_table = {
      "x-unknown": "Latin-1",
 }
 
+def to_entities(str):
+    res = []
+    for ch in str:
+        och = ord(ch)
+        if och > 127:
+            res.append('&#%d;' % och)
+        elif och == 38:
+            res.append('&amp;')
+        elif och == 60:
+            res.append("&lt;")
+        elif och == 62:
+            res.append("&gt;")
+        else:
+            res.append(ch)
+    return ''.join(res)
+
 class mbox_email:
     """ wrapper for email """
 
@@ -89,14 +105,19 @@ class mbox_email:
     def getContent(self):
         payloads = []
         for part in self._msg.walk():
-            if part.get_content_type() in ['text/plain', 'text/html']:
+            ct_type = part.get_content_type()
+            if ct_type in ['text/plain', 'text/html']:
                 p = part.get_payload(decode=1)
                 charset = self._msg.get_param("charset")
                 if charset is None:
                     charset = "Latin-1"
                 charset = charset.lower()
                 charset = charset_table.get(charset, charset)
-                payloads.append(unicode(p, charset).encode('utf-8'))
+                p = unicode(p, charset)
+                p = to_entities(p)
+                if ct_type == 'text/plain':
+                    p = p.replace('\n', '<br />')
+                payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 
     def getAttachments(self):

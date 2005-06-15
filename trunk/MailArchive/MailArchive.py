@@ -34,16 +34,6 @@ from modules.mbox_email import mbox_email
 
 _marker = []
 
-def to_num_ent(str):
-    res = []
-    for ch in str:
-        och = ord(ch)
-        if och < 128:
-            res.append(ch)
-        else:
-            res.append('&#%d;' % och)
-    return ''.join(res)
-
 def addMailArchive(self, id='', title='', path='', REQUEST=None):
     """ """
     ob = MailArchive(id, title, path)
@@ -107,8 +97,6 @@ class MailArchive(Folder, mbox):
         junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
         #get rid of junks
         for j in junks: msg = msg.replace(j, '')
-        msg = self.newlineToBr(msg)
-        msg = to_num_ent(msg)
         return self.extractUrl(msg)
 
     def getPrevNext(self, id, sort_by):
