@@ -63,17 +63,14 @@ class mbox_email:
         return res
 
     def getTo(self):
-        buf = self._msg.get('to', None)
-        if buf is None:
-            return None
-        return self._extract_email(buf)
+        return self._msg.get('to', None)
 
     def getFrom(self):
-        buf = self._msg.get('from', None)
-        if buf is None:
-            return None
-        return buf
+        return self._msg.get('from', None)
 
+    def getCarbonCopy(self):
+        return self._msg.get('cc', None)
+        
     def getAuthor(self):
         buf = self.getFrom()
         buf = buf.replace('<', '')

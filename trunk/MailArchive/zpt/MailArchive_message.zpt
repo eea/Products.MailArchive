@@ -8,10 +8,12 @@
 <tal:block tal:condition="msg"
 	tal:define="msg_author python:msg[0];
 				msg_email python:msg[1];
-				msg_subject python:msg[2];
-				msg_date python:msg[3];
-				msg_body python:msg[4];
-				msg_atts python:msg[5];
+				msg_to python:msg[2];
+				msg_cc python:msg[3];
+				msg_subject python:msg[4];
+				msg_date python:msg[5];
+				msg_body python:msg[6];
+				msg_atts python:msg[7];
 				msgsprevnext python:here.getPrevNext(id, sort_by);
 				msg_prev python:msgsprevnext[0];
 				msg_next python:msgsprevnext[1]">
@@ -40,8 +42,8 @@
         <tr><th>From</th><td>
 	<strong tal:content="msg_author" /> <span tal:replace="structure python:here.antispam(msg_email)" /><br />
         </td></tr>
-        <tr><th>To</th><td>To address here</td></tr>
-        <tr><th>Cc</th><td>Cc address here (if any)</td></tr>
+        <tr tal:condition="python:msg_to"><th>To</th><td tal:content="msg_to" /></tr>
+        <tr tal:condition="python:msg_cc"><th>Cc</th><td tal:content="msg_cc" /></tr>
         <tr><th>Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
         <tr><th>Subject</th><td tal:content="msg_subject" /></tr>
         </table>
