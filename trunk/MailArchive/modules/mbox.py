@@ -24,6 +24,8 @@ import mailbox
 import sys
 import os.path
 
+from mbox_email import mbox_email
+
 class mbox:
 
     def __init__(self, path):
@@ -44,15 +46,16 @@ class mbox:
         while msg is not None:
             document = msg.fp.read()
             if document is not None:
+                m = mbox_email(''.join(msg.headers))
                 d = msg.getdate('Date')
-                s = msg.get('Subject', '')
+                s = m.getSubject()
                 if s == '': s = '(no subject)'
-                from_addr = msg.getaddr('From')[0]
-                if not from_addr: from_addr = msg.getaddr('From')[1]
+                from_addr = m.getFrom()
+                f = from_addr[0]
+                if not f: f = from_addr[1]
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    s, d, from_addr,
-                    msg.get('Message-ID', ''), msg.get('In-Reply-To', '')
+                    s, d, f, m.getMessageID(), m.getInReplyTo()
                 )
                 if index == 1: self.starting = d
                 self.ending = d

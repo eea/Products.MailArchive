@@ -88,20 +88,21 @@ class mbox_email:
         return res
 
     def getSubject(self):
-        buf = self._msg.get('subject', None)
+        buf = self._msg.get('subject', '')
         data, enc = decode_header(buf)[0]
         if enc is not None:
             charset  = charset_table.get(enc, enc)    
             return unicode(data, charset).encode('utf-8')
+        return buf
 
     def getDateTime(self):
         return parsedate(self._msg.get('date', None))
 
     def getInReplyTo(self):
-        return self._msg.get('In-Reply-To', None)
+        return self._msg.get('In-Reply-To', '')
 
     def getMessageID(self):
-        return self._msg.get('Message-ID', None)
+        return self._msg.get('Message-ID', '')
 
     def getContent(self):
         payloads = []
