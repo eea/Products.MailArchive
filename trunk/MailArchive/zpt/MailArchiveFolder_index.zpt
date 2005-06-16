@@ -7,7 +7,7 @@
         <th>Archive</th>
 		<th>Period</th>
 		<th>#Messages</th>
-		<th>Download</th>
+		<th tal:condition="here/allow_zip">Download</th>
     </tr>
 
     <tal:block define="archives here/getArchives" repeat="archive archives">
@@ -18,7 +18,7 @@
 			<span tal:replace="python:here.tupleToShortDate(archive.ending)" />
 		</td>
 		<td tal:content="archive/count_mbox_msgs" />
-		<td>
+		<td tal:condition="here/allow_zip">
             <a tal:define="zip string:${archive/id}.zip" tal:attributes="href string:${zip}">
 				<span tal:replace="string:${archive/id}.zip" />
 				<!-- <span tal:replace="python:here.showSizeKb(archive.getMboxSize())"/> Kb ] --></a>

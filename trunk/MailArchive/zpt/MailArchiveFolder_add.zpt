@@ -21,6 +21,11 @@
         <td valign="top"><input type="text" name="path" size="35"></td>
     </tr>
     <tr>
+        <th>Allow download of archive</th>
+        <td><input type="checkbox" name="allow_zip" />
+        </td>
+    </tr>
+    <tr>
         <td></td>
         <td><input type="submit" value=" Submit "></td>
     </tr>

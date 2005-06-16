@@ -21,6 +21,12 @@
             <p tal:condition="python: not here.validPath()">Invalid path</p>
         </td>
     </tr>
+    <tr>
+        <th>Allow download of archive</th>
+        <td><input type="checkbox" name="allow_zip" tal:condition="python:here.allow_zip" CHECKED />
+            <input type="checkbox" name="allow_zip" tal:condition="python:not here.allow_zip" />
+        </td>
+    </tr>
 </table>
 <input name="Save" type="submit" id="Save" value="Save changes" />
 </form>

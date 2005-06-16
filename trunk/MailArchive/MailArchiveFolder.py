@@ -35,10 +35,10 @@ from Utils import Utils
 _marker = []
 
 manage_addMailArchiveFolderForm = PageTemplateFile('zpt/MailArchiveFolder_add', globals())
-def manage_addMailArchiveFolder(self, id, title='', path='', REQUEST=None):
+def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0, REQUEST=None):
     """ Add a new MailArchiveFolder object """
 
-    ob = MailArchiveFolder(id, title, path)
+    ob = MailArchiveFolder(id, title, path, allow_zip)
     self._setObject(id, ob)
     if REQUEST is not None:
         return self.manage_main(self, REQUEST, update_menu=1)
@@ -60,14 +60,17 @@ class MailArchiveFolder(Folder, Utils):
         Folder.manage_options[3:-2]
     )
 
-    def __init__(self, id, title, path):
+    def __init__(self, id, title, path, allow_zip):
         self.id = id
         self.title = title
         self._path = path
+        self.allow_zip = allow_zip
 
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
         self._v_last_update = 0
+        if not hasattr(self, 'allow_zip'):
+            self.allow_zip = 0
 
     def get_mailarchivefolder_path(self, p=0): return self.absolute_url(p)
 
@@ -140,10 +143,11 @@ class MailArchiveFolder(Folder, Utils):
         else:
             return default
 
-    def manageProperties(self, title='', path='', REQUEST=None):
+    def manageProperties(self, title='', path='', allow_zip=0, REQUEST=None):
         """ save properties """
         self.title = title
         self._path = path
+        self.allow_zip = allow_zip
         self._p_changed = 1
         self.load_archive(0)
         if REQUEST is not None:
@@ -151,7 +155,7 @@ class MailArchiveFolder(Folder, Utils):
                 message = "The properties of %s have been changed!" % self.id,
                 action = './manage_main',
                 )
-        
+
     def manage_afterAdd(self, item, container, new_fn=None):
         self.load_archive(0)
         Folder.inheritedAttribute ("manage_afterAdd") (self, item, container)
