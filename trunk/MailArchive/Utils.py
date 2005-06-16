@@ -41,11 +41,11 @@ class Utils:
         return html_quote(p_string).replace('\n', '<br />')
 
     def tupleToDate(self, p_tuple):
-        try: return time.strftime('%a %b %d %H:%M:%S %Z %Y', p_tuple)
+        try: return time.strftime('%Y-%m-%d %H:%M:%S', p_tuple)
         except: return ''
 
     def tupleToShortDate(self, p_tuple):
-        try: return time.strftime('%a %b %d %Y', p_tuple)
+        try: return time.strftime('%Y-%m-%d', p_tuple)
         except: return ''
 
     def replace_at(self, msg):

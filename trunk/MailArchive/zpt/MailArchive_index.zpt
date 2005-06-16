@@ -27,7 +27,7 @@
 			tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}"
 			tal:content="python:here.get_msg_subject(item)" />
 			<em tal:content="python:here.get_msg_from(item)" /> --
-			<em tal:content="python:here.tupleToDate(here.get_msg_date(item))" />
+			<em tal:content="python:here.tupleToShortDate(here.get_msg_date(item))" />
 		</tal:block>
 	</li>
 </ul>
