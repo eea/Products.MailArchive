@@ -63,8 +63,12 @@ class mbox_email:
         for i in buf:
             data, enc = decode_header(i[0])[0]
             if enc is not None:
+                enc = enc.lower()
                 charset  = charset_table.get(enc, enc)
-                data = unicode(data, charset).encode('utf-8')
+                try:
+                    data = unicode(data, charset).encode('utf-8')
+                except:
+                    pass
             res.append((data, i[1]))
         return res
             
@@ -72,8 +76,12 @@ class mbox_email:
         buf = parseaddr(self._msg.get('from', ''))
         data, enc = decode_header(buf[0])[0]
         if enc is not None:
+            enc = enc.lower()
             charset  = charset_table.get(enc, enc)    
-            return (unicode(data, charset).encode('utf-8'), buf[1])
+            try:
+                return (unicode(data, charset).encode('utf-8'), buf[1])
+            except:
+                return buf
         return buf
 
     def getCC(self):
@@ -82,6 +90,7 @@ class mbox_email:
         for i in buf:
             data, enc = decode_header(i[0])[0]
             if enc is not None:
+                enc = enc.lower()
                 charset  = charset_table.get(enc, enc)
                 data = unicode(data, charset).encode('utf-8')
             res.append((data, i[1]))
@@ -92,7 +101,10 @@ class mbox_email:
         data, enc = decode_header(buf)[0]
         if enc is not None:
             charset  = charset_table.get(enc, enc)    
-            return unicode(data, charset).encode('utf-8')
+            try:    
+                return unicode(data, charset).encode('utf-8')
+            except:
+                return buf
         return buf
 
     def getDateTime(self):
