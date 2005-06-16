@@ -48,6 +48,9 @@ class Utils:
         try: return time.strftime('%a %b %d %Y', p_tuple)
         except: return ''
 
+    def replace_at(self, msg):
+        return msg.replace('@', '&#64;')
+    
     def zip_file(self, id, original, data):
         path = join(CLIENT_HOME, id)
         zp = ZipFile(path, "w")

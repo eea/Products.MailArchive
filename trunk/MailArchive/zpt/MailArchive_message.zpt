@@ -6,14 +6,13 @@
 						msg python:here.getMsg(id);
 						url here/absolute_url">
 <tal:block tal:condition="msg"
-	tal:define="msg_author python:msg[0];
-				msg_email python:msg[1];
-				msg_to python:msg[2];
-				msg_cc python:msg[3];
-				msg_subject python:msg[4];
-				msg_date python:msg[5];
-				msg_body python:msg[6];
-				msg_atts python:msg[7];
+	tal:define="msg_from python:msg[0];
+				msg_to python:msg[1];
+				msg_cc python:msg[2];
+				msg_subject python:msg[3];
+				msg_date python:msg[4];
+				msg_body python:msg[5];
+				msg_atts python:msg[6];
 				msgsprevnext python:here.getPrevNext(id, sort_by);
 				msg_prev python:msgsprevnext[0];
 				msg_next python:msgsprevnext[1]">
@@ -40,10 +39,22 @@
 	</ul>
         <table style="border:1px">
         <tr><th>From</th><td>
-	<strong tal:content="msg_author" /> <span tal:replace="structure python:here.antispam(msg_email)" /><br />
+			<strong tal:content="python:msg_from[0]" /> <span tal:replace="structure python:here.antispam(msg_from[1])" /><br />
         </td></tr>
-        <tr tal:condition="python:msg_to"><th>To</th><td tal:content="msg_to" /></tr>
-        <tr tal:condition="python:msg_cc"><th>Cc</th><td tal:content="msg_cc" /></tr>
+        <tr tal:condition="python:len(msg_to)>0">
+			<th>To</th>
+			<td><tal:block repeat="to msg_to">
+					<span tal:replace="python:to[0]" />&nbsp;<span tal:replace="structure python:here.antispam(to[1])" />,&nbsp;
+				</tal:block>
+			</td>
+		</tr>
+        <tr tal:condition="python:len(msg_cc)>0">
+			<th>Cc</th>
+			<td><tal:block repeat="cc msg_cc">
+					<span tal:replace="python:cc[0]" />&nbsp;<span tal:replace="structure python:here.antispam(cc[1])" />,&nbsp;
+				</tal:block>
+			</td>
+		</tr>
         <tr><th>Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
         <tr><th>Subject</th><td tal:content="msg_subject" /></tr>
         </table>

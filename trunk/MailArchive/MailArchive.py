@@ -87,7 +87,7 @@ class MailArchive(Folder, mbox):
         #returns the body of the given message id
         if id is not None:
             m = mbox_email(self.get_mbox_msg(id))
-            return (m.getAuthor(), m.getEmailFrom(), m.getTo(), m.getCarbonCopy(), m.getSubject(), m.getDateTime(), \
+            return (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
                     self.parseContent(m.getContent()), m.getAttachments())
         else:
             return None
@@ -96,6 +96,7 @@ class MailArchive(Folder, mbox):
         junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
         #get rid of junks
         for j in junks: msg = msg.replace(j, '')
+        msg = self.replace_at(msg)
         return self.extractUrl(msg)
 
     def getPrevNext(self, id, sort_by):

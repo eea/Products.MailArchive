@@ -24,6 +24,7 @@
 import email
 import re
 from os.path import join
+from email.Utils import parseaddr, parsedate, getaddresses
 
 charset_table = {
      "window-1252": "cp1252",
@@ -55,43 +56,20 @@ class mbox_email:
     def __init__(self, msg):
         self._msg = email.message_from_string(msg)
 
-    def _extract_email(self, s):
-        """  Extract email addresses. Thanks to Carl Scharenberg for this piece of code"""
-        res = []
-        mail = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
-        res.extend(mail.findall(s))
-        return res
-
     def getTo(self):
-        return self._msg.get('to', None)
+        return getaddresses(self._msg.get_all('to', ''))
 
     def getFrom(self):
-        return self._msg.get('from', None)
+        return parseaddr(self._msg.get('from', ''))
 
-    def getCarbonCopy(self):
-        return self._msg.get('cc', None)
+    def getCC(self):
+        return getaddresses(self._msg.get_all('cc', ''))
         
-    def getAuthor(self):
-        buf = self.getFrom()
-        buf = buf.replace('<', '')
-        buf = buf.replace(self.getEmailFrom(), '')
-        buf = buf.replace('>', '')
-        buf = buf.replace('"', '')
-        return buf.strip()
-
-    def getEmailFrom(self):
-        buf = self._extract_email(self.getFrom())
-        if len(buf) >= 1: return buf[0]
-        else: return ''
-
     def getSubject(self):
         return self._msg.get('subject', None)
 
     def getDateTime(self):
-        buf = self._msg.get('date', None)
-        if buf is None:
-            return None
-        return email.Utils.parsedate(buf)
+        return parsedate(self._msg.get('date', None))
 
     def getInReplyTo(self):
         return self._msg.get('In-Reply-To', None)
