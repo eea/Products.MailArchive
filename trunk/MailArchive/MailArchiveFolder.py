@@ -163,4 +163,40 @@ class MailArchiveFolder(Folder, Utils):
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())
     index_html = PageTemplateFile('zpt/MailArchiveFolder_index', globals())
 
+    def index_rdf(self, REQUEST=None, RESPONSE=None):
+        """ """
+        #process items for the RDF file
+        l_archives = self.getArchives()
+        if len(l_archives)>0:
+            l_archive = l_archives[0]
+            l_msgs = l_archive.sortMboxMsgs('date', '1')[:10]
+            #generate RDF file
+            l_rdf = []
+            l_rdf_append = l_rdf.append
+            l_rdf_append('<?xml version="1.0" encoding="utf-8"?>')
+            l_rdf_append('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://purl.org/rss/1.0/">')
+            l_rdf_append('<channel rdf:about="%s">' % self.absolute_url())
+            l_rdf_append('<title>%s</title>' % self.xmlEncode(self.title))
+            l_rdf_append('<link>%s</link>' % self.absolute_url())
+            l_rdf_append('<items>')
+            l_rdf_append('<rdf:Seq>')
+            for l_depth, l_msg in l_msgs:
+                l_rdf_append('<rdf:li resource="%s/message_html?skey=date&amp;id=%s"/>' % (l_archive.absolute_url(), l_archive.get_msg_index(l_msg)))
+            l_rdf_append('</rdf:Seq>')
+            l_rdf_append('</items>')
+            l_rdf_append('</channel>')
+            for l_depth, l_msg in l_msgs:
+                l_rdf_append('<item rdf:about="%s/message_html?skey=date&amp;id=%s">' % (l_archive.absolute_url(), l_archive.get_msg_index(l_msg)))
+                l_rdf_append('<title>%s</title>' % self.xmlEncode(l_archive.get_msg_subject(l_msg)))
+                l_rdf_append('<link>%s/message_html?skey=date&amp;id=%s</link>' % (l_archive.absolute_url(), l_archive.get_msg_index(l_msg)))
+                l_rdf_append('<description><![CDATA[%s]]></description>' % self.xmlEncode(l_archive.getMsg(l_archive.get_msg_index(l_msg))[5]))
+                l_rdf_append('<dc:date>%s</dc:date>' % self.tupleToDateHTML(l_archive.get_msg_date(l_msg)))
+                l_rdf_append('</item>')
+            l_rdf_append("</rdf:RDF>")
+            RESPONSE.setHeader('content-type', 'text/xml')
+            return ''.join(l_rdf)
+        else:
+            RESPONSE.setStatus('NotFound')
+            return RESPONSE
+
 InitializeClass(MailArchiveFolder)

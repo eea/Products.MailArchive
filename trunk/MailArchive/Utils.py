@@ -48,6 +48,10 @@ class Utils:
         try: return time.strftime('%Y-%m-%d', p_tuple)
         except: return ''
 
+    def tupleToDateHTML(self, p_tuple):
+        try: return time.strftime('%Y-%m-%dT%H:%M:%S', p_tuple)
+        except: return ''
+
     def replace_at(self, msg):
         return msg.replace('@', '&#64;')
 
@@ -86,3 +90,13 @@ class Utils:
     def get_last_modif(self, path):
         """ Return the time of last modification of path """
         return getmtime(path)
+
+    def xmlEncode(self, p_string):
+        #encode some special chars to use in an XML string
+        l_tmp = str(p_string)
+        l_tmp = l_tmp.replace('&', '&amp;')
+        l_tmp = l_tmp.replace('<', '&lt;')
+        l_tmp = l_tmp.replace('"', '&quot;')
+        l_tmp = l_tmp.replace('\'', '&apos;')
+        l_tmp = l_tmp.replace('>', '&gt;')
+        return l_tmp
