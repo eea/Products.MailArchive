@@ -78,11 +78,16 @@ class MailArchiveFolder(Folder, Utils):
         if not os.path.isdir(self._path):
             return 0
         return 1
-    
+
     def getArchives(self):
-        """ returns the archives list """
-        return self.objectValues('MailArchive')
-    
+        """ returns the archives list sorted by the 'starting' property
+            - the date of the first message in the mbox file """
+        l = [(x.starting, x) for x in self.objectValues('MailArchive')]
+        print l
+        l.sort()
+        print l
+        return [val for (key, val) in l]
+
     def load_archive(self, delay=1):
         """ load MailArchves """
         # Only check the mailboxes every 10th minute.
