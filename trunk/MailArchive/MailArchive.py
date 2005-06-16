@@ -65,18 +65,18 @@ class MailArchive(Folder, mbox):
 
     security = ClassSecurityInfo()
 
-    def sortMboxMsgs(self, sort_by=''):
+    def sortMboxMsgs(self, skey='', rkey=''):
         #returns a sorted list of messages
         n = -1
-        if sort_by == 'subject': n = 3
-        elif sort_by == 'date': n = 4
-        elif sort_by == 'author': n = 5
-        elif sort_by == 'thread': n = 6
+        if skey == 'subject': n = 3
+        elif skey == 'date': n = 4
+        elif skey == 'author': n = 5
+        elif skey == 'thread': n = 6
         if n > -1:
             if n == 6:
-                return self.get_mbox_thread(self.sort_mbox_msgs(4))
+                return self.get_mbox_thread(self.sort_mbox_msgs(4, ''))
             else:
-                return [(0, x) for x in self.sort_mbox_msgs(n)]
+                return [(0, x) for x in self.sort_mbox_msgs(n, rkey)]
         else:
             return [(0, x) for x in self.get_mbox_msgs()]
 

@@ -104,10 +104,11 @@ class mbox:
         #returns the number of messages
         return len(self.cache.keys())
 
-    def sort_mbox_msgs(self, n):
+    def sort_mbox_msgs(self, n, r):
         #returns a sorted list of messages
         t = [(x[n], x) for x in self.cache.values()]
         t.sort()
+        if r: t.reverse()
         return [val for (key, val) in t]
 
 def main():

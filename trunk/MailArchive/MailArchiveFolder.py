@@ -162,5 +162,5 @@ class MailArchiveFolder(Folder, Utils):
 
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())
     index_html = PageTemplateFile('zpt/MailArchiveFolder_index', globals())
-    
+
 InitializeClass(MailArchiveFolder)
