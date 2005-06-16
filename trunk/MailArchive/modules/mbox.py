@@ -45,9 +45,12 @@ class mbox:
             document = msg.fp.read()
             if document is not None:
                 d = msg.getdate('Date')
+                from_addr = msg.getaddr('From')[0]
+                if not from_addr:
+                    from_addr = msg.getaddr('From')[1]
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    msg.get('Subject'), d, msg.getaddr('From')[0],
+                    msg.get('Subject'), d, from_addr,
                     msg.get('Message-ID'), msg.get('In-Reply-To')
                 )
                 if index == 1: self.starting = d
