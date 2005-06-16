@@ -34,7 +34,10 @@
 			</a>
 		</tal:block>
 		<tal:block tal:condition="python:skey!='author'">
-			<a tal:attributes="href string:${url}/?skey=author" title="Sortable" i18n:attributes="title" i18n:translate="">From</a>
+			<a tal:attributes="href string:${url}/?skey=author" title="Sortable" i18n:attributes="title">
+				<span i18n:translate="" tal:omit-tag="">Author</span>
+				<img src="misc_/MailArchive/sortnot.gif" width="12" height="12" alt="" />
+			</a>
 		</tal:block>
 	</th>
 	<th class="sorted" scope="col">
@@ -46,7 +49,10 @@
 			</a>
 		</tal:block>
 		<tal:block tal:condition="python:skey!='subject'">
-			<a tal:attributes="href string:${url}/?skey=subject" title="Sortable" i18n:attributes="title" i18n:translate="">Subject</a>
+			<a tal:attributes="href string:${url}/?skey=subject" title="Sortable" i18n:attributes="title">
+				<span i18n:translate="" tal:omit-tag="">Subject</span>
+				<img src="misc_/MailArchive/sortnot.gif" width="12" height="12" alt="" />
+			</a>
 		</tal:block>
 	</th>
 	<th class="sorted" scope="col">
@@ -58,7 +64,10 @@
 			</a>
 		</tal:block>
 		<tal:block tal:condition="python:skey!='date'">
-			<a tal:attributes="href string:${url}/?skey=date" title="Sortable" i18n:attributes="title" i18n:translate="">Date</a>
+			<a tal:attributes="href string:${url}/?skey=date" title="Sortable" i18n:attributes="title">
+				<span i18n:translate="" tal:omit-tag="">Date</span>
+				<img src="misc_/MailArchive/sortnot.gif" width="12" height="12" alt="" />
+			</a>
 		</tal:block>
 	</th>
 </thead>

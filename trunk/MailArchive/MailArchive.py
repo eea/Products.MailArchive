@@ -75,6 +75,8 @@ class MailArchive(Folder, mbox):
         if n > -1:
             if n == 6:
                 return self.get_mbox_thread(self.sort_mbox_msgs(4, ''))
+            elif n == 5:
+                return [(0, x) for x in self.sort_mbox_msgs_ci(n, rkey)]
             else:
                 return [(0, x) for x in self.sort_mbox_msgs(n, rkey)]
         else:

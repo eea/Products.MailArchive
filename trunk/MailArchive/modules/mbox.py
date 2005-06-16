@@ -46,12 +46,11 @@ class mbox:
             if document is not None:
                 d = msg.getdate('Date')
                 from_addr = msg.getaddr('From')[0]
-                if not from_addr:
-                    from_addr = msg.getaddr('From')[1]
+                if not from_addr: from_addr = msg.getaddr('From')[1]
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    msg.get('Subject'), d, from_addr,
-                    msg.get('Message-ID'), msg.get('In-Reply-To')
+                    msg.get('Subject', ''), d, from_addr,
+                    msg.get('Message-ID', ''), msg.get('In-Reply-To', '')
                 )
                 if index == 1: self.starting = d
                 self.ending = d
@@ -110,6 +109,13 @@ class mbox:
     def sort_mbox_msgs(self, n, r):
         #returns a sorted list of messages
         t = [(x[n], x) for x in self.cache.values()]
+        t.sort()
+        if r: t.reverse()
+        return [val for (key, val) in t]
+
+    def sort_mbox_msgs_ci(self, n, r):
+        #returns a sorted list of messages - sort without case-sensitivity
+        t = [(x[n].lower(), x) for x in self.cache.values()]
         t.sort()
         if r: t.reverse()
         return [val for (key, val) in t]

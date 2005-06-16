@@ -39,6 +39,7 @@ def initialize(context):
 misc_={
     "cabinet.gif": ImageFile("icons/cabinet.gif",globals()),
     "archive.gif": ImageFile("icons/archive.gif",globals()),
+    "sortnot.gif": ImageFile("icons/sortnot.gif",globals()),
     "sortup.gif": ImageFile("icons/sortup.gif",globals()),
     "sortdown.gif": ImageFile("icons/sortdown.gif",globals()),
 }
