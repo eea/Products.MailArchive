@@ -38,7 +38,7 @@ class mbox:
     def process_mbox(self):
         #open a MBOX file and process all its content
         self.cache = {}
-        mb = mailbox.UnixMailbox (open(self.path,'rb'))
+        mb = mailbox.PortableUnixMailbox (open(self.path,'rb'))
         msg = mb.next()
         index = 1
         while msg is not None:
