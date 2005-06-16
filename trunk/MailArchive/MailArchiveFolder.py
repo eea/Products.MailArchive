@@ -83,9 +83,7 @@ class MailArchiveFolder(Folder, Utils):
         """ returns the archives list sorted by the 'starting' property
             - the date of the first message in the mbox file """
         l = [(x.starting, x) for x in self.objectValues('MailArchive')]
-        print l
         l.sort()
-        print l
         return [val for (key, val) in l]
 
     def load_archive(self, delay=1):
