@@ -31,6 +31,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 #Product imports
 from modules.mbox import mbox
 from modules.mbox_email import mbox_email
+from modules.cleanhtml import HTMLCleaner
 
 _marker = []
 
@@ -93,9 +94,8 @@ class MailArchive(Folder, mbox):
             return None
 
     def parseContent(self, msg):
-        junks = ['<x-html>', '</x-html>', '<x-flowed>', '</x-flowed>']
-        #get rid of junks
-        for j in junks: msg = msg.replace(j, '')
+        mycleaner = HTMLCleaner()
+        msg = mycleaner.clean(msg)
         msg = self.replace_at(msg)
         return self.extractUrl(msg)
 

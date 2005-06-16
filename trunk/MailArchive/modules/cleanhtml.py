@@ -30,10 +30,15 @@ from sgmllib import SGMLParser
 from types import StringType
 
 # Elements we don't like
-bad_elements = ( 'script', 'style','object','applet','embed','iframe','layer' )
+bad_elements = (
+    'script', 'style','object','applet','embed','iframe','layer',
+    'x-html', 'x-flowed'
+)
 
-good_elements = ( 'p','b','font','i','em','strong','pre','span','div','li','ol','ul','dl',
- 'dd','dt','table','thead','tbody','tr','th','td')
+good_elements = (
+    'p','b','font','i','em','strong','pre','span','div','li','ol','ul','dl',
+    'dd','dt','table','thead','tbody','tr','th','td'
+)
 
 closed_elements = ( 'br','hr','img','colspec')
 

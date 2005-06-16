@@ -90,8 +90,6 @@ class mbox_email:
                 charset = charset_table.get(charset, charset)
                 p = unicode(p, charset)
                 p = to_entities(p)
-                if ct_type == 'text/plain':
-                    p = p.replace('\n', '<br />')
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 

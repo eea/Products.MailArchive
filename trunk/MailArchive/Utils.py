@@ -50,7 +50,7 @@ class Utils:
 
     def replace_at(self, msg):
         return msg.replace('@', '&#64;')
-    
+
     def zip_file(self, id, original, data):
         path = join(CLIENT_HOME, id)
         zp = ZipFile(path, "w")

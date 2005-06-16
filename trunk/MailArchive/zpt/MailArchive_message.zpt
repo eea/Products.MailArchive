@@ -58,9 +58,7 @@
         <tr><th>Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
         <tr><th>Subject</th><td tal:content="msg_subject" /></tr>
         </table>
-	<div style="font-family: monospace; border-top: 1px dotted black; border-bottom: 1px dotted black;">
-	<span tal:replace="structure msg_body" />
-	</div>
+	<div style="font-family: monospace; border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
 	<span tal:condition="python:len(msg_atts) > 0"> Download attachments: </span><br/>
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
