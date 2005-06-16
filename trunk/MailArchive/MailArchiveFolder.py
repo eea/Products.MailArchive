@@ -67,7 +67,7 @@ class MailArchiveFolder(Folder, Utils):
 
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
-	self._v_last_update = 0
+        self._v_last_update = 0
 
     def get_mailarchivefolder_path(self, p=0): return self.absolute_url(p)
 
@@ -91,7 +91,7 @@ class MailArchiveFolder(Folder, Utils):
         # Only check the mailboxes every 10th minute.
         # FIXME: To be called from MailArchiveFolder_index.zpt
         # (preferably while the user sees the list)
-	if delay and self._v_last_update > time.time() - 600:
+        if delay and self._v_last_update > time.time() - 600:
             return
 
         self._v_last_update = time.time()
