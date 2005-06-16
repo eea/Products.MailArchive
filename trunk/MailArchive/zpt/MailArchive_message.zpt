@@ -26,7 +26,7 @@
 			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
 		</li>
 		<li>
-			<strong i18n:translate="">Messages sorted by</strong>:
+			<strong i18n:translate="">Sort messages by</strong>:
 			<a tal:condition="python:sort_by != 'thread'" tal:attributes="href string:${url}/?sort=thread" i18n:translate="">[ thread ]</a>
 			<a tal:condition="python:sort_by != 'subject'" tal:attributes="href string:${url}/?sort=subject" i18n:translate="">[ subject ]</a>
 			<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
@@ -64,7 +64,7 @@
 			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?sort=${sort_by}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
 		</li>
 		<li>
-			<strong i18n:translate="">Messages sorted by</strong>:
+			<strong i18n:translate="">Sort messages by</strong>:
 			<a tal:condition="python:sort_by != 'thread'" tal:attributes="href string:${url}/?sort=thread" i18n:translate="">[ thread ]</a>
 			<a tal:condition="python:sort_by != 'subject'" tal:attributes="href string:${url}/?sort=subject" i18n:translate="">[ subject ]</a>
 			<a tal:condition="python:sort_by != 'date'" tal:attributes="href string:${url}/?sort=date" i18n:translate="">[ date ]</a>
