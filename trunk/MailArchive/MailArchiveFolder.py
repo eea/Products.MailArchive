@@ -20,7 +20,7 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-import os
+import os, time
 
 from OFS.Folder import Folder
 from OFS.Image import File
@@ -65,6 +65,10 @@ class MailArchiveFolder(Folder, Utils):
         self.title = title
         self._path = path
 
+    def __setstate__(self,state):
+        MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
+	self._v_last_update = 0
+
     def get_mailarchivefolder_path(self, p=0): return self.absolute_url(p)
 
     def getPath(self):
@@ -79,22 +83,35 @@ class MailArchiveFolder(Folder, Utils):
         """ returns the archives list """
         return self.objectValues('MailArchive')
     
-    def load_archive(self):
+    def load_archive(self, delay=1):
         """ load MailArchves """
+        # Only check the mailboxes every 10th minute.
+        # FIXME: To be called from MailArchiveFolder_index.zpt
+        # (preferably while the user sees the list)
+	if delay and self._v_last_update > time.time() - 600:
+            return
+
+        self._v_last_update = time.time()
         if not self.validPath():
             return
         mbx = []
+        # FIXME: If a mailbox file disappears from the file system
+        # it shall disappear here also
         for f in os.listdir(self._path):
             abs_path = os.path.join(self._path, f)
             if f[0] == '.':    # Drop 'hidden' files
                 continue
-            if not os.path.isfile(abs_path):
+            if not os.path.isfile(abs_path): # Drop directories etc.
                 continue
             if open(abs_path).read(5) == "From ":
                 id = f
                 try:
+                    #FIXME: If the mailbox file already exists on the
+                    # filesystem and it hasn't changed, then don't read it again
+                    # -- too time consuming
                     addMailArchive(self, id, '', abs_path)
                 except:
+                    #FIXME: Don't delete and then add. Just ignore
                     zobj = self._getOb(id)
                     if zobj.last_modified != self.get_last_modif(self._path):
                         self._delObject(id)
@@ -109,7 +126,7 @@ class MailArchiveFolder(Folder, Utils):
             obj = self._getOb(mbox_id)
             mbox = obj.get_mbox_file()
             #zip mbox content
-            original = "%s_mbx" % mbox_id
+            original = "%s.mbx" % mbox_id
             zf, path = self.zip_file(id, original, mbox)
             os.unlink(path)
             self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
@@ -125,7 +142,7 @@ class MailArchiveFolder(Folder, Utils):
         self.title = title
         self._path = path
         self._p_changed = 1
-        self.load_archive()
+        self.load_archive(0)
         if REQUEST is not None:
             return MessageDialog(title = 'Edited',
                 message = "The properties of %s have been changed!" % self.id,
@@ -133,7 +150,7 @@ class MailArchiveFolder(Folder, Utils):
                 )
         
     def manage_afterAdd(self, item, container, new_fn=None):
-        self.load_archive()
+        self.load_archive(0)
         Folder.inheritedAttribute ("manage_afterAdd") (self, item, container)
 
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())
