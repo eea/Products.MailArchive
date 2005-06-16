@@ -31,7 +31,6 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 #Product imports
 from modules.mbox import mbox
 from modules.mbox_email import mbox_email
-from modules.cleanhtml import HTMLCleaner
 
 _marker = []
 
@@ -91,15 +90,9 @@ class MailArchive(Folder, mbox):
         if id is not None:
             m = mbox_email(self.get_mbox_msg(id))
             return (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
-                    self.parseContent(m.getContent()), m.getAttachments())
+                    m.getContent(), m.getAttachments())
         else:
             return None
-
-    def parseContent(self, msg):
-        mycleaner = HTMLCleaner()
-        msg = mycleaner.clean(msg)
-        msg = self.replace_at(msg)
-        return self.extractUrl(msg)
 
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message

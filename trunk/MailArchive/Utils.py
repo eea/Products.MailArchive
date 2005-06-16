@@ -77,7 +77,7 @@ class Utils:
         buf = map(None, addr)
         for i in range(0, len(addr), choice((2,3,4))):
             buf[i] = '&#%d;' % ord(buf[i])
-        return '<a href="mailto:%s">%s</A>' % (''.join(buf), ''.join(buf))
+        return '<a href="mailto:%s">%s</a>' % (''.join(buf), ''.join(buf))
 
     def extractUrl(self, msg):
         """ Functions to identify and extract URLs"""

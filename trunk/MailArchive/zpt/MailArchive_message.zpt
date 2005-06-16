@@ -39,19 +39,19 @@
 	</ul>
         <table style="border:1px">
         <tr><th>From</th><td>
-			<span tal:replace="python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
+			<span tal:replace="structure python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
         </td></tr>
         <tr tal:condition="python:len(msg_to)>0">
 			<th>To</th>
 			<td><tal:block repeat="to msg_to">
-					<span tal:replace="python:to[0]" />&nbsp;<em tal:content="structure python:here.antispam(to[1])" />,&nbsp;
+					<span tal:replace="structure python:to[0]" />&nbsp;<em tal:content="structure python:here.antispam(to[1])" />,
 				</tal:block>
 			</td>
 		</tr>
         <tr tal:condition="python:len(msg_cc)>0">
 			<th>Cc</th>
 			<td><tal:block repeat="cc msg_cc">
-					<span tal:replace="python:cc[0]" />&nbsp;<em tal:content="structure python:here.antispam(cc[1])" />,&nbsp;
+					<span tal:replace="structure python:cc[0]" />&nbsp;<em tal:content="structure python:here.antispam(cc[1])" />,
 				</tal:block>
 			</td>
 		</tr>

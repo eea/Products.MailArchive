@@ -26,6 +26,7 @@ import re
 from os.path import join
 from email.Utils import parseaddr, parsedate, getaddresses
 from email.Header import decode_header
+from cleanhtml import HTMLCleaner
 
 charset_table = {
      "window-1252": "cp1252",
@@ -35,7 +36,18 @@ charset_table = {
      "x-unknown": "Latin-1",
 }
 
+
 def to_entities(str):
+    res = []
+    for ch in str:
+        och = ord(ch)
+        if och > 127:
+            res.append('&#%d;' % och)
+        else:
+            res.append(ch)
+    return ''.join(res)
+
+def to_entities_quote(str):
     res = []
     for ch in str:
         och = ord(ch)
@@ -66,7 +78,7 @@ class mbox_email:
                 enc = enc.lower()
                 charset  = charset_table.get(enc, enc)
                 try:
-                    data = unicode(data, charset).encode('utf-8')
+                    data = to_entities_quote(unicode(data, charset))
                 except:
                     pass
             res.append((data, i[1]))
@@ -79,7 +91,7 @@ class mbox_email:
             enc = enc.lower()
             charset  = charset_table.get(enc, enc)    
             try:
-                return (unicode(data, charset).encode('utf-8'), buf[1])
+                return (to_entities_quote(unicode(data, charset)), buf[1])
             except:
                 return buf
         return buf
@@ -92,7 +104,7 @@ class mbox_email:
             if enc is not None:
                 enc = enc.lower()
                 charset  = charset_table.get(enc, enc)
-                data = unicode(data, charset).encode('utf-8')
+                data = to_entities_quote(unicode(data, charset))
             res.append((data, i[1]))
         return res
 
@@ -102,7 +114,7 @@ class mbox_email:
         if enc is not None:
             charset  = charset_table.get(enc, enc)    
             try:    
-                return unicode(data, charset).encode('utf-8')
+                return to_entities_quote(unicode(data, charset))
             except:
                 return buf
         return buf
@@ -128,7 +140,19 @@ class mbox_email:
                 charset = charset.lower()
                 charset = charset_table.get(charset, charset)
                 p = unicode(p, charset)
-                p = to_entities(p)
+                if ct_type == 'text/html':
+                    mycleaner = HTMLCleaner()
+                    try:
+                        p = mycleaner.clean(p)
+                        p = to_entities(p)
+                    except:
+                        p = to_entities_quote(p)
+                    p = p.replace('@', '&#64;')
+                else:
+                    p = to_entities_quote(p)
+                    p = p.replace('@', '&#64;')
+                    p = p.replace('\n', '<br />')
+#                   p =  self.extractUrl(msg)
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 

@@ -42,7 +42,7 @@ good_elements = (
 
 closed_elements = ( 'br','hr','img','colspec')
 
-good_attributes = ('alt', 'href', 'title', 'src', 'class', 'style', 'name', 'id',
+good_attributes = ('alt', 'href', 'title', 'class', 'style', 'name', 'id',
 'cellspacing', 'cellpadding', 'width', 'border','bgcolor','color','align','valign','face','size',
 'height','colspan','rowspan' )
 
@@ -90,7 +90,9 @@ class HTMLCleaner(SGMLParser):
         elif self.checkflag == 1:
             self.__data.append("<" + tag)
             for attr in attrs:
-                if attr[0] in good_attributes:
+                if attr[0] == 'src':
+                    self.__data.append(' %s="reference-removed"' %  attr[0])
+                elif attr[0] in good_attributes:
                     self.__data.append(' %s="%s"' % ( attr[0], attr[1]))
             if tag in closed_elements:
                 self.__data.append(" />")
@@ -111,25 +113,12 @@ class HTMLCleaner(SGMLParser):
 
     def handle_charref(self, name):
         """Handle character reference for UNICODE"""
-        try:
-            n = int(name)
-        except ValueError:
-            self.unknown_charref(name)
-            return
-        if not 0 <= n <= 65535:
-            self.unknown_charref(name)
-            return
-        self.handle_data(unichr(n))
+        self.handle_data('&#%s;' % name)
 
     def handle_entityref(self, name):
         """Handle entity references.
         """
-        table = htmlentitydefs.name2codepoint
-        if name in table:
-            self.handle_data(unichr(table[name]))
-        else:
-            self.unknown_entityref(name)
-            return
+        self.handle_data('&%s;' % name)
 
 if __name__ == '__main__':
     conn = open('testdata')

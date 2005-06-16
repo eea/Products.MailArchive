@@ -73,7 +73,7 @@
 </thead>
 <tbody>
 <tr tal:repeat="tuple items" tal:attributes="class python:test(path('repeat/tuple/even'), 'zebraeven', '')">
-	<td tal:content="python:here.get_msg_from(tuple[1])" />
+	<td tal:content="structure python:here.get_msg_from(tuple[1])" />
 	<td>
 		<tal:block tal:repeat="x python:range(0, tuple[0])"> ------ </tal:block>
 		<a tal:define="item_id python:here.get_msg_index(tuple[1])"
