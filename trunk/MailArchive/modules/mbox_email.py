@@ -25,6 +25,7 @@ import email
 import re
 from os.path import join
 from email.Utils import parseaddr, parsedate, getaddresses
+from email.Header import decode_header
 
 charset_table = {
      "window-1252": "cp1252",
@@ -57,16 +58,40 @@ class mbox_email:
         self._msg = email.message_from_string(msg)
 
     def getTo(self):
-        return getaddresses(self._msg.get_all('to', ''))
-
+        res = []
+        buf = getaddresses(self._msg.get_all('to', ''))
+        for i in buf:
+            data, enc = decode_header(i[0])[0]
+            if enc is not None:
+                charset  = charset_table.get(enc, enc)
+                data = unicode(data, charset).encode('utf-8')
+            res.append((data, i[1]))
+        return res
+            
     def getFrom(self):
-        return parseaddr(self._msg.get('from', ''))
+        buf = parseaddr(self._msg.get('from', ''))
+        data, enc = decode_header(buf[0])[0]
+        if enc is not None:
+            charset  = charset_table.get(enc, enc)    
+            return (unicode(data, charset).encode('utf-8'), buf[1])
 
     def getCC(self):
-        return getaddresses(self._msg.get_all('cc', ''))
-        
+        res = []
+        buf = getaddresses(self._msg.get_all('cc', ''))
+        for i in buf:
+            data, enc = decode_header(i[0])[0]
+            if enc is not None:
+                charset  = charset_table.get(enc, enc)
+                data = unicode(data, charset).encode('utf-8')
+            res.append((data, i[1]))
+        return res
+
     def getSubject(self):
-        return self._msg.get('subject', None)
+        buf = self._msg.get('subject', None)
+        data, enc = decode_header(buf)[0]
+        if enc is not None:
+            charset  = charset_table.get(enc, enc)    
+            return unicode(data, charset).encode('utf-8')
 
     def getDateTime(self):
         return parsedate(self._msg.get('date', None))
