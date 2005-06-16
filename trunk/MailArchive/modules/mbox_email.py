@@ -74,6 +74,7 @@ class mbox_email:
         if enc is not None:
             charset  = charset_table.get(enc, enc)    
             return (unicode(data, charset).encode('utf-8'), buf[1])
+        return buf
 
     def getCC(self):
         res = []
