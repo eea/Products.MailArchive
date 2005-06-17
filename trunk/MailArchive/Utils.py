@@ -23,9 +23,9 @@
 
 import time
 import re
-
 from whrandom import choice
-from os.path import join, getmtime
+from os.path import join, getmtime, isdir, isfile
+from os import listdir
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from StringIO import StringIO
 
@@ -48,6 +48,9 @@ class Utils:
         try: return time.strftime('%Y-%m-%d', p_tuple)
         except: return ''
 
+    def get_time(self):
+        return time.time()
+    
     def tupleToDateHTML(self, p_tuple):
         try: return time.strftime('%Y-%m-%dT%H:%M:%S', p_tuple)
         except: return ''
@@ -79,18 +82,22 @@ class Utils:
             buf[i] = '&#%d;' % ord(buf[i])
         return '<a href="mailto:%s">%s</a>' % (''.join(buf), ''.join(buf))
 
-    def extractUrl(self, msg):
-        """ Functions to identify and extract URLs"""
-        #pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
-        #return [u[0] for u in re.findall(pat_url, msg)]
-        strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
-                      r'<a rel="nofollow" href="\g<url>">\g<url></a>', msg)
-        return strg.strip()
-
     def get_last_modif(self, path):
         """ Return the time of last modification of path """
         return getmtime(path)
 
+    def valid_directory(self, path):
+        return isdir(path)
+    
+    def valid_file(self, path):
+        return isfile(path)
+
+    def get_files(self, path):
+        return listdir(path)
+    
+    def file_path(self, path, name):
+        return join(path, name)
+            
     def xmlEncode(self, p_string):
         #encode some special chars to use in an XML string
         l_tmp = str(p_string)

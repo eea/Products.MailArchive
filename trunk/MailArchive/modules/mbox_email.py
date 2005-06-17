@@ -37,10 +37,16 @@ charset_table = {
 }
 
 
+def to_unicode(s, encoding):
+    if encoding:
+        encoding = encoding.lower()
+        charset  = charset_table.get(encoding, encoding)
+        return unicode(s, charset)
+    else:
+        return unicode(s)
+
 def extractUrl(msg):
     """ Functions to identify and extract URLs"""
-    #pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
-    #return [u[0] for u in re.findall(pat_url, msg)]
     strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
                   r'<a rel="nofollow" href="\g<url>">\g<url></a>', msg)
     return strg.strip()
@@ -77,55 +83,41 @@ class mbox_email:
     def __init__(self, msg):
         self._msg = email.message_from_string(msg)
 
+    def _extract_url(self, msg):
+        """ Functions to identify and extract URLs"""
+        strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
+                      r'<a href="\g<url>">\g<url></a>', msg)
+        return strg.strip()
+
     def getTo(self):
         res = []
         buf = getaddresses(self._msg.get_all('to', ''))
         for i in buf:
-            data, enc = decode_header(i[0])[0]
-            if enc is not None:
-                enc = enc.lower()
-                charset  = charset_table.get(enc, enc)
-                try:
-                    data = to_entities_quote(unicode(data, charset))
-                except:
-                    pass
-            res.append((data, i[1]))
+            header = decode_header(i[0])
+            data = ''.join([to_unicode(s, enc) for s, enc in header])
+            res.append((to_entities_quote(data), i[1]))
         return res
             
     def getFrom(self):
         buf = parseaddr(self._msg.get('from', ''))
-        data, enc = decode_header(buf[0])[0]
-        if enc is not None:
-            enc = enc.lower()
-            charset  = charset_table.get(enc, enc)    
-            try:
-                return (to_entities_quote(unicode(data, charset)), buf[1])
-            except:
-                return buf
-        return buf
+        header = decode_header(buf[0])
+        data = ''.join([to_unicode(s, enc) for s, enc in header])
+        return (to_entities_quote(data), buf[1])
 
     def getCC(self):
         res = []
         buf = getaddresses(self._msg.get_all('cc', ''))
         for i in buf:
-            data, enc = decode_header(i[0])[0]
-            if enc is not None:
-                enc = enc.lower()
-                charset  = charset_table.get(enc, enc)
-                data = to_entities_quote(unicode(data, charset))
-            res.append((data, i[1]))
+            header = decode_header(i[0])
+            data = ''.join([to_unicode(s, enc) for s, enc in header])
+            res.append((to_entities_quote(data), i[1]))
         return res
 
     def getSubject(self):
         buf = self._msg.get('subject', '')
-        data, enc = decode_header(buf)[0]
-        if enc is not None:
-            charset  = charset_table.get(enc, enc)    
-            try:    
-                return to_entities_quote(unicode(data, charset))
-            except:
-                return buf
-        return buf
+        header = decode_header(buf)
+        data = ''.join([to_unicode(s, enc) for s, enc in header])
+        return to_entities_quote(data)
 
     def getDateTime(self):
         return parsedate(self._msg.get('date', None))
@@ -161,6 +153,7 @@ class mbox_email:
                     p = p.replace('@', '&#64;')
                 else:
                     p = to_entities_quote(p)
+                    #p =  self._extract_url(p)
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
                     p =  extractUrl(p)
