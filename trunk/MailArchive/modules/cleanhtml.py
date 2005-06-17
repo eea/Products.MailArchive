@@ -31,20 +31,31 @@ from types import StringType
 
 # Elements we don't like
 bad_elements = (
-    'script', 'style','object','applet','embed','iframe','layer',
-    'x-html', 'x-flowed'
+    'script', 'style','object','applet','embed', 'frame', 'iframe','layer',
+    'param', 'x-html', 'x-flowed'
 )
 
+# Unused
 good_elements = (
     'p','b','font','i','em','strong','pre','span','div','li','ol','ul','dl',
     'dd','dt','table','thead','tbody','tr','th','td'
 )
 
-closed_elements = ( 'br','hr','img','colspec')
+empty_elements = ( 'area', 'br', 'col', 'hr','img', 'input', 'isindex'
+)
 
-good_attributes = ('alt', 'href', 'title', 'class', 'style', 'name', 'id',
-'cellspacing', 'cellpadding', 'width', 'border','bgcolor','color','align','valign','face','size',
-'height','colspan','rowspan' )
+good_attributes = (
+    'abbr', 'accept-charset', 'accept', 'accesskey', 'action', 'align',
+    'alink', 'alt', 'axis', 'bgcolor', 'border', 'cellpadding', 'cellspacing',
+    'char', 'charoff', 'charset', 'checked', 'cite', 'class', 'clear',
+    'color', 'cols', 'colspan', 'compact', 'coords', 'dir', 'disabled',
+    'enctype', 'face', 'for', 'frame', 'frameborder', 'headers', 'height',
+    'hreflang', 'hspace', 'id', 'ismap', 'label', 'lang', 'maxlength',
+    'method', 'multiple', 'name', 'nohref', 'noshade', 'nowrap', ' readonly',
+    'rel', 'rev', 'rows', 'rowspan', 'rules', 'scope', 'selected', 'shape',
+    'size', 'src', 'start', 'style', 'summary', 'target', 'title', 'type',
+    'valign', 'value', 'width'
+)
 
 bad_attributes = ('target',)
 
@@ -62,6 +73,7 @@ class HTMLCleaner(SGMLParser):
         self.encoding = encoding
         self.tagstack = []
         self.checkflag = 0  # Are we in a tag we check?
+        self.inbody = 0
         self.__data = []
 
     def clean(self, data, encoding='iso8859-1'):
@@ -69,6 +81,7 @@ class HTMLCleaner(SGMLParser):
         self.encoding = encoding
         self.tagstack = []
         self.checkflag = 0  # Are we in a tag we check?
+        self.inbody = 0
         self.__data = []
         self.feed(data)
         return string.join(self.__data,'')
@@ -82,31 +95,35 @@ class HTMLCleaner(SGMLParser):
 
     def unknown_starttag(self, tag, attrs):
         self.tagstack.append(tag)
-        if tag in bad_elements:
+        if tag in bad_elements and self.inbody == 1:
             self.checkflag = 0
         elif tag == 'body':
             self.checkflag = 1
+            self.inbody = 1
             self.__data.append('<div class="msgbody">')
         elif self.checkflag == 1:
             self.__data.append("<" + tag)
             for attr in attrs:
                 if attr[0] == 'src':
                     self.__data.append(' %s="reference-removed"' %  attr[0])
+                elif attr[0] == 'href':
+		    # Don't allow content spam
+                    self.__data.append(' %s="%s" rel="nofollow"' % ( attr[0], attr[1]))
                 elif attr[0] in good_attributes:
                     self.__data.append(' %s="%s"' % ( attr[0], attr[1]))
-            if tag in closed_elements:
+            if tag in empty_elements:
                 self.__data.append(" />")
             else:
                 self.__data.append(">")
 
     def unknown_endtag(self, tag):
         self.tagstack.pop()
-        if tag in bad_elements:
+        if tag in bad_elements and self.inbody == 1:
             self.checkflag = 1
         elif tag == 'body':
             self.checkflag = 0
             self.__data.append('</div>')
-        elif tag in closed_elements:
+        elif tag in empty_elements:
             pass
         elif self.checkflag == 1:
             self.__data.append("</%s>" % tag)

@@ -84,7 +84,7 @@ class Utils:
         #pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
         #return [u[0] for u in re.findall(pat_url, msg)]
         strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
-                      r'<a href="\g<url>">\g<url></a>', msg)
+                      r'<a rel="nofollow" href="\g<url>">\g<url></a>', msg)
         return strg.strip()
 
     def get_last_modif(self, path):

@@ -37,6 +37,14 @@ charset_table = {
 }
 
 
+def extractUrl(msg):
+    """ Functions to identify and extract URLs"""
+    #pat_url = re.compile(r'''(?x)((http|ftp|gopher)://(\w+[:.]?){2,}(/?|[^ \n\r"]+[\w/])(?=[\s\.,>)'"\]]))''')
+    #return [u[0] for u in re.findall(pat_url, msg)]
+    strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
+                  r'<a rel="nofollow" href="\g<url>">\g<url></a>', msg)
+    return strg.strip()
+
 def to_entities(str):
     res = []
     for ch in str:
@@ -129,6 +137,9 @@ class mbox_email:
         return self._msg.get('Message-ID', '')
 
     def getContent(self):
+        """ Walks through the message until it finds one that
+            is either text/plain or text/html
+        """
         payloads = []
         for part in self._msg.walk():
             ct_type = part.get_content_type()
@@ -152,7 +163,8 @@ class mbox_email:
                     p = to_entities_quote(p)
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
-#                   p =  self.extractUrl(msg)
+                    p =  extractUrl(p)
+                    p = '<div style="font-family: monospace;">%s</div>' % p
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 

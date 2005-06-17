@@ -58,13 +58,13 @@
         <tr><th>Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
         <tr><th>Subject</th><td tal:content="msg_subject" /></tr>
         </table>
-	<div style="font-family: monospace; border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
-	<span tal:condition="python:len(msg_atts) > 0"> Download attachments: </span><br/>
+	<div style="border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
+	<div style="font-weight:bold" tal:condition="python:len(msg_atts) > 0">Download attachments:</div>
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
 		<a tal:attributes="href string:${id}+++${attachment}" tal:content="attachment"/><br/>
-	</tal:block>
 	<hr />
+	</tal:block>
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
 			<span i18n:translate="" tal:omit-tag="">Previous message</span>:
@@ -85,7 +85,6 @@
 			<a tal:attributes="href here/get_mailarchivefolder_path"><strong i18n:translate="">Mail archive folder</strong></a>
 		</li>
 	</ul>
-	<hr />
 </tal:block>
 </tal:block>
 
