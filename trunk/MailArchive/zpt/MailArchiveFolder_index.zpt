@@ -27,4 +27,6 @@
     </tal:block>
     
 </table>
+<div style="text-align: center"><a href="index_rdf" type="application/rss+xml">Syndicate this site with RDF</a>
+</div>
 <span tal:replace="structure here/standard_html_footer" />
