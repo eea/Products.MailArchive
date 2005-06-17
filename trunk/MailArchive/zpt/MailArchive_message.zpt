@@ -63,7 +63,6 @@
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
 		<a tal:attributes="href string:${id}+++${attachment}" tal:content="attachment"/><br/>
-	<hr />
 	</tal:block>
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
