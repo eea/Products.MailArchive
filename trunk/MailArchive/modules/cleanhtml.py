@@ -26,7 +26,7 @@
 #
 import string
 import htmlentitydefs
-from sgmllib import SGMLParser
+from HTMLParser import HTMLParser
 from types import StringType
 
 # Elements we don't like
@@ -59,7 +59,7 @@ good_attributes = (
 
 bad_attributes = ('target',)
 
-class HTMLCleaner(SGMLParser):
+class HTMLCleaner(HTMLParser):
     """ This class cleans malicous HTML code
         You call it like this:
 
@@ -69,7 +69,7 @@ class HTMLCleaner(SGMLParser):
     """
 
     def __init__(self, encoding='iso8859-1'):
-        SGMLParser.__init__(self)
+        HTMLParser.__init__(self)
         self.encoding = encoding
         self.tagstack = []
         self.checkflag = 0  # Are we in a tag we check?
@@ -93,8 +93,17 @@ class HTMLCleaner(SGMLParser):
                 data = unicode(data, self.encoding)
             self.__data.append(data)
 
-    def unknown_starttag(self, tag, attrs):
-        self.tagstack.append(tag)
+#   def start_br(self, attrs):
+#       self.__data.append("<br")
+#       self.__data.append(" />")
+
+#   def end_br(self):
+#       self.__data.append("END")
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ('p','td','tr'): # This tag cannot nest - so close it
+            self.handle_endtag(tag)
+        self.tagstack.insert(0, tag)
         if tag in bad_elements and self.inbody == 1:
             self.checkflag = 0
         elif tag == 'body':
@@ -116,17 +125,26 @@ class HTMLCleaner(SGMLParser):
             else:
                 self.__data.append(">")
 
-    def unknown_endtag(self, tag):
-        self.tagstack.pop()
-        if tag in bad_elements and self.inbody == 1:
-            self.checkflag = 1
-        elif tag == 'body':
-            self.checkflag = 0
-            self.__data.append('</div>')
-        elif tag in empty_elements:
-            pass
-        elif self.checkflag == 1:
-            self.__data.append("</%s>" % tag)
+    def handle_endtag(self, tag):
+        if len(self.tagstack) == 0:
+            return # Too many pops
+        if tag not in self.tagstack:
+            return # Tag was not opened
+        i = self.tagstack.index(tag)
+        for tag in self.tagstack[:i+1]:
+            if tag in bad_elements and self.inbody == 1:
+                self.checkflag = 1
+            elif tag == 'body':
+                self.checkflag = 0
+                self.__data.append('</div>')
+            elif tag in empty_elements:
+                pass
+            elif self.checkflag == 1:
+                self.__data.append("</%s>" % tag)
+        self.tagstack = self.tagstack[i+1:]
+
+    def handle_comment(self, data):
+        self.handle_data('<!--%s-->' % data)
 
     def handle_charref(self, name):
         """Handle character reference for UNICODE"""
@@ -138,11 +156,11 @@ class HTMLCleaner(SGMLParser):
         self.handle_data('&%s;' % name)
 
 if __name__ == '__main__':
-    conn = open('testdata')
-    if not conn:
-        raise IOError, "Failure in open"
-    data = conn.read()
-    conn.close()
+    from sys import stdin
+    data = stdin.read()
 
     mycleaner = HTMLCleaner('iso8859-1')
-    print mycleaner.clean(data)
+    import pdb
+#   pdb.set_trace()
+    res = mycleaner.clean(data)
+    print res
