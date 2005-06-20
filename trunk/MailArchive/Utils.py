@@ -24,7 +24,7 @@
 import time
 import re
 from whrandom import choice
-from os.path import join, getmtime, isdir, isfile
+from os.path import join, getmtime, isdir, isfile, getsize
 from os import listdir
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from StringIO import StringIO
@@ -90,6 +90,10 @@ class Utils:
         """ Return the time of last modification of path """
         return getmtime(path)
 
+    def get_mbox_size(self, path):
+        """ return the mbox size """
+        return getsize(path)
+    
     def valid_directory(self, path):
         return isdir(path)
     

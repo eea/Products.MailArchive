@@ -92,6 +92,24 @@ class MailArchiveFolder(Folder, Utils):
         l.sort()
         return [val for (key, val) in l]
 
+    def _delete_archives(self, archives, mboxes):
+        """ If a mailbox file disappears from the file system
+         it shall disappear here also """
+        del_objs = self.list_difference(archives, mboxes)
+        self.manage_delObjects(del_objs)
+        #[self._delObject(id) for id in del_objs]
+
+    def _add_archives(self, mboxes):
+        """ add mailboxes """
+        for mb in mboxes:
+            try:
+                #FIXME: If the mailbox file already exists on the
+                # filesystem and it hasn't changed, then don't read it again
+                # -- too time consuming
+                addMailArchive(self, mb[1], '', mb[0])
+            except:
+                pass
+
     def _load_archives(self):
         """ Load the mail archives located on the file system.
             This function is called when a new MailArchiveFolder
@@ -101,24 +119,8 @@ class MailArchiveFolder(Folder, Utils):
         if not self.valid_directory(path):
             return
         
-        files = self.get_files(path)
-        for f in files:
-            abs_path = self.file_path(path, f)
-            if f[0] == '.': # Drop 'hidden' files
-                continue
-            if not self.valid_file(abs_path):    # Drop directories etc.
-                continue
-            if open(abs_path).read(5) == 'From ':
-                try:
-                    addMailArchive(self, f, '', abs_path)
-                except:
-                    pass
-    
-    def _delete_archives(self, archives, mboxes):
-        """ If a mailbox file disappears from the file system
-         it shall disappear here also """
-        del_objs = self.list_difference(archives, mboxes)
-        [self._delObject(id) for id in del_objs]
+        mboxes = self.get_mboxes(path)    #mbox archives
+        self._add_archives(mboxes)
 
     def update_archives(self, delay=1):
         """ Update the mail archives
@@ -137,53 +139,20 @@ class MailArchiveFolder(Folder, Utils):
         
         ids = self._get_archives_id() #zope archives
         mboxes = self.get_mboxes(path)    #mbox archives
-
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
-        for mb in mboxes:
-            try:
-                #FIXME: If the mailbox file already exists on the
-                # filesystem and it hasn't changed, then don't read it again
-                # -- too time consuming
-                addMailArchive(self, mb[1], '', mb[0])
-            except:
-                pass
-                
-    def load_archives(self, delay=1):
-        """ load MailArchves """
-        # Only check the mailboxes every 10th minute.
-        # FIXME: To be called from MailArchiveFolder_index.zpt
-        # (preferably while the user sees the list)
-        if delay and self._v_last_update > time.time() - 600:
-            return
-
-        self._v_last_update = time.time()
-        if not self.validPath():
-            return
-        mbx = []
-        # FIXME: If a mailbox file disappears from the file system
-        # it shall disappear here also
-        for f in os.listdir(self._path):
-            abs_path = os.path.join(self._path, f)
-            if f[0] == '.':    # Drop 'hidden' files
-                continue
-            if not os.path.isfile(abs_path): # Drop directories etc.
-                continue
-            if open(abs_path).read(5) == "From ":
-                id = f
-                try:
-                    #FIXME: If the mailbox file already exists on the
-                    # filesystem and it hasn't changed, then don't read it again
-                    # -- too time consuming
-                    addMailArchive(self, id, '', abs_path)
-                except:
-                    #FIXME: Don't delete and then add. Just ignore
-                    zobj = self._getOb(id)
-                    if zobj.last_modified != self.get_last_modif(self._path):
-                        self._delObject(id)
-                        addMailArchive(self, id, '', abs_path)
-                    else:
-                        pass
+        buf = []
+        for mbox in mboxes:
+            if hasattr(self, mbox[1]):
+                m = getattr(self, mbox[1])
+                # If the mailbox file already exists on the filesystem and
+                # it hasn't changed, then don't read it again
+                if m.size != self.get_mbox_size(mbox[0]) and m.last_modified != self.get_last_modif(mbox[0]):
+                    buf.append(mbox)
+            else:
+                buf.append(mbox)
+        self._add_archives(buf)
+        return
 
     def _getOb(self, id, default=_marker):
         if id.endswith(".zip"):
@@ -198,10 +167,8 @@ class MailArchiveFolder(Folder, Utils):
             self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
             self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment')
             return File(id, '', zf, content_type='application/x-zip-compressed').__of__(self)
-        elif default is _marker:
-            return getattr(self, id)
         else:
-            return default
+            return getattr(self, id)
 
     def manageProperties(self, title='', path='', allow_zip=0, REQUEST=None):
         """ save properties """

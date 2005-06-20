@@ -120,10 +120,8 @@ class MailArchive(Folder, mbox):
                 return File(att, '', data).__of__(self)
             else:
                 return None
-        elif default is _marker:
-            return getattr(self, id)
         else:
-            return default
+            return getattr(self, id)
 
     security.declareProtected('View', 'index_html')
     index_html = PageTemplateFile('zpt/MailArchive_index', globals())
