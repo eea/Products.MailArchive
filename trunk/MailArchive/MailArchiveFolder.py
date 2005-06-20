@@ -20,8 +20,6 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-import os, time
-
 from OFS.Folder import Folder
 from OFS.Image import File
 from Globals import InitializeClass, MessageDialog
@@ -65,6 +63,7 @@ class MailArchiveFolder(Folder, Utils):
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self._v_last_update = 0
 
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
@@ -78,18 +77,79 @@ class MailArchiveFolder(Folder, Utils):
         return self._path
 
     def validPath(self):
-        if not os.path.isdir(self._path):
-            return 0
-        return 1
-
+        return self.valid_directory(self._path)
+    
+    def _get_archives(self):
+        return self.objectValues('MailArchive')
+    
+    def _get_archives_id(self):
+        return self.objectIds('MailArchive')
+    
     def getArchives(self):
         """ returns the archives list sorted by the 'starting' property
             - the date of the first message in the mbox file """
-        l = [(x.starting, x) for x in self.objectValues('MailArchive')]
+        l = [(x.starting, x) for x in self._get_archives()]
         l.sort()
         return [val for (key, val) in l]
 
-    def load_archive(self, delay=1):
+    def _load_archives(self):
+        """ Load the mail archives located on the file system.
+            This function is called when a new MailArchiveFolder
+            instance is created.
+        """
+        path = self.getPath()
+        if not self.valid_directory(path):
+            return
+        
+        files = self.get_files(path)
+        for f in files:
+            abs_path = self.file_path(path, f)
+            if f[0] == '.': # Drop 'hidden' files
+                continue
+            if not self.valid_file(abs_path):    # Drop directories etc.
+                continue
+            if open(abs_path).read(5) == 'From ':
+                try:
+                    addMailArchive(self, f, '', abs_path)
+                except:
+                    pass
+    
+    def _delete_archives(self, archives, mboxes):
+        """ If a mailbox file disappears from the file system
+         it shall disappear here also """
+        del_objs = self.list_difference(archives, mboxes)
+        [self._delObject(id) for id in del_objs]
+
+    def update_archives(self, delay=1):
+        """ Update the mail archives
+            Only check the mailboxes every 10th minute.
+            FIXME: To be called from MailArchiveFolder_index.zpt
+                (preferably while the user sees the list)
+        """
+        #if delay and self._v_last_update > self.get_time() - 600:
+        #    return
+        
+        self._v_last_update = self.get_time()
+
+        path = self.getPath()
+        if not self.valid_directory(path):
+            return
+        
+        ids = self._get_archives_id() #zope archives
+        mboxes = self.get_mboxes(path)    #mbox archives
+
+        self._delete_archives(ids, [mb[1] for mb in mboxes])
+        
+        for mb in mboxes:
+            try:
+                #FIXME: If the mailbox file already exists on the
+                # filesystem and it hasn't changed, then don't read it again
+                # -- too time consuming
+                addMailArchive(self, mb[1], '', mb[0])
+            except:
+                pass
+                
+    def load_archives(self, delay=1):
         """ load MailArchves """
         # Only check the mailboxes every 10th minute.
         # FIXME: To be called from MailArchiveFolder_index.zpt
@@ -148,8 +208,8 @@ class MailArchiveFolder(Folder, Utils):
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self.update_archives(0)
         self._p_changed = 1
-        self.load_archive(0)
         if REQUEST is not None:
             return MessageDialog(title = 'Edited',
                 message = "The properties of %s have been changed!" % self.id,
@@ -157,7 +217,7 @@ class MailArchiveFolder(Folder, Utils):
                 )
 
     def manage_afterAdd(self, item, container, new_fn=None):
-        self.load_archive(0)
+        self._load_archives()
         Folder.inheritedAttribute ("manage_afterAdd") (self, item, container)
 
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())

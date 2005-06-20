@@ -2,6 +2,7 @@
 
 <h1 tal:content="here/title_or_id" />
 
+<span tal:replace="python:here.update_archives()"/>
 <table border="2" cellpadding="0" cellspacing="0">
     <tr>
         <th>Archive</th>

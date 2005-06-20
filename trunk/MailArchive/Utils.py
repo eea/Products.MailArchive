@@ -44,6 +44,10 @@ class Utils:
         try: return time.strftime('%Y-%m-%d %H:%M:%S', p_tuple)
         except: return ''
 
+    def list_difference(self, l1, l2):
+        #return a list with elements from l1 that are not in l2
+        return [e1 for e1 in l1 if e1 not in l2]
+    
     def tupleToShortDate(self, p_tuple):
         try: return time.strftime('%Y-%m-%d', p_tuple)
         except: return ''
@@ -94,6 +98,18 @@ class Utils:
 
     def get_files(self, path):
         return listdir(path)
+    
+    def get_mboxes(self, path):
+        res = []
+        for f in self.get_files(path):
+            abs_path = self.file_path(path, f)
+            if f[0] == '.': # Drop 'hidden' files
+                continue
+            if not self.valid_file(abs_path):    # Drop directories etc.
+                continue
+            if open(abs_path).read(5) == 'From ':
+                res.append((abs_path, f))
+        return res
     
     def file_path(self, path, name):
         return join(path, name)
