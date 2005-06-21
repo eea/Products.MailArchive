@@ -24,9 +24,12 @@
 
 import email
 import re
+import codecs
 from os.path import join
 from email.Utils import parseaddr, parsedate, getaddresses
 from email.Header import decode_header
+
+
 from cleanhtml import HTMLCleaner
 
 charset_table = {
@@ -42,9 +45,10 @@ def to_unicode(s, encoding):
     if encoding:
         encoding = encoding.lower()
         charset  = charset_table.get(encoding, encoding)
-        return unicode(s, charset)
+        return unicode(s, charset, errors='replace')
     else:
-        return unicode(s)
+        return unicode(s, errors='replace')
+
 
 def extractUrl(msg):
     """ Functions to identify and extract URLs"""
@@ -90,19 +94,29 @@ class mbox_email:
                       r'<a href="\g<url>">\g<url></a>', msg)
         return strg.strip()
 
+    def codecs_lookup(self, encoding):
+        if encoding is not None:
+            try:
+                codecs.lookup(encoding)
+                return True
+            except LookupError:
+                return False
+        else:
+            return True
+
     def getTo(self):
         res = []
         buf = getaddresses(self._msg.get_all('to', ''))
         for i in buf:
             header = decode_header(i[0])
-            data = ''.join([to_unicode(s, enc) for s, enc in header])
+            data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
             res.append((to_entities_quote(data), i[1]))
         return res
             
     def getFrom(self):
         buf = parseaddr(self._msg.get('from', ''))
         header = decode_header(buf[0])
-        data = ''.join([to_unicode(s, enc) for s, enc in header])
+        data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
         return (to_entities_quote(data), buf[1])
 
     def getCC(self):
@@ -110,14 +124,14 @@ class mbox_email:
         buf = getaddresses(self._msg.get_all('cc', ''))
         for i in buf:
             header = decode_header(i[0])
-            data = ''.join([to_unicode(s, enc) for s, enc in header])
+            data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
             res.append((to_entities_quote(data), i[1]))
         return res
 
     def getSubject(self):
         buf = self._msg.get('subject', '')
         header = decode_header(buf)
-        data = ''.join([to_unicode(s, enc) for s, enc in header])
+        data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
         return to_entities_quote(data)
 
     def getDateTime(self):
