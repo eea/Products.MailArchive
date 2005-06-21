@@ -19,6 +19,7 @@
 #  Original Code: 
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
+#  Soren Roug, EEA
 
 
 import email
@@ -157,7 +158,7 @@ class mbox_email:
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
                     p =  extractUrl(p)
-                    p = '<div style="font-family: monospace;">%s</div>' % p
+                    p = '''<div style="font-family: 'Courier New', monospace; white-space: pre-wrap">%s</div>''' % p
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 
