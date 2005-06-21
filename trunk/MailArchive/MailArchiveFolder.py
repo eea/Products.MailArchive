@@ -26,6 +26,7 @@ from OFS.Image import File
 from Globals import InitializeClass, MessageDialog
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, view
+from AccessControl import Unauthorized
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 #Product imports
@@ -158,8 +159,10 @@ class MailArchiveFolder(Folder, Utils):
 
     def _getOb(self, id, default=_marker):
         if id.endswith(".zip"):
+            if not self.allow_zip:
+                self.RESPONSE.setStatus(404, "Not Found")
+                return self.RESPONSE
             mbox_id = id[:-4]
-            print mbox_id
             #get mbox content
             obj = self._getOb(mbox_id)
             mbox = obj.get_mbox_file()
