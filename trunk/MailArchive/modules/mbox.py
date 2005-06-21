@@ -98,7 +98,7 @@ class mbox:
 
     def get_mbox_thread(self, msgs):
         #builds threads
-        r = self.__get_mbox_thread(msgs, None, 0)
+        r = self.__get_mbox_thread(msgs, '', 0)
         for x in msgs:
             r.append((0, x))
         return r
