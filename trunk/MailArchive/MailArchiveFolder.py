@@ -20,6 +20,7 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
+#Zope imports
 from OFS.Folder import Folder
 from OFS.Image import File
 from Globals import InitializeClass, MessageDialog
@@ -27,6 +28,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, view
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
+#Product imports
 from MailArchive import addMailArchive
 from Utils import Utils
 
@@ -40,7 +42,6 @@ def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0, REQUES
     self._setObject(id, ob)
     if REQUEST is not None:
         return self.manage_main(self, REQUEST, update_menu=1)
-    
     
 class MailArchiveFolder(Folder, Utils):
     """ """
@@ -58,6 +59,8 @@ class MailArchiveFolder(Folder, Utils):
         Folder.manage_options[3:-2]
     )
 
+    security = ClassSecurityInfo()
+    
     def __init__(self, id, title, path, allow_zip):
         self.id = id
         self.title = title
@@ -71,27 +74,27 @@ class MailArchiveFolder(Folder, Utils):
         if not hasattr(self, 'allow_zip'):
             self.allow_zip = 0
 
-    def get_mailarchivefolder_path(self, p=0): return self.absolute_url(p)
+    security.declareProtected(view, 'get_mailarchivefolder_path')
+    def get_mailarchivefolder_path(self, p=0):
+        return self.absolute_url(p)
 
+    security.declareProtected(view, 'getPath')
     def getPath(self):
         return self._path
 
+    security.declareProtected(view_management_screens, 'validPath')
     def validPath(self):
         return self.valid_directory(self._path)
     
-    def _get_archives(self):
-        return self.objectValues('MailArchive')
-    
-    def _get_archives_id(self):
-        return self.objectIds('MailArchive')
-    
+    security.declareProtected(view, 'getArchives')
     def getArchives(self):
         """ returns the archives list sorted by the 'starting' property
             - the date of the first message in the mbox file """
-        l = [(x.starting, x) for x in self._get_archives()]
+        l = [(x.starting, x) for x in self.objectValues('MailArchive')]
         l.sort()
         return [val for (key, val) in l]
 
+    security.declarePrivate('_delete_archives')
     def _delete_archives(self, archives, mboxes):
         """ If a mailbox file disappears from the file system
          it shall disappear here also """
@@ -99,6 +102,7 @@ class MailArchiveFolder(Folder, Utils):
         self.manage_delObjects(del_objs)
         #[self._delObject(id) for id in del_objs]
 
+    security.declarePrivate('_add_archives')
     def _add_archives(self, mboxes):
         """ add mailboxes """
         for mb in mboxes:
@@ -110,6 +114,7 @@ class MailArchiveFolder(Folder, Utils):
             except:
                 pass
 
+    security.declarePrivate('_load_archives')
     def _load_archives(self):
         """ Load the mail archives located on the file system.
             This function is called when a new MailArchiveFolder
@@ -122,7 +127,9 @@ class MailArchiveFolder(Folder, Utils):
         mboxes = self.get_mboxes(path)    #mbox archives
         self._add_archives(mboxes)
 
-    def update_archives(self, delay=1):
+    
+    security.declareProtected(view, 'updateArchives')
+    def updateArchives(self, delay=1):
         """ Update the mail archives
             Only check the mailboxes every 10th minute.
             FIXME: To be called from MailArchiveFolder_index.zpt
@@ -137,7 +144,7 @@ class MailArchiveFolder(Folder, Utils):
         if not self.valid_directory(path):
             return
         
-        ids = self._get_archives_id() #zope archives
+        ids = self.objectIds('MailArchive') #zope archives
         mboxes = self.get_mboxes(path)    #mbox archives
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
@@ -170,12 +177,13 @@ class MailArchiveFolder(Folder, Utils):
         else:
             return getattr(self, id)
 
+    security.declareProtected(view_management_screens, 'manageProperties')
     def manageProperties(self, title='', path='', allow_zip=0, REQUEST=None):
         """ save properties """
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
-        self.update_archives(0)
+        self.updateArchives(0)
         self._p_changed = 1
         if REQUEST is not None:
             return MessageDialog(title = 'Edited',
@@ -183,14 +191,21 @@ class MailArchiveFolder(Folder, Utils):
                 action = './manage_main',
                 )
 
+    security.declareProtected(view_management_screens, 'manage_afterAdd')
     def manage_afterAdd(self, item, container, new_fn=None):
         self._load_archives()
         Folder.inheritedAttribute ("manage_afterAdd") (self, item, container)
 
+    security.declareProtected(view_management_screens, 'properties_html')
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())
+    
+    security.declareProtected(view, 'index_html')
     index_html = PageTemplateFile('zpt/MailArchiveFolder_index', globals())
 
+    security.declareProtected(view, 'index_xslt')
     index_xslt = PageTemplateFile('zpt/MailArchiveFolder_xslt', globals())
+    
+    security.declareProtected(view, 'index_rdf')
     def index_rdf(self, REQUEST=None, RESPONSE=None):
         """ """
         #process items for the RDF file

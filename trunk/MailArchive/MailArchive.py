@@ -26,6 +26,7 @@ from OFS.SimpleItem import SimpleItem
 from OFS.Folder import Folder
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+from AccessControl.Permissions import view_management_screens, view
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 #Product imports
@@ -40,6 +41,7 @@ def addMailArchive(self, id='', title='', path='', REQUEST=None):
     self._setObject(id, ob)
     if REQUEST:
         return self.manage_main(self, REQUEST, update_menu=1)
+
 
 class MailArchive(Folder, mbox):
     """ """
@@ -64,6 +66,7 @@ class MailArchive(Folder, mbox):
 
     security = ClassSecurityInfo()
 
+    security.declareProtected(view, 'sortMboxMsgs')
     def sortMboxMsgs(self, skey='', rkey=''):
         #returns a sorted list of messages
         n = -1
@@ -81,10 +84,14 @@ class MailArchive(Folder, mbox):
         else:
             return [(0, x) for x in self.get_mbox_msgs()]
 
+
+    security.declareProtected(view, 'processId')
     def processId(self, REQUEST):
         try: return abs(int(REQUEST.get('id', '')))
         except: return None
 
+
+    security.declareProtected(view, 'getMsg')
     def getMsg(self, id=None):
         #returns the body of the given message id
         if id is not None:
@@ -94,6 +101,7 @@ class MailArchive(Folder, mbox):
         else:
             return None
 
+    security.declareProtected(view, 'getPrevNext')
     def getPrevNext(self, id, sort_by):
         #returns info about the next and previous message
         l = [x[1] for x in self.sortMboxMsgs(sort_by)]
@@ -105,6 +113,7 @@ class MailArchive(Folder, mbox):
         else: next = -1
         return (prev, next)
 
+    security.declareProtected(view, 'getMboxSize')
     def getMboxSize(self):
         return self.size
 
