@@ -88,12 +88,6 @@ class mbox_email:
     def __init__(self, msg):
         self._msg = email.message_from_string(msg)
 
-    def _extract_url(self, msg):
-        """ Functions to identify and extract URLs"""
-        strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
-                      r'<a href="\g<url>">\g<url></a>', msg)
-        return strg.strip()
-
     def codecs_lookup(self, encoding):
         if encoding is not None:
             try:
@@ -168,7 +162,6 @@ class mbox_email:
                     p = p.replace('@', '&#64;')
                 else:
                     p = to_entities_quote(p)
-                    #p =  self._extract_url(p)
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
                     p =  extractUrl(p)

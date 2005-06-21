@@ -19,3 +19,6 @@ Dependencies
     (maybe as root) with the same python-binary you use for running your Zope-Server.
     If you run Zope with Python 2.2.3 or higher, the email-package is already included.
 
+How to test it
+
+    Run test_email.py from MailArchive directory: python tests/test_email.py

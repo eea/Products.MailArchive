@@ -1,0 +1,36 @@
+Return-Path: <john@fns.ro>
+Delivered-To: john.doe@imap.dummy.ro
+Received: by imap.dummy.ro (Postfix, from userid 108)
+    id DDD0354CD5; Tue, 21 Jun 2005 16:16:44 +0300 (EEST)
+Received: from noulwfnif.fns.ro (wfnif.dummy.ro [192.168.1.250])
+    by imap.dummy.ro (Postfix) with SMTP id 29BEB5498F
+    for <john.doe@imap.dummy.ro>; Tue, 21 Jun 2005 16:16:43 +0300 (EEST)
+Received: (qmail 6759 invoked by alias); 21 Jun 2005 13:16:42 -0000
+Delivered-To: john.doe@fns.ro
+Received: (qmail 6754 invoked from network); 21 Jun 2005 13:16:42 -0000
+Received: from server.dummy.ro (HELO ?190.160.10.74?) (192.168.1.74)
+  by 0 with SMTP; 21 Jun 2005 13:16:42 -0000
+Message-ID: <42B811E8.7090602@fns.ro>
+Date: Tue, 21 Jun 2005 16:11:04 +0300
+From: "=?gb2312?B?y87OxM7E?=" <linong@upu.cn>
+User-Agent: Mozilla Thunderbird 1.0.2 (Windows/20050317)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: =?ISO-2022-JP?B?Sj9yZ2VuIExhcnNlbg==?= <jorg.lan@iod.dk>
+CC: "=?gb2312?B?y87OxM7E?=" <linong@upu.cn>
+Subject: =?ISO-2022-JP?B?Sj9yZ2VuIExhcnNlbg==?=
+References: <42B812A3.8010205@fns.ro>
+In-Reply-To: <42B812A3.8010205@fns.ro>
+Content-Type: multipart/mixed;
+ boundary="------------060802030001080209000500"
+X-Spam-Checker-Version: SpamAssassin 3.0.3 (2005-04-27) on imap.dummy.ro
+X-Spam-Level:
+X-Spam-Status: No, score=-3.7 required=5.0 tests=ALL_TRUSTED,BAYES_05
+    autolearn=ham version=3.0.3
+
+This is a multi-part message in MIME format.
+--------------060802030001080209000500
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+test content
