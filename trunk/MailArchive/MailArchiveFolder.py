@@ -74,6 +74,10 @@ class MailArchiveFolder(Folder, Utils):
         self._v_last_update = 0
         if not hasattr(self, 'allow_zip'):
             self.allow_zip = 0
+        if not hasattr(self, 'index_header'):
+            self.index_header = ''
+        if not hasattr(self, 'index_footer'):
+            self.index_footer = ''
 
     security.declareProtected(view, 'get_mailarchivefolder_path')
     def get_mailarchivefolder_path(self, p=0):
@@ -176,11 +180,14 @@ class MailArchiveFolder(Folder, Utils):
             return getattr(self, id)
 
     security.declareProtected(view_management_screens, 'manageProperties')
-    def manageProperties(self, title='', path='', allow_zip=0, REQUEST=None):
+    def manageProperties(self, title='', path='', index_header='', index_footer='',
+             allow_zip=0, REQUEST=None):
         """ save properties """
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self.index_header = index_header
+        self.index_footer = index_footer
         self.updateArchives(0)
         self._p_changed = 1
         if REQUEST is not None:

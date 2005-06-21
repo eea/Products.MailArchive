@@ -29,6 +29,20 @@
         </td>
     </tr>
     <tr>
+        <th>Header</th>
+        <td>
+            <textarea cols="60" rows="5"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>Footer</th>
+        <td>
+            <textarea cols="60" rows="5">&lt;div style="text-align: center"&gt;
+&lt;a href="index_rdf" type="application/rss+xml"&gt;Syndicate this site with RDF&lt;/a&gt;
+&lt;/div&gt;</textarea>
+        </td>
+    </tr>
+    <tr>
         <td></td>
         <td><input type="submit" value=" Submit "></td>
     </tr>

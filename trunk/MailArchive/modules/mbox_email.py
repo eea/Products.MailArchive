@@ -92,11 +92,11 @@ class mbox_email:
         if encoding is not None:
             try:
                 codecs.lookup(encoding)
-                return True
+                return 1
             except LookupError:
-                return False
+                return 0
         else:
-            return True
+            return 1
 
     def getTo(self):
         res = []

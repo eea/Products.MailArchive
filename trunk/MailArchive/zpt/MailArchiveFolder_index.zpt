@@ -2,7 +2,9 @@
 
 <h1 tal:content="here/title_or_id" />
 
+<span tal:replace="structure here/index_header"/>
 <span tal:replace="python:here.updateArchives()"/>
+
 <table border="2" cellpadding="0" cellspacing="0">
     <tr>
         <th>Archive</th>
@@ -13,7 +15,7 @@
 
     <tal:block define="archives here/getArchives" repeat="archive archives">
 	<tr>
-        <td><a tal:attributes="href string:${archive/absolute_url}?sort=date" tal:content="archive/title_or_id" /></td>
+        <td><a tal:attributes="href string:${archive/absolute_url}?skey=date" tal:content="archive/title_or_id" /></td>
 		<td>
 			<span tal:replace="python:here.tupleToShortDate(archive.starting)" /> -
 			<span tal:replace="python:here.tupleToShortDate(archive.ending)" />
@@ -28,6 +30,5 @@
     </tal:block>
     
 </table>
-<div style="text-align: center"><a href="index_rdf" type="application/rss+xml">Syndicate this site with RDF</a>
-</div>
+<span tal:replace="structure here/index_footer"/>
 <span tal:replace="structure here/standard_html_footer" />

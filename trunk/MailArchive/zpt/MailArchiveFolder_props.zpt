@@ -27,6 +27,18 @@
             <input type="checkbox" name="allow_zip" tal:condition="python:not here.allow_zip" />
         </td>
     </tr>
+    <tr>
+        <th>Header</th>
+        <td>
+            <textarea cols="60" rows="5" name="index_header" tal:content="here/index_header"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>Footer</th>
+        <td>
+            <textarea cols="60" rows="5" name="index_footer" tal:content="here/index_footer"></textarea>
+        </td>
+    </tr>
 </table>
 <input name="Save" type="submit" id="Save" value="Save changes" />
 </form>
