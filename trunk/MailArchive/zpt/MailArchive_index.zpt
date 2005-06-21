@@ -28,7 +28,7 @@
 	<th class="sorted" scope="col">
 		<tal:block tal:condition="python:skey=='author'">
 			<a title="Sorted A..Z - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=author&rkey=1' % url, '%s/?skey=author' % url)">
-				<span i18n:translate="" tal:omit-tag="">From</span>
+				<span i18n:translate="" tal:omit-tag="">Author</span>
 				<img tal:condition="python:rkey==''" src="misc_/MailArchive/sortup.gif" width="12" height="12" alt="" />
 				<img tal:condition="python:rkey=='1'" src="misc_/MailArchive/sortdown.gif" width="12" height="12" alt="" />
 			</a>

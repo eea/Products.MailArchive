@@ -25,7 +25,7 @@ import time
 import re
 from whrandom import choice
 from os.path import join, getmtime, isdir, isfile, getsize
-from os import listdir
+from os import listdir, unlink
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from StringIO import StringIO
 
@@ -103,6 +103,9 @@ class Utils:
     def get_files(self, path):
         return listdir(path)
     
+    def delete_file(self, path):
+        unlink(path)
+
     def get_mboxes(self, path):
         res = []
         for f in self.get_files(path):

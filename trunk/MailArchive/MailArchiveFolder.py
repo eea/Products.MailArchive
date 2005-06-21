@@ -107,9 +107,6 @@ class MailArchiveFolder(Folder, Utils):
         """ add mailboxes """
         for mb in mboxes:
             try:
-                #FIXME: If the mailbox file already exists on the
-                # filesystem and it hasn't changed, then don't read it again
-                # -- too time consuming
                 addMailArchive(self, mb[1], '', mb[0])
             except:
                 pass
@@ -127,7 +124,6 @@ class MailArchiveFolder(Folder, Utils):
         mboxes = self.get_mboxes(path)    #mbox archives
         self._add_archives(mboxes)
 
-    
     security.declareProtected(view, 'updateArchives')
     def updateArchives(self, delay=1):
         """ Update the mail archives
@@ -159,18 +155,17 @@ class MailArchiveFolder(Folder, Utils):
             else:
                 buf.append(mbox)
         self._add_archives(buf)
-        return
 
     def _getOb(self, id, default=_marker):
         if id.endswith(".zip"):
             mbox_id = id[:-4]
+            print mbox_id
             #get mbox content
             obj = self._getOb(mbox_id)
             mbox = obj.get_mbox_file()
             #zip mbox content
-            original = "%s.mbx" % mbox_id
-            zf, path = self.zip_file(id, original, mbox)
-            os.unlink(path)
+            zf, path = self.zip_file(id, mbox_id, mbox)
+            self.delete_file(path)
             self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
             self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment')
             return File(id, '', zf, content_type='application/x-zip-compressed').__of__(self)

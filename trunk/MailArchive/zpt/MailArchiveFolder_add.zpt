@@ -6,6 +6,9 @@
 
 <h3>Add MailArchive Folder</h3>
 
+<p>This proccess can take several minutes according to the number and size of the
+    files that you are loading.</p>
+    
 <form action="manage_addMailArchiveFolder" method="post" name="frmAdd">
 <table>
     <tr>

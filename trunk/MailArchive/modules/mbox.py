@@ -33,7 +33,6 @@ class mbox:
         self.size = os.path.getsize(self.path)
         self.last_modified = os.path.getmtime(self.path)
         self.cache = {}
-        self.mid_cache = {}
         self.starting = None
         self.ending = None
         self.process_mbox()
@@ -54,13 +53,10 @@ class mbox:
                 from_addr = m.getFrom()
                 f = from_addr[0]
                 if not f: f = from_addr[1]
-                mes_id = m.getMessageID()
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    s, d, f, mes_id, m.getInReplyTo()
+                    s, d, f, m.getMessageID(), m.getInReplyTo()
                 )
-                # Cache the message-ids so we can use In-Reply-To
-                self.mid_cache[mes_id] = index
                 if index == 1: self.starting = d
                 self.ending = d
                 index += 1
