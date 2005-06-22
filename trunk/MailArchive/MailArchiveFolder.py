@@ -62,7 +62,7 @@ class MailArchiveFolder(Folder, Utils):
     )
 
     security = ClassSecurityInfo()
-    
+
     def __init__(self, id, title, path, allow_zip, index_header, index_footer):
         self.id = id
         self.title = title

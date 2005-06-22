@@ -43,6 +43,7 @@ class mbox:
         mb = mailbox.PortableUnixMailbox (open(self.path,'rb'))
         msg = mb.next()
         index = 1
+        starting, ending = None, None
         while msg is not None:
             document = msg.fp.read()
             if document is not None:
@@ -57,10 +58,16 @@ class mbox:
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
                     s, d, f, m.getMessageID(), m.getInReplyTo()
                 )
-                if index == 1: self.starting = d
-                self.ending = d
+                #process starting, ending
+                if starting is None: starting = d
+                else:
+                    if d < starting: starting = d
+                if ending is None: ending = d
+                else:
+                    if d > ending: ending = d
                 index += 1
                 msg = mb.next()
+        self.starting, self.ending = starting, ending
         mb = None
 
     def get_msg_index(self, msg): return msg[0]
