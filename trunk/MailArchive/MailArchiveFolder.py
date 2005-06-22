@@ -124,6 +124,12 @@ class MailArchiveFolder(Folder, Utils):
             except:
                 pass
 
+    security.declarePrivate('_reload_archive')
+    def _reload_archives(self, mboxes):
+        """ reload archives """
+        [ self.manage_delObjects(mbox[1]) for mbox in mboxes ]
+        self._add_archives(mboxes)
+
     security.declarePrivate('_load_archives')
     def _load_archives(self):
         """ Load the mail archives located on the file system.
@@ -144,7 +150,7 @@ class MailArchiveFolder(Folder, Utils):
             FIXME: To be called from MailArchiveFolder_index.zpt
                 (preferably while the user sees the list)
         """
-        if delay and self._v_last_update > self.get_time() - 6:
+        if delay and self._v_last_update > self.get_time() - 600:
             return
         
         self._v_last_update = self.get_time()
@@ -167,7 +173,7 @@ class MailArchiveFolder(Folder, Utils):
                     buf.append(mbox)
             else:
                 buf.append(mbox)
-        self._add_archives(buf)
+        self._reload_archives(buf)
 
     def _getOb(self, id, default=_marker):
         if id.endswith(".zip"):
