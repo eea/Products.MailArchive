@@ -139,8 +139,8 @@ class MailArchiveFolder(Folder, Utils):
             FIXME: To be called from MailArchiveFolder_index.zpt
                 (preferably while the user sees the list)
         """
-        #if delay and self._v_last_update > self.get_time() - 600:
-        #    return
+        if delay and self._v_last_update > self.get_time() - 600:
+            return
         
         self._v_last_update = self.get_time()
 
