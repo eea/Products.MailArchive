@@ -40,14 +40,13 @@ charset_table = {
      "x-unknown": "Latin-1",
 }
 
-
 def to_unicode(s, encoding):
     if encoding:
         encoding = encoding.lower()
         charset  = charset_table.get(encoding, encoding)
-        return unicode(s, charset, errors='replace')
+        return unicode(s, charset, 'replace')
     else:
-        return unicode(s, errors='replace')
+        return unicode(s, 'ascii', 'replace')
 
 
 def extractUrl(msg):
