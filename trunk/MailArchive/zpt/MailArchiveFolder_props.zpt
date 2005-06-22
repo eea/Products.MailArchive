@@ -28,6 +28,11 @@
         </td>
     </tr>
     <tr>
+        <th>Ignore archives</th>
+        <td><textarea cols="30" rows="5" name="mbox_ignore"
+                tal:content="python:here.list_to_lines(here.mbox_ignore)"></textarea>
+    </tr>
+    <tr>
         <th>Header</th>
         <td>
             <textarea cols="60" rows="5" name="index_header" tal:content="here/index_header"></textarea>

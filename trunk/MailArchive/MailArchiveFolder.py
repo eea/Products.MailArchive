@@ -68,10 +68,11 @@ class MailArchiveFolder(Folder, Utils):
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self.mbox_ignore = ['Trash','Sent','Sent-Items'] 
         self.index_header = index_header
         self.index_footer = index_footer
         self._v_last_update = 0
-
+    
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
         self._v_last_update = 0
@@ -81,6 +82,8 @@ class MailArchiveFolder(Folder, Utils):
             self.index_header = ''
         if not hasattr(self, 'index_footer'):
             self.index_footer = ''
+        if not hasattr(self, 'mbox_ignore'):
+            self.mbox_ignore = ['Trash','Sent','Sent-Items']
 
     security.declareProtected(view, 'get_mailarchivefolder_path')
     def get_mailarchivefolder_path(self, p=0):
@@ -107,8 +110,10 @@ class MailArchiveFolder(Folder, Utils):
         """ If a mailbox file disappears from the file system
          it shall disappear here also """
         del_objs = self.list_difference(archives, mboxes)
-        self.manage_delObjects(del_objs)
-        #[self._delObject(id) for id in del_objs]
+        del_objs.extend(self.mbox_ignore)
+        #check if objects are in Zope to avoid AttributeError
+        buf = [ x for x in del_objs if hasattr(self, x) ]
+        self.manage_delObjects(self.remove_duplicates(buf))
 
     security.declarePrivate('_add_archives')
     def _add_archives(self, mboxes):
@@ -129,7 +134,7 @@ class MailArchiveFolder(Folder, Utils):
         if not self.valid_directory(path):
             return
         
-        mboxes = self.get_mboxes(path)    #mbox archives
+        mboxes = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
         self._add_archives(mboxes)
 
     security.declareProtected(view, 'updateArchives')
@@ -139,7 +144,7 @@ class MailArchiveFolder(Folder, Utils):
             FIXME: To be called from MailArchiveFolder_index.zpt
                 (preferably while the user sees the list)
         """
-        if delay and self._v_last_update > self.get_time() - 600:
+        if delay and self._v_last_update > self.get_time() - 6:
             return
         
         self._v_last_update = self.get_time()
@@ -149,7 +154,7 @@ class MailArchiveFolder(Folder, Utils):
             return
         
         ids = self.objectIds('MailArchive') #zope archives
-        mboxes = self.get_mboxes(path)    #mbox archives
+        mboxes = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
         buf = []
@@ -183,12 +188,13 @@ class MailArchiveFolder(Folder, Utils):
             return getattr(self, id)
 
     security.declareProtected(view_management_screens, 'manageProperties')
-    def manageProperties(self, title='', path='', index_header='', index_footer='',
+    def manageProperties(self, title='', path='', mbox_ignore=[], index_header='', index_footer='',
              allow_zip=0, REQUEST=None):
         """ save properties """
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self.mbox_ignore = self.lines_to_list(mbox_ignore)
         self.index_header = index_header
         self.index_footer = index_footer
         self.updateArchives(0)

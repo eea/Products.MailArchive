@@ -59,9 +59,28 @@ class Utils:
         try: return time.strftime('%Y-%m-%dT%H:%M:%S', p_tuple)
         except: return ''
 
+    def lines_to_list(self, value):
+        """Takes a value from a textarea control and returns a list of values"""
+        if type(value) == type([]):
+            return value
+        elif value == '':
+            return []
+        else:
+            return filter(lambda x:x!='', value.split('\r\n'))
+
+    def list_to_lines(self, values):
+        """Takes a list of values and returns a value for a textarea control"""
+        if len(values) == 0: return ''
+        else: return '\r\n'.join(values)
+
     def replace_at(self, msg):
         return msg.replace('@', '&#64;')
 
+    def remove_duplicates(self, l):
+        d = {}
+        [ d.setdefault(i,None) for i in l ]
+        return d.keys()
+    
     def zip_file(self, id, original, data):
         path = join(CLIENT_HOME, id)
         zp = ZipFile(path, "w")
@@ -106,7 +125,7 @@ class Utils:
     def delete_file(self, path):
         unlink(path)
 
-    def get_mboxes(self, path):
+    def get_mboxes(self, path, ignore_list):
         res = []
         for f in self.get_files(path):
             abs_path = self.file_path(path, f)
@@ -114,8 +133,11 @@ class Utils:
                 continue
             if not self.valid_file(abs_path):    # Drop directories etc.
                 continue
-            if open(abs_path).read(5) == 'From ':
-                res.append((abs_path, f))
+            if (f[:-4] in ignore_list) or (f in ignore_list):
+                continue
+            else:
+                if open(abs_path).read(5) == 'From ':
+                    res.append((abs_path, f))
         return res
     
     def file_path(self, path, name):
