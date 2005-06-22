@@ -15,7 +15,7 @@
 
     <tal:block define="archives here/getArchives" repeat="archive archives">
 	<tr>
-        <td><a tal:attributes="href string:${archive/absolute_url}?skey=date" tal:content="archive/title_or_id" /></td>
+        <td><a tal:attributes="href string:${archive/absolute_url}?skey=date&amp;rkey=1" tal:content="archive/title_or_id" /></td>
 		<td>
 			<span tal:replace="python:here.tupleToShortDate(archive.starting)" /> -
 			<span tal:replace="python:here.tupleToShortDate(archive.ending)" />
