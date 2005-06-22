@@ -36,10 +36,11 @@ from Utils import Utils
 _marker = []
 
 manage_addMailArchiveFolderForm = PageTemplateFile('zpt/MailArchiveFolder_add', globals())
-def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0, REQUEST=None):
+def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0,
+                                index_header='', index_footer='', REQUEST=None):
     """ Add a new MailArchiveFolder object """
 
-    ob = MailArchiveFolder(id, title, path, allow_zip)
+    ob = MailArchiveFolder(id, title, path, allow_zip, index_header, index_footer)
     self._setObject(id, ob)
     if REQUEST is not None:
         return self.manage_main(self, REQUEST, update_menu=1)
@@ -62,11 +63,13 @@ class MailArchiveFolder(Folder, Utils):
 
     security = ClassSecurityInfo()
     
-    def __init__(self, id, title, path, allow_zip):
+    def __init__(self, id, title, path, allow_zip, index_header, index_footer):
         self.id = id
         self.title = title
         self._path = path
         self.allow_zip = allow_zip
+        self.index_header = index_header
+        self.index_footer = index_footer
         self._v_last_update = 0
 
     def __setstate__(self,state):
