@@ -150,7 +150,7 @@ class MailArchiveFolder(Folder, Utils):
             FIXME: To be called from MailArchiveFolder_index.zpt
                 (preferably while the user sees the list)
         """
-        if delay and self._v_last_update > self.get_time() - 6:
+        if delay and self._v_last_update > self.get_time() - 600:
             return
         
         self._v_last_update = self.get_time()
@@ -164,7 +164,7 @@ class MailArchiveFolder(Folder, Utils):
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
         buf = []
-        for mbox in mboxes:
+        for mbox in mboxes:s
             if hasattr(self, mbox[1]):
                 m = getattr(self, mbox[1])
                 # If the mailbox file already exists on the filesystem and
