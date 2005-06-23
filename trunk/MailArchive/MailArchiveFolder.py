@@ -164,7 +164,7 @@ class MailArchiveFolder(Folder, Utils):
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
         buf = []
-        for mbox in mboxes:s
+        for mbox in mboxes:
             if hasattr(self, mbox[1]):
                 m = getattr(self, mbox[1])
                 # If the mailbox file already exists on the filesystem and
