@@ -23,11 +23,14 @@
 	<strong i18n:translate="">Messages</strong>: <span tal:replace="python:len(items)" />
 </p>
 <table class="sortable">
+<col id="author-col" />
+<col id="subject-col" />
+<col id="date-col" style="width:6em" />
 <thead>
 	<tr>
 	<th class="sorted" scope="col">
 		<tal:block tal:condition="python:skey=='author'">
-			<a title="Sorted A..Z - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=author&rkey=1' % url, '%s/?skey=author' % url)">
+			<a title="Sorted - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=author&rkey=1' % url, '%s/?skey=author' % url)">
 				<span i18n:translate="" tal:omit-tag="">Author</span>
 				<img tal:condition="python:rkey==''" src="misc_/MailArchive/sortup.gif" width="12" height="12" alt="" />
 				<img tal:condition="python:rkey=='1'" src="misc_/MailArchive/sortdown.gif" width="12" height="12" alt="" />
@@ -42,7 +45,7 @@
 	</th>
 	<th class="sorted" scope="col">
 		<tal:block tal:condition="python:skey=='subject'">
-			<a title="Sorted A..Z - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=subject&rkey=1' % url, '%s/?skey=subject' % url)">
+			<a title="Sorted - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=subject&rkey=1' % url, '%s/?skey=subject' % url)">
 				<span i18n:translate="" tal:omit-tag="">Subject</span>
 				<img tal:condition="python:rkey==''" src="misc_/MailArchive/sortup.gif" width="12" height="12" alt="" />
 				<img tal:condition="python:rkey=='1'" src="misc_/MailArchive/sortdown.gif" width="12" height="12" alt="" />
@@ -57,7 +60,7 @@
 	</th>
 	<th class="sorted" scope="col">
 		<tal:block tal:condition="python:skey=='date'">
-			<a title="Sorted A..Z - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=date&rkey=1' % url, '%s/?skey=date' % url)">
+			<a title="Sorted - Click to reverse" rel="nofollow" tal:attributes="href python:test(rkey=='', '%s/?skey=date&rkey=1' % url, '%s/?skey=date' % url)">
 				<span i18n:translate="" tal:omit-tag="">Date</span>
 				<img tal:condition="python:rkey==''" src="misc_/MailArchive/sortup.gif" width="12" height="12" alt="" />
 				<img tal:condition="python:rkey=='1'" src="misc_/MailArchive/sortdown.gif" width="12" height="12" alt="" />
