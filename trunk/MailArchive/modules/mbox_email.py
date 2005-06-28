@@ -163,6 +163,7 @@ class mbox_email:
                     p = to_entities_quote(p)
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
+                    p = p.replace('\r', '')
                     p =  extractUrl(p)
                     p = '''<div style="font-family: 'Courier New', monospace; white-space: pre-wrap">%s</div>''' % p
                 payloads.append(p.encode('ascii'))

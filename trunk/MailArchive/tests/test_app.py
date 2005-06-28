@@ -11,7 +11,7 @@ from Products.MailArchive.MailArchiveFolder import MailArchiveFolder
 
 #constants
 MBOX = 'mail_archive'
-MBOX_PATH = os.path.join(INSTANCE_HOME, r'Products\MailArchive\tests\data\mbox_directory')
+MBOX_PATH = os.path.join(INSTANCE_HOME, r'Products/MailArchive/tests/data/mbox_directory')
 
 
 class Test01_MboxPreviousNext(ZopeTestCase.ZopeTestCase):

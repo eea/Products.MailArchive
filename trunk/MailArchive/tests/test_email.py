@@ -7,7 +7,7 @@ import email
 
 from Products.MailArchive.modules.mbox_email import mbox_email
 
-MSG_PATH = os.path.join(INSTANCE_HOME, r'Products\MailArchive\tests\data')
+MSG_PATH = os.path.join(INSTANCE_HOME, r'Products/MailArchive/tests/data')
 
 
 class Test_MboxEmail(ZopeTestCase.ZopeTestCase):
