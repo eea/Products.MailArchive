@@ -12,6 +12,7 @@ How to use it
     a MailArchiveFolder. Upon creation of this object, all the MBOX files inside
     this mail archive will be added to Zope.
 
+    For more complete instructions read INSTALL.txt
 
 Dependencies
 
