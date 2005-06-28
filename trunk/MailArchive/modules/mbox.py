@@ -56,7 +56,7 @@ class mbox:
                 if not f: f = from_addr[1]
                 self.cache[index] = (
                     index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    s, d, f, m.getMessageID(), m.getInReplyTo()
+                    s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
                 )
                 #process starting, ending
                 if starting is None: starting = d
@@ -78,6 +78,8 @@ class mbox:
     def get_msg_from(self, msg): return msg[5]
     def get_msg_id(self, msg): return msg[6]
     def get_msg_inreplyto(self, msg): return msg[7]
+    def get_msg_to(self, msg):  return msg[8]
+    def get_msg_cc(self, msg):  return msg[9]
 
     def get_mbox_file(self):
         return open(self.path, 'rb').read()

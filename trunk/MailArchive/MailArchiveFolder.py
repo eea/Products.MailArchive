@@ -103,6 +103,7 @@ class MailArchiveFolder(Folder, Utils):
             - the date of the first message in the mbox file """
         l = [(x.starting, x) for x in self.objectValues('MailArchive')]
         l.sort()
+        l.reverse()
         return [val for (key, val) in l]
 
     security.declarePrivate('_delete_archives')
@@ -249,11 +250,19 @@ class MailArchiveFolder(Folder, Utils):
             l_rdf_append('</rdf:Seq>')
             l_rdf_append('</items>')
             l_rdf_append('</channel>')
+            descr = []
             for l_depth, l_msg in l_msgs:
+                for addr in l_archive.get_msg_to(l_msg):
+                    if addr[0]: descr.append(addr[0])
+                    else:   descr.append(addr[1])
+                for addr in l_archive.get_msg_cc(l_msg):
+                    if addr[0]: descr.append(addr[0])
+                    else:   descr.append(addr[1])
                 l_rdf_append('<item rdf:about="%s/message_html?skey=date&amp;id=%s">' % (l_archive.absolute_url(), l_archive.get_msg_index(l_msg)))
                 l_rdf_append('<title>%s</title>' % self.xmlEncode(l_archive.get_msg_subject(l_msg)))
+                l_rdf_append('<dc:creator>%s</dc:creator>' % self.xmlEncode(l_archive.get_msg_from(l_msg)))
                 l_rdf_append('<link>%s/message_html?skey=date&amp;id=%s</link>' % (l_archive.absolute_url(), l_archive.get_msg_index(l_msg)))
-                l_rdf_append('<description><![CDATA[%s]]></description>' % self.xmlEncode(l_archive.getMsg(l_archive.get_msg_index(l_msg))[5]))
+                l_rdf_append('<description>%s</description>' % (self.xmlEncode(', '.join(descr))))
                 l_rdf_append('<dc:date>%s</dc:date>' % self.tupleToDateHTML(l_archive.get_msg_date(l_msg)))
                 l_rdf_append('</item>')
             l_rdf_append("</rdf:RDF>")
