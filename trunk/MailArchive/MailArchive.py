@@ -102,9 +102,9 @@ class MailArchive(Folder, mbox):
             return None
 
     security.declareProtected(view, 'getPrevNext')
-    def getPrevNext(self, id, sort_by):
+    def getPrevNext(self, id, skey, rkey):
         #returns info about the next and previous message
-        l = [x[1] for x in self.sortMboxMsgs(sort_by)]
+        l = [x[1] for x in self.sortMboxMsgs(skey, rkey)]
         t = [x[0] for x in l]
         index = t.index(id)
         if index > 0: prev = l[index-1]

@@ -1,7 +1,8 @@
 <span tal:replace="structure here/standard_html_header" />
 
 <tal:block tal:define="skey python:request.get('skey', 'subject');
-						items python:here.sortMboxMsgs(skey);
+						rkey python:request.get('rkey', '');
+						items python:here.sortMboxMsgs(skey, rkey);
 						id python:here.processId(request);
 						msg python:here.getMsg(id);
 						url here/absolute_url">
@@ -13,18 +14,18 @@
 				msg_date python:msg[4];
 				msg_body python:msg[5];
 				msg_atts python:msg[6];
-				msgsprevnext python:here.getPrevNext(id, skey);
+				msgsprevnext python:here.getPrevNext(id, skey, rkey);
 				msg_prev python:msgsprevnext[0];
 				msg_next python:msgsprevnext[1]">
 	<h1 tal:content="msg_subject" />
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
 			<span i18n:translate="" tal:omit-tag="">Previous message</span>:
-			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
+			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
 		</li>
 		<li tal:condition="python:msg_next!=-1">
 			<span i18n:translate="" tal:omit-tag="">Next message</span>:
-			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
+			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
 		</li>
 		<li>
 			<strong i18n:translate="">Sort messages by</strong>:
@@ -67,11 +68,11 @@
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
 			<span i18n:translate="" tal:omit-tag="">Previous message</span>:
-			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
+			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
 		</li>
 		<li tal:condition="python:msg_next!=-1">
 			<span i18n:translate="" tal:omit-tag="">Next message</span>:
-			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
+			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
 		</li>
 		<li>
 			<strong i18n:translate="">Sort messages by</strong>:
