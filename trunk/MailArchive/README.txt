@@ -22,4 +22,7 @@ Dependencies
 
 How to test it
 
-    Run test_email.py from MailArchive directory: python tests/test_email.py
+    Set up the environment variabiles for your Zope server in the 'run_tests.bat' file
+    Run the tests using the 'run_tests.bat' file.
+    
+    Linux users should do the same operations on run_tests.sh
