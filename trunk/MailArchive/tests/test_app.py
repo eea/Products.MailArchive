@@ -162,6 +162,11 @@ class Test03_ArchiveMbox(ZopeTestCase.ZopeTestCase):
         self.mbox = MailArchiveFolder(MBOX, '', MBOX_PATH, 0, '', '')
         self.app._setObject(MBOX, self.mbox)
 
+    def test_filter_mboxes(self):
+        obj = self.mbox.getArchives()[1]    #only mbox2.mbx
+        for s in [obj.get_msg_subject(x[1]) for x in obj.sortMboxMsgs('subject')]:
+            self.failIfEqual(s, "DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA")
+        
     def tearDown(self):
         self.app._delObject(MBOX)
         self.mbox = None

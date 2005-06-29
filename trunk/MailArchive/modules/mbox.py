@@ -25,8 +25,13 @@ import sys
 import os.path
 
 from mbox_email import mbox_email
+from mbox_filters import mbox_filters
 
-class mbox:
+SPAM = 0
+KEEP = 1
+UNSURE = 2
+
+class mbox(mbox_filters):
 
     def __init__(self, path):
         self.path = path
@@ -35,6 +40,7 @@ class mbox:
         self.cache = {}
         self.starting = None
         self.ending = None
+        mbox_filters.__dict__['__init__'](self)
         self.process_mbox()
 
     def process_mbox(self):
@@ -50,22 +56,24 @@ class mbox:
                 m = mbox_email(''.join(msg.headers))
                 d = msg.getdate('Date')
                 s = m.getSubject()
-                if s == '': s = '(no subject)'
-                from_addr = m.getFrom()
-                f = from_addr[0]
-                if not f: f = from_addr[1]
-                self.cache[index] = (
-                    index, msg.fp.start, msg.fp.stop-msg.fp.start,
-                    s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
-                )
-                #process starting, ending
-                if starting is None: starting = d
-                else:
-                    if d < starting: starting = d
-                if ending is None: ending = d
-                else:
-                    if d > ending: ending = d
-                index += 1
+                (result, reason) = self.run_rules(s)
+                if result:
+                    if s == '': s = '(no subject)'
+                    from_addr = m.getFrom()
+                    f = from_addr[0]
+                    if not f: f = from_addr[1]
+                    self.cache[index] = (
+                        index, msg.fp.start, msg.fp.stop-msg.fp.start,
+                        s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
+                    )
+                    #process starting, ending
+                    if starting is None: starting = d
+                    else:
+                        if d < starting: starting = d
+                    if ending is None: ending = d
+                    else:
+                        if d > ending: ending = d
+                    index += 1
                 msg = mb.next()
         self.starting, self.ending = starting, ending
         mb = None
