@@ -35,7 +35,7 @@
     <tr>
         <th></th>
         <td><em>These are all the files from <strong tal:content="here/getPath" /> directory.<br>
-        Files marked with * are recognized as mbox files.</em></td>
+        Files marked with * have been recognized as mbox files.</em></td>
     </tr>
     <tr>
         <th>Mailboxes</th>
