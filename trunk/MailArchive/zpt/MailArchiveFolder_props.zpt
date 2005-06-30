@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <th></th>
-        <td><em>This are all the files from <strong tal:content="here/getPath" /> directory.<br>
+        <td><em>These are all the files from <strong tal:content="here/getPath" /> directory.<br>
         Files marked with * are recognized as mbox files.</em></td>
     </tr>
     <tr>
