@@ -26,6 +26,8 @@ import string
 import re
 from os.path import join
 
+import Globals
+
 BLACKWORDS = 'BLACKWORDS'
 SPAM = 0
 KEEP = 1
@@ -35,12 +37,8 @@ UNSURE = 2
 class mbox_filters:
     
     def __init__(self):
-        try:
-            file_path = join(INSTANCE_HOME, 'Products', 'MailArchive', 'modules', BLACKWORDS)
-            buf = open(file_path).readlines()
-        except IOError: #for zope older than 2.7.0
-            file_path = join(INSTANCE_HOME, 'lib', 'python', 'Products', 'MailArchive', 'modules', BLACKWORDS)
-            buf = open(file_path).readlines()
+        file_path = join(Globals.package_home(globals()) ,BLACKWORDS)
+        buf = open(file_path).readlines()
         blackword_list = map(string.strip, buf)
         self.blackword_pattern_list = self.compile_pattern_list([i for i in blackword_list if i != ''])
 
