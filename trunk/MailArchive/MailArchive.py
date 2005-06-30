@@ -38,7 +38,8 @@ _marker = []
 def addMailArchive(self, id='', title='', path='', REQUEST=None):
     """ """
     ob = MailArchive(id, title, path)
-    self._setObject(id, ob)
+    if len(ob.cache.keys()) > 0:
+        self._setObject(id, ob)
     if REQUEST:
         return self.manage_main(self, REQUEST, update_menu=1)
 

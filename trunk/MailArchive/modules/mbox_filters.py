@@ -35,8 +35,12 @@ UNSURE = 2
 class mbox_filters:
     
     def __init__(self):
-        file_path = join(INSTANCE_HOME, 'Products', 'MailArchive', 'modules', BLACKWORDS)
-        buf = open(file_path).readlines()
+        try:
+            file_path = join(INSTANCE_HOME, 'Products', 'MailArchive', 'modules', BLACKWORDS)
+            buf = open(file_path).readlines()
+        except IOError: #for zope older than 2.7.0
+            file_path = join(INSTANCE_HOME, 'lib', 'python', 'Products', 'MailArchive', 'modules', BLACKWORDS)
+            buf = open(file_path).readlines()
         blackword_list = map(string.strip, buf)
         self.blackword_pattern_list = self.compile_pattern_list([i for i in blackword_list if i != ''])
 
