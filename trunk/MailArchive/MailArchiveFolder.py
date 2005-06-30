@@ -67,7 +67,10 @@ class MailArchiveFolder(Folder, Utils):
         self.id = id
         self.title = title
         self._path = path
-        self.allow_zip = allow_zip
+    
+        #We don't really care about the download of the mailboxes.
+        #The mbox format is little used outside the Unix community.
+        self.allow_zip = 0  #allow_zip
         self.mbox_ignore = ['Trash','Sent','Sent-Items'] 
         self.index_header = index_header
         self.index_footer = index_footer
@@ -140,8 +143,8 @@ class MailArchiveFolder(Folder, Utils):
         path = self.getPath()
         if not self.valid_directory(path):
             return
-        
-        mboxes = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
+
+        mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
         self._add_archives(mboxes)
 
     security.declareProtected(view, 'updateArchives')
@@ -159,9 +162,9 @@ class MailArchiveFolder(Folder, Utils):
         path = self.getPath()
         if not self.valid_directory(path):
             return
-        
+
         ids = self.objectIds('MailArchive') #zope archives
-        mboxes = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
+        mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
         self._delete_archives(ids, [mb[1] for mb in mboxes])
         
         buf = []
@@ -176,23 +179,36 @@ class MailArchiveFolder(Folder, Utils):
                 buf.append(mbox)
         self._reload_archives(ids, buf)
 
-    def _getOb(self, id, default=_marker):
-        if id.endswith(".zip"):
-            if not self.allow_zip:
-                self.RESPONSE.setStatus(404, "Not Found")
-                return self.RESPONSE
-            mbox_id = id[:-4]
-            #get mbox content
-            obj = self._getOb(mbox_id)
-            mbox = obj.get_mbox_file()
-            #zip mbox content
-            zf, path = self.zip_file(id, mbox_id, mbox)
-            self.delete_file(path)
-            self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
-            self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment')
-            return File(id, '', zf, content_type='application/x-zip-compressed').__of__(self)
-        else:
-            return getattr(self, id)
+    security.declareProtected(view_management_screens, 'listMailboxes')
+    def listMailboxes(self):
+        """ list all mboxes from directory """
+        res = []
+        mboxes, others = self.get_mboxes(self._path, ignore_list=[])
+        res = ["%s *" % mbox[1] for mbox in mboxes]
+        res.extend([oth[1] for oth in others])
+        res.sort()
+        return res
+
+    #We don't really care about the download of the mailboxes.
+    #The mbox format is little used outside the Unix community.
+    
+    #def _getOb(self, id, default=_marker):
+    #    if id.endswith(".zip"):
+    #        if not self.allow_zip:
+    #            self.RESPONSE.setStatus(404, "Not Found")
+    #            return self.RESPONSE
+    #        mbox_id = id[:-4]
+    #        #get mbox content
+    #        obj = self._getOb(mbox_id)
+    #        mbox = obj.get_mbox_file()
+    #        #zip mbox content
+    #        zf, path = self.zip_file(id, mbox_id, mbox)
+    #        self.delete_file(path)
+    #        self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-zip-compressed')
+    #        self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment')
+    #        return File(id, '', zf, content_type='application/x-zip-compressed').__of__(self)
+    #    else:
+    #        return getattr(self, id)
 
     security.declareProtected(view_management_screens, 'manageProperties')
     def manageProperties(self, title='', path='', mbox_ignore=[], index_header='', index_footer='',

@@ -81,15 +81,18 @@ class Utils:
         [ d.setdefault(i,None) for i in l ]
         return d.keys()
     
-    def zip_file(self, id, original, data):
-        path = join(CLIENT_HOME, id)
-        zp = ZipFile(path, "w")
-        info = ZipInfo(original)
-        info.date_time =  time.localtime(time.time())[:6]
-        info.compress_type = ZIP_DEFLATED
-        zp.writestr(info, data)
-        zp.close()
-        return open(path, 'rb').read(), path
+    #We don't really care about the download of the mailboxes.
+    #The mbox format is little used outside the Unix community.
+    
+    #def zip_file(self, id, original, data):
+    #    path = join(CLIENT_HOME, id)
+    #    zp = ZipFile(path, "w")
+    #    info = ZipInfo(original)
+    #    info.date_time =  time.localtime(time.time())[:6]
+    #    info.compress_type = ZIP_DEFLATED
+    #    zp.writestr(info, data)
+    #    zp.close()
+    #    return open(path, 'rb').read(), path
 
     def showSizeKb(self, p_size):
         #transform a file size in Kb
@@ -122,14 +125,16 @@ class Utils:
     def get_files(self, path):
         return listdir(path)
     
-    def delete_file(self, path):
-        unlink(path)
+    #def delete_file(self, path):
+    #    unlink(path)
 
     def get_mboxes(self, path, ignore_list):
-        res = []
+        mbox = []
+        others = []
         for f in self.get_files(path):
             abs_path = self.file_path(path, f)
             if f[0] == '.': # Drop 'hidden' files
+                others.append((abs_path, f))
                 continue
             if not self.valid_file(abs_path):    # Drop directories etc.
                 continue
@@ -137,8 +142,10 @@ class Utils:
                 continue
             else:
                 if open(abs_path).read(5) == 'From ':
-                    res.append((abs_path, f))
-        return res
+                    mbox.append((abs_path, f))
+                else:
+                    others.append((abs_path, f))
+        return mbox, others
     
     def file_path(self, path, name):
         return join(path, name)
