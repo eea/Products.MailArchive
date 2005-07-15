@@ -1,8 +1,9 @@
 Readme for MailArchive
 
     MailArchive is a product that can let the browse a mail archive in
-    Unix MBOX format. The product is tested on Zope 2.7, but can be made
-    to work on Zope 2.6.
+    Unix MBOX format. The product resyncronises every ten minutes when
+    the mail files change. It is therefore maintenance free. The product
+    is tested on Zope 2.7, but can be made to work on Zope 2.6.
 
 How to use it
 
