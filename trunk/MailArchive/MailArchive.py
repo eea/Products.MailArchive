@@ -121,20 +121,20 @@ class MailArchive(Folder, mbox):
     #We don't really care about the download of the mailboxes.
     #The mbox format is little used outside the Unix community.
 
-    #def _getOb(self, id, default=_marker):
-    #    if id.find('+++') != -1:
-    #        info = id.split('+++')
-    #        msg = info[0]
-    #        att = info[1]
-    #        if msg is not None:
-    #            m = mbox_email(self.get_mbox_msg(int(msg)))
-    #            data = m.getAttachment(att)
-    #            self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(att))
-    #            return File(att, '', data).__of__(self)
-    #        else:
-    #            return None
-    #    else:
-    #        return getattr(self, id)
+    def _getOb(self, id, default=_marker):
+        if id.find('+++') != -1:
+            info = id.split('+++')
+            msg = info[0]
+            att = info[1]
+            if msg is not None:
+                m = mbox_email(self.get_mbox_msg(int(msg)))
+                data = m.getAttachment(att)
+                self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(att))
+                return File(att, '', data).__of__(self)
+            else:
+                return None
+        else:
+            return getattr(self, id)
 
     security.declareProtected('View', 'index_html')
     index_html = PageTemplateFile('zpt/MailArchive_index', globals())
