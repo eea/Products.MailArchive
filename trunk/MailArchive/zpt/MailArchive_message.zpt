@@ -39,25 +39,25 @@
 		</li>
 	</ul>
         <table style="border:1px">
-        <tr><th>From</th><td>
+        <tr><th scope="row" class="scope-row">From</th><td>
 			<span tal:replace="structure python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
         </td></tr>
         <tr tal:condition="python:len(msg_to)>0">
-			<th>To</th>
+			<th scope="row" class="scope-row">To</th>
 			<td><tal:block repeat="to msg_to">
 					<span tal:replace="structure python:to[0]" />&nbsp;<em tal:content="structure python:here.antispam(to[1])" />,
 				</tal:block>
 			</td>
 		</tr>
         <tr tal:condition="python:len(msg_cc)>0">
-			<th>Cc</th>
+			<th scope="row" class="scope-row">Cc</th>
 			<td><tal:block repeat="cc msg_cc">
 					<span tal:replace="structure python:cc[0]" />&nbsp;<em tal:content="structure python:here.antispam(cc[1])" />,
 				</tal:block>
 			</td>
 		</tr>
-        <tr><th>Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
-        <tr><th>Subject</th><td tal:content="msg_subject" /></tr>
+        <tr><th scope="row" class="scope-row">Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
+        <tr><th scope="row" class="scope-row">Subject</th><td tal:content="msg_subject" /></tr>
         </table>
 	<div style="border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
 	<div style="font-weight:bold" tal:condition="python:len(msg_atts) > 0">Download attachments:</div>
