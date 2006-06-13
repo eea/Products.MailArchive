@@ -38,7 +38,7 @@
 			<a tal:attributes="href here/get_mailarchivefolder_path"><strong i18n:translate="">Mail archive folder</strong></a>
 		</li>
 	</ul>
-        <table style="border:1px">
+        <table class="datatable"> 
         <tr><th scope="row" class="scope-row">From</th><td>
 			<span tal:replace="structure python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
         </td></tr>

@@ -25,7 +25,7 @@
 <table class="sortable">
 <col id="author-col" />
 <col id="subject-col" />
-<col id="date-col" style="width:6em" />
+<col id="date-col" style="width:8em" />
 <thead>
 	<tr>
 	<th class="sorted" scope="col">
