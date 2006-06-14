@@ -23,6 +23,7 @@
 import mailbox
 import sys
 import os.path
+import re
 
 from mbox_email import mbox_email
 from mbox_filters import mbox_filters
@@ -48,7 +49,6 @@ class mbox(mbox_filters):
         self.cache = {}
         mb = mailbox.PortableUnixMailbox (open(self.path,'rb'))
         msg = mb.next()
-        index = 1
         starting, ending = None, None
         while msg is not None:
             document = msg.fp.read()
@@ -62,6 +62,7 @@ class mbox(mbox_filters):
                     from_addr = m.getFrom()
                     f = from_addr[0]
                     if not f: f = from_addr[1]
+                    index = self.get_unique_id(m)
                     self.cache[index] = (
                         index, msg.fp.start, msg.fp.stop-msg.fp.start,
                         s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
@@ -73,7 +74,6 @@ class mbox(mbox_filters):
                     if ending is None: ending = d
                     else:
                         if d > ending: ending = d
-                    index += 1
                 msg = mb.next()
         self.starting, self.ending = starting, ending
         mb = None
@@ -142,6 +142,12 @@ class mbox(mbox_filters):
         if r: t.reverse()
         return [val for (key, val) in t]
 
+    def get_unique_id(self, msg):
+        #returns a unique id for this message based on Message-ID
+        msg_id = msg.getMessageID()
+        m = re.search('([\w]*)@', msg_id)
+        return m.group(1)
+        
 def main():
     b = mbox(sys.argv[1])
     print b.cache

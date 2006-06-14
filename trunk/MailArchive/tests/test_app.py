@@ -23,23 +23,23 @@ class Test01_MboxPreviousNext(ZopeTestCase.ZopeTestCase):
 
     def test_prev_next_first(self):
         obj = self.mbox.getArchives()[0]    #only mbox1.mbx
-        prev, next = obj.getPrevNext(1, 'subject', 0)
+        prev, next = obj.getPrevNext('815f70cf050329015744ac9a43', 'subject', 0)
         id = obj.get_msg_id(prev)
         self.assertEqual(id, '<815f70cf05033023503b4a9704@mail.gmail.com>')
         self.assertEqual(next, -1)
-        prev, next = obj.getPrevNext(1, 'subject', 1)
+        prev, next = obj.getPrevNext('815f70cf050329015744ac9a43', 'subject', 1)
         id = obj.get_msg_id(next)
         self.assertEqual(prev, -1)
         self.assertEqual(id, '<815f70cf05033023503b4a9704@mail.gmail.com>')
 
     def test_prev_next_middle(self):
         obj = self.mbox.getArchives()[0]    #only mbox1.mbx
-        prev, next = obj.getPrevNext(3, 'date', 0)
+        prev, next = obj.getPrevNext('775606', 'date', 0)
         prev = obj.get_msg_id(prev)
         next = obj.get_msg_id(next)
         self.assertEqual(prev, '<424A5688.6050106@microsfot.co.uk>')
         self.assertEqual(next, '<815f70cf05033023503b4a9704@mail.gmail.com>')
-        prev, next = obj.getPrevNext(3, 'date', 1)
+        prev, next = obj.getPrevNext('775606', 'date', 1)
         prev = obj.get_msg_id(prev)
         next = obj.get_msg_id(next)
         self.assertEqual(prev, '<815f70cf05033023503b4a9704@mail.gmail.com>')
@@ -47,11 +47,11 @@ class Test01_MboxPreviousNext(ZopeTestCase.ZopeTestCase):
         
     def test_prev_next_last(self):
         obj = self.mbox.getArchives()[0]    #only mbox1.mbx
-        prev, next = obj.getPrevNext(2, 'subject', 0)
+        prev, next = obj.getPrevNext('6050106', 'subject', 0)
         next = obj.get_msg_id(next)
         self.assertEqual(prev, -1)
         self.assertEqual(next, '<16970.59764.819866.775606@gargle.gargle.HOWL>')
-        prev, next = obj.getPrevNext(2, 'subject', 1)
+        prev, next = obj.getPrevNext('6050106', 'subject', 1)
         prev = obj.get_msg_id(prev)
         self.assertEqual(prev, '<16970.59764.819866.775606@gargle.gargle.HOWL>')
         self.assertEqual(next, -1)
@@ -146,7 +146,7 @@ class Test02_MboxAddRemoveModify(ZopeTestCase.ZopeTestCase):
         ids = [x.id for x in objs ]
         self.assertEqual(ids, ['mbox3.mbx', 'mbox1.mbx', 'mbox2.mbx'])
         self.revert_mbox_size() #revert changes
-        
+
 
     def tearDown(self):
         self.app._delObject(MBOX)

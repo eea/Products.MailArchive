@@ -86,21 +86,19 @@ class MailArchive(Folder, mbox):
             return [(0, x) for x in self.get_mbox_msgs()]
 
 
-    security.declareProtected(view, 'processId')
-    def processId(self, REQUEST):
-        try: return abs(int(REQUEST.get('id', '')))
-        except: return None
-
+    security.declareProtected(view, 'getMailArhiveURL')
+    def getMailArhiveURL(self):
+        """ return the absolute path to this MailArchive """
+        return self.absolute_url()
 
     security.declareProtected(view, 'getMsg')
     def getMsg(self, id=None):
         #returns the body of the given message id
         if id is not None:
             m = mbox_email(self.get_mbox_msg(id))
-            return (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
-                    m.getContent(), m.getAttachments())
-        else:
-            return None
+            if m.getMessageID():
+                return (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
+                        m.getContent(), m.getAttachments())
 
     security.declareProtected(view, 'getPrevNext')
     def getPrevNext(self, id, skey, rkey):
@@ -127,7 +125,7 @@ class MailArchive(Folder, mbox):
             msg = info[0]
             att = info[1]
             if msg is not None:
-                m = mbox_email(self.get_mbox_msg(int(msg)))
+                m = mbox_email(self.get_mbox_msg(msg))
                 data = m.getAttachment(att)
                 self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(att))
                 return File(att, '', data).__of__(self)
