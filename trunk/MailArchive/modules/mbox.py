@@ -32,6 +32,25 @@ SPAM = 0
 KEEP = 1
 UNSURE = 2
 
+
+def get_start_stop(msg):
+    """
+    the `mailbox._PartialFile` class has internal `start` & `stop`
+    attributes whose name changed in newer Python versions.
+    """
+    partial_file = msg.fp
+
+    if sys.version_info >= (2,6):
+        start = partial_file._start
+        stop = partial_file._stop
+
+    else:
+        start = partial_file.start
+        stop = partial_file.stop
+
+    return start, stop
+
+
 class mbox(mbox_filters):
 
     def __init__(self, path):
@@ -63,8 +82,9 @@ class mbox(mbox_filters):
                     f = from_addr[0]
                     if not f: f = from_addr[1]
                     index = self.get_unique_id(m)
+                    start, stop = get_start_stop(msg)
                     self.cache[index] = (
-                        index, msg.fp.start, msg.fp.stop-msg.fp.start,
+                        index, start, stop-start,
                         s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
                     )
                     #process starting, ending
