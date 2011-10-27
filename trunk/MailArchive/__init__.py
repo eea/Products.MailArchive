@@ -16,12 +16,12 @@
 #Rights Reserved.
 #
 #Contributor(s):
-#  Original Code: 
+#  Original Code:
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
 
-from ImageFile import ImageFile
+from App.ImageFile import ImageFile
 
 import MailArchiveFolder
 

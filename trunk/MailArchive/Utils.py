@@ -16,22 +16,19 @@
 #Rights Reserved.
 #
 #Contributor(s):
-#  Original Code: 
+#  Original Code:
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
 
 import time
-import re
-from whrandom import choice
+from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
-from os import listdir, unlink
-from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
-from StringIO import StringIO
+from os import listdir
 
-from Products.PythonScripts.standard import url_quote, html_quote
+from Products.PythonScripts.standard import html_quote
 
-class Utils:
+class Utils(object):
 
     def __init__(self):
         """ """
@@ -47,14 +44,14 @@ class Utils:
     def list_difference(self, l1, l2):
         #return a list with elements from l1 that are not in l2
         return [e1 for e1 in l1 if e1 not in l2]
-    
+
     def tupleToShortDate(self, p_tuple):
         try: return time.strftime('%Y-%m-%d', p_tuple)
         except: return ''
 
     def get_time(self):
         return time.time()
-    
+
     def tupleToDateHTML(self, p_tuple):
         try: return time.strftime('%Y-%m-%dT%H:%M:%S', p_tuple)
         except: return ''
@@ -80,10 +77,10 @@ class Utils:
         d = {}
         [ d.setdefault(i,None) for i in l ]
         return d.keys()
-    
+
     #We don't really care about the download of the mailboxes.
     #The mbox format is little used outside the Unix community.
-    
+
     #def zip_file(self, id, original, data):
     #    path = join(CLIENT_HOME, id)
     #    zp = ZipFile(path, "w")
@@ -115,16 +112,16 @@ class Utils:
     def get_mbox_size(self, path):
         """ return the mbox size """
         return getsize(path)
-    
+
     def valid_directory(self, path):
         return isdir(path)
-    
+
     def valid_file(self, path):
         return isfile(path)
 
     def get_files(self, path):
         return listdir(path)
-    
+
     #def delete_file(self, path):
     #    unlink(path)
 
@@ -146,10 +143,10 @@ class Utils:
                 else:
                     others.append((abs_path, f))
         return mbox, others
-    
+
     def file_path(self, path, name):
         return join(path, name)
-            
+
     def xmlEncode(self, p_string):
         #encode some special chars to use in an XML string
         l_tmp = str(p_string)
