@@ -187,9 +187,11 @@ class mbox_email:
         return atts
     
     def getAttachment(self, filename):
+        clean = lambda x: re.sub(r'[\r\n\t]', '', x)
         for part in self._msg.walk():
             if part.get_content_maintype() == 'multipart':
                 continue
-            if filename == part.get_filename():
+            in_email = part.get_filename() or ''
+            if filename == in_email or clean(filename) == clean(in_email):
                 return part.get_payload(decode=1)
         return None
