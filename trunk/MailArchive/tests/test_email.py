@@ -98,11 +98,12 @@ class Test_MboxEmail(ZopeTestCase.ZopeTestCase):
 
     def test_list_attachments(self):
         msg = mbox_email(self.open_msg('msg1.txt'))
-        self.assertEqual(msg.getAttachments(), ['test.png'])
+        self.assertEqual(msg.getAttachments(), [('test.png', 'test.png')])
 
     def test_list_multiple_attachments(self):
         msg = mbox_email(self.open_msg('msg3.txt'))
-        self.assertEqual(msg.getAttachments(), ['test.png', 'test.zip'])
+        self.assertEqual(msg.getAttachments(), [('test.png', 'test.png'),
+                                                ('test.zip', 'test.zip')])
 
     def test_not_attachments(self):
         msg = mbox_email(self.open_msg('msg2.txt'))

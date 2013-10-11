@@ -31,6 +31,7 @@ from email.Header import decode_header
 
 
 from cleanhtml import HTMLCleaner
+import urllib
 
 charset_table = {
      "window-1252": "cp1252",
@@ -176,7 +177,7 @@ class mbox_email:
                 continue
             filename = part.get_filename()
             if filename:
-                atts.append(filename)
+                atts.append((filename, urllib.quote(filename)))
             #if not filename:
             #    ext = mimetypes.guess_extension(part.get_type())
             #    if not ext:
@@ -185,7 +186,7 @@ class mbox_email:
             #        filename = 'unknown%03d%s' % (counter, ext)
             #counter += 1
         return atts
-    
+
     def getAttachment(self, filename):
         clean = lambda x: re.sub(r'[\r\n\t]', '', x)
         for part in self._msg.walk():

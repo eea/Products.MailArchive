@@ -38,32 +38,34 @@
 			<a tal:attributes="href here/get_mailarchivefolder_path"><strong i18n:translate="">Mail archive folder</strong></a>
 		</li>
 	</ul>
-        <table class="datatable"> 
-        <tr><th scope="row" class="scope-row">From</th><td>
+				<table class="datatable"> 
+				<tr><th scope="row" class="scope-row">From</th><td>
 			<span tal:replace="structure python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
-        </td></tr>
-        <tr tal:condition="python:len(msg_to)>0">
+				</td></tr>
+				<tr tal:condition="python:len(msg_to)>0">
 			<th scope="row" class="scope-row">To</th>
 			<td><tal:block repeat="to msg_to">
 					<span tal:replace="structure python:to[0]" />&nbsp;<em tal:content="structure python:here.antispam(to[1])" />,
 				</tal:block>
 			</td>
 		</tr>
-        <tr tal:condition="python:len(msg_cc)>0">
+				<tr tal:condition="python:len(msg_cc)>0">
 			<th scope="row" class="scope-row">Cc</th>
 			<td><tal:block repeat="cc msg_cc">
 					<span tal:replace="structure python:cc[0]" />&nbsp;<em tal:content="structure python:here.antispam(cc[1])" />,
 				</tal:block>
 			</td>
 		</tr>
-        <tr><th scope="row" class="scope-row">Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
-        <tr><th scope="row" class="scope-row">Subject</th><td tal:content="msg_subject" /></tr>
-        </table>
+				<tr><th scope="row" class="scope-row">Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
+				<tr><th scope="row" class="scope-row">Subject</th><td tal:content="msg_subject" /></tr>
+				</table>
 	<div style="border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
 	<div style="font-weight:bold" tal:condition="python:len(msg_atts) > 0">Download attachments:</div>
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
-		<a tal:attributes="href string:${id}+++${attachment}" tal:content="attachment"/><br/>
+		<a tal:define="title python:attachment[0]; quoted_title python:attachment[1];"
+			tal:attributes="href string:${id}+++${quoted_title}"
+			tal:content="title"/><br/>
 	</tal:block>
 	<ul>
 		<li tal:condition="python:msg_prev!=-1">
@@ -90,7 +92,7 @@
 <tal:block tal:condition="python:msg is None">
 	<h1 i18n:translate="">Invalid message id</h1>
 	<p><span i18n:translate="" tal:omit-tag="">A message with this id was not found in the archive. Return to </span>
-	   <a tal:attributes="href here/getMailArhiveURL" i18n:translate="">archive</a></p>
+		 <a tal:attributes="href here/getMailArhiveURL" i18n:translate="">archive</a></p>
 </tal:block>
 </tal:block>
 
