@@ -166,7 +166,7 @@ class mbox(mbox_filters):
         #returns a unique id for this message based on Message-ID
         msg_id = msg.getMessageID()
         m = re.search('([\w]*)@', msg_id)
-        return m.group(1)
+        return m.group(1) or msg.getMessageID()
         
 def main():
     b = mbox(sys.argv[1])
