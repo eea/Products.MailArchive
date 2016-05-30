@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <title>Add MailArchive Folder</title>
+</head>
+<body>
+
+<h3>Add MailArchive Folder</h3>
+
+<p>This proccess can take several minutes according to the number and size of the
+    files that you are loading.</p>
+    
+<form action="manage_addMailArchiveFolder" method="post" name="frmAdd">
+<table>
+    <tr>
+        <th>Id</th>
+        <td valign="top"><input type="text" name="id" size="35"></td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td valign="top"><input type="text" name="title:utf8:ustring" size="35"></td>
+    </tr>
+    <tr>
+        <th>Path</th>
+        <td valign="top"><input type="text" name="path" size="35"></td>
+    </tr>
+    <tr>
+        <th>Allow download of archive</th>
+        <td><input type="checkbox" name="allow_zip" />
+        </td>
+    </tr>
+    <tr>
+        <th>Header</th>
+        <td>
+            <textarea cols="60" rows="5" name="index_header"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>Footer</th>
+        <td>
+            <textarea cols="60" rows="5" name="index_footer">&lt;div style="text-align: center"&gt;
+&lt;a href="index_rdf" type="application/rss+xml"&gt;Syndicate this site with RDF&lt;/a&gt;
+&lt;/div&gt;</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value=" Submit "></td>
+    </tr>
+</table>
+</form>
+
+</body>
+</html>

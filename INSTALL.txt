@@ -1,0 +1,44 @@
+
+STYLING:
+
+The overview page of a mailbox contains a sortable table of date, subject and
+author.  It will work correctly out of the box, but for a nicer look and feel
+you should add the following to your CSS stylesheet:
+---------
+.sortable {
+        border: 1px solid black;
+        font-size: 0.9em;
+        line-height:normal;
+}
+.sortable th {
+        background: #ccc;
+        border: 2px outset #999;
+        margin:0;
+        padding:0;
+        white-space: nowrap;
+        vertical-align: top;
+}
+.sortable th a:link, .sortable th a:visited, .sortable th span {
+        display:block;
+        text-decoration: none;
+        font-weight: normal;
+        color: black;
+        padding:1px 0.5em;
+}
+
+.sortable th a:hover {
+        color:white;
+        background: #aaa;
+}
+.sortable tbody tr.zebraeven {
+        background-color: white;
+}
+---------
+If you have a special stylesheet for print, and you should really have one,
+then add this rule to it:
+---------
+.sortable img {
+        display: none;
+}
+---------
+It simply shows the sortable table without the arrows for sorting.

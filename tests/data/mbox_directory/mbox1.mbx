@@ -1,0 +1,351 @@
+From - Mon Jan 1 00:00:00 1965
+Return-Path: <hope-bounces@hope.org>
+Delivered-To: cnitu@imap.fins.ro
+Received: from localhost (localhost [127.0.0.1])
+	by imap.fins.ro (Postfix) with ESMTP id C520854F0B
+	for <c.nitu@imap.fins.ro>; Tue, 29 Mar 2005 12:58:13 +0300 (EEST)
+Received: from imap.fins.ro ([127.0.0.1])
+ by localhost (imap.fins.ro [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 13757-18 for <c.nitu@imap.fins.ro>;
+ Tue, 29 Mar 2005 12:58:13 +0300 (EEST)
+Received: by imap.fins.ro (Postfix, from userid 108)
+	id 6EB7754D19; Tue, 29 Mar 2005 12:58:13 +0300 (EEST)
+Received: from noulfinfw.ser.ro (finfw.fins.ro [192.168.1.250])
+	by imap.fins.ro (Postfix) with SMTP id 8F61054D21
+	for <c.nitu@imap.fins.ro>; Tue, 29 Mar 2005 12:58:06 +0300 (EEST)
+Received: (qmail 31703 invoked by alias); 29 Mar 2005 09:58:05 -0000
+Delivered-To: c.nitu@ser.ro
+Received: (qmail 31690 invoked from network); 29 Mar 2005 09:58:05 -0000
+Received: from cvs.hope.org (HELO mail.hope.org) (63.240.213.173)
+  by 0 with SMTP; 29 Mar 2005 09:58:05 -0000
+Received: from cvs.hope.org (localhost.localdomain [127.0.0.1])
+	by mail.hope.org (Postfix) with ESMTP
+	id 248B420335D; Tue, 29 Mar 2005 05:00:11 -0500 (EST)
+Delivered-To: hope@hope.org
+Received: from wproxy.gmail.com (wproxy.gmail.com [64.233.184.195])
+	by mail.hope.org (Postfix) with ESMTP id 7DE38203352
+	for <hope@hope.org>; Tue, 29 Mar 2005 05:00:09 -0500 (EST)
+Received: by wproxy.gmail.com with SMTP id 68so526372wra
+	for <hope@hope.org>; Tue, 29 Mar 2005 01:57:52 -0800 (PST)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; s=beta; d=gmail.com;
+	h=received:message-id:date:from:reply-to:to:subject:mime-version:content-type:content-transfer-encoding;
+	b=gw606/BnG3hd+vnNUzfWwefBBPWiw/hjB3O9c4C7b12i8Y1bs2nuQKPKqczP7ZiPQWMrnjdkBiJ+gylq31IB6ScP3zyzjgX4hr6vF6Qr13dCSsF0UbaL9Kn6KpdUjxQ+mbLyb7jnHzr1rKCJ+/gtXJnJ+032y5RIFMajOO0+n/A=
+Received: by 10.54.63.4 with SMTP id l4mr735159wra;
+	Tue, 29 Mar 2005 01:57:52 -0800 (PST)
+Received: by 10.54.53.63 with HTTP; Tue, 29 Mar 2005 01:57:52 -0800 (PST)
+Message-ID: <815f70cf050329015744ac9a43@mail.gmail.com>
+Date: Tue, 29 Mar 2005 01:57:52 -0800
+From: john ray <budd@gmil.com>
+To: hope@hope.org
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 8bit
+Subject: [hope] login page problem
+X-BeenThere: hope@hope.org
+X-Mailman-Version: 2.1.5
+Precedence: list
+Reply-To: john ray <budd@gmil.com>
+List-Id: Users of the Hope <hope.hope.org>
+List-Unsubscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=unsubscribe>
+List-Archive: <http://mail.hope.org/pipermail/hope>
+List-Post: <mailto:hope@hope.org>
+List-Help: <mailto:hope-request@hope.org?subject=help>
+List-Subscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=subscribe>
+Sender: hope-bounces@hope.org
+Errors-To: hope-bounces@hope.org
+
+I'm creatin a customised login page template using districtname, user
+name and password.
+i got halt in d logic for password checking. 
+after submitting d login form how do i call d same page if the passwd
+is wrong along with d req params passed? do i need an ext python
+script for this redirection.
+also tell how to set session data in ZPTs from the form fields?
+
+
+
+
+
+-- 
+Share the vision of difference with ME
+_______________________________________________
+hope maillist  -  hope@hope.org
+http://mail.hope.org/mailman/listinfo/hope
+**   No cross posts or HTML encoding!  **
+(Related lists - 
+ http://mail.hope.org/mailman/listinfo/hope-announce
+ http://mail.hope.org/mailman/listinfo/hope-dev )
+
+From - Wed Mar 30 11:10:12 2005
+Return-Path: <hope-bounces@hope.org>
+Delivered-To: cnitu@imap.fins.ro
+Received: from localhost (localhost [127.0.0.1])
+	by imap.fins.ro (Postfix) with ESMTP id 452BE54CEC
+	for <c.nitu@imap.fins.ro>; Wed, 30 Mar 2005 11:13:55 +0300 (EEST)
+Received: from imap.fins.ro ([127.0.0.1])
+ by localhost (imap.fins.ro [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 21954-14 for <c.nitu@imap.fins.ro>;
+ Wed, 30 Mar 2005 11:13:55 +0300 (EEST)
+Received: by imap.fins.ro (Postfix, from userid 108)
+	id E8D0854D1C; Wed, 30 Mar 2005 11:13:54 +0300 (EEST)
+Received: from noulfinfw.ser.ro (finfw.fins.ro [192.168.1.250])
+	by imap.fins.ro (Postfix) with SMTP id 295A754D19
+	for <c.nitu@imap.fins.ro>; Wed, 30 Mar 2005 11:13:50 +0300 (EEST)
+Received: (qmail 9604 invoked by alias); 30 Mar 2005 08:13:49 -0000
+Delivered-To: c.nitu@ser.ro
+Received: (qmail 9589 invoked from network); 30 Mar 2005 08:13:49 -0000
+Received: from cvs.hope.org (HELO mail.hope.org) (63.240.213.173)
+  by 0 with SMTP; 30 Mar 2005 08:13:49 -0000
+Received: from cvs.hope.org (localhost.localdomain [127.0.0.1])
+	by mail.hope.org (Postfix) with ESMTP
+	id C3CDE20336E; Wed, 30 Mar 2005 03:15:37 -0500 (EST)
+Delivered-To: hope@hope.org
+Received: from server1.microsfot.co.uk (server1.microsfot.co.uk
+	[213.228.237.21])
+	by mail.hope.org (Postfix) with ESMTP id 6941A20334D
+	for <hope@hope.org>; Wed, 30 Mar 2005 03:15:30 -0500 (EST)
+Received: from localhost ([127.0.0.1]) by server1.microsfot.co.uk with asmtp 
+	(Cipher TLSv1:RC4-MD5:128) (Exim 3.35 #1 (Debian))
+	id 1DGYaK-0001Uf-00; Wed, 30 Mar 2005 09:29:56 +0100
+Message-ID: <424A5688.6050106@microsfot.co.uk>
+Date: Wed, 30 Mar 2005 08:34:32 +0100
+From: Chris Denver <chris@microsfot.co.uk>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US;
+	rv:1.7.3) Gecko/20040910
+MIME-Version: 1.0
+To: john ray <budd@gmil.com>
+Subject: Re: [hope] login page problem
+References: <815f70cf050329015744ac9a43@mail.gmail.com>
+In-Reply-To: <815f70cf050329015744ac9a43@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Cc: hope@hope.org
+Precedence: list
+List-Id: Users of the Hope <hope.hope.org>
+List-Unsubscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=unsubscribe>
+List-Archive: <http://mail.hope.org/pipermail/hope>
+List-Post: <mailto:hope@hope.org>
+List-Help: <mailto:hope-request@hope.org?subject=help>
+List-Subscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=subscribe>
+Sender: hope-bounces@hope.org
+Errors-To: hope-bounces@hope.org
+
+john ray wrote:
+
+> I'm creatin a customised login page template using districtname, user
+> name and password.
+> i got halt in d logic for password checking. 
+> after submitting d login form how do i call d same page if the passwd
+> is wrong along with d req params passed? do i need an ext python
+> script for this redirection.
+> also tell how to set session data in ZPTs from the form fields?
+
+I'd suggest you look at using CookieCrumbler and SimpleUserFolder 
+instead of trying to roll your own.
+
+Chris
+
+-- 
+microsfot - Content Management, hope & Python Consulting
+            - http://www.microsfot.co.uk
+
+_______________________________________________
+hope maillist  -  hope@hope.org
+http://mail.hope.org/mailman/listinfo/hope
+**   No cross posts or HTML encoding!  **
+(Related lists - 
+ http://mail.hope.org/mailman/listinfo/hope-announce
+ http://mail.hope.org/mailman/listinfo/hope-dev )
+
+From - Wed Mar 30 21:33:20 2005
+Return-Path: <hope-bounces@hope.org>
+Delivered-To: cnitu@imap.fins.ro
+Received: from localhost (localhost [127.0.0.1])
+	by imap.fins.ro (Postfix) with ESMTP id 21AC454CEB
+	for <c.nitu@imap.fins.ro>; Wed, 30 Mar 2005 21:37:09 +0300 (EEST)
+Received: from imap.fins.ro ([127.0.0.1])
+ by localhost (imap.fins.ro [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 15760-22 for <c.nitu@imap.fins.ro>;
+ Wed, 30 Mar 2005 21:37:08 +0300 (EEST)
+Received: by imap.fins.ro (Postfix, from userid 108)
+	id DC94254D19; Wed, 30 Mar 2005 21:37:08 +0300 (EEST)
+Received: from noulfinfw.ser.ro (finfw.fins.ro [192.168.1.250])
+	by imap.fins.ro (Postfix) with SMTP id D2D8654CF2
+	for <c.nitu@imap.fins.ro>; Wed, 30 Mar 2005 21:37:05 +0300 (EEST)
+Received: (qmail 16529 invoked by alias); 30 Mar 2005 18:37:05 -0000
+Delivered-To: c.nitu@ser.ro
+Received: (qmail 16519 invoked from network); 30 Mar 2005 18:37:05 -0000
+Received: from cvs.hope.org (HELO mail.hope.org) (63.240.213.173)
+  by 0 with SMTP; 30 Mar 2005 18:37:05 -0000
+Received: from cvs.hope.org (localhost.localdomain [127.0.0.1])
+	by mail.hope.org (Postfix) with ESMTP
+	id 6AD57203371; Wed, 30 Mar 2005 13:38:53 -0500 (EST)
+Delivered-To: hope@hope.org
+Received: from srv2.shake.de (srv2.shake.de [193.141.176.14])
+	by mail.hope.org (Postfix) with ESMTP id E7047203367
+	for <hope@hope.org>; Wed, 30 Mar 2005 13:38:46 -0500 (EST)
+Received: from linux.local (hs3-237.shake.de [193.141.176.237])
+	by srv2.shake.de (Postfix on SuSE Linux 8.0 (i386)) with ESMTP
+	id C85DCCAD; Wed, 30 Mar 2005 20:35:02 +0200 (CEST)
+Received: (from Smith@localhost)
+	by linux.local (8.11.6/8.11.6/SuSE Linux 0.5) id j2UI1OO04056;
+	Wed, 30 Mar 2005 20:01:24 +0200
+From: Smith Maurer <Smith@shake.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <16970.59764.819866.775606@gargle.gargle.HOWL>
+Date: Wed, 30 Mar 2005 20:01:24 +0200
+To: john ray <budd@gmil.com>
+Subject: Re: [hope] login page problem
+In-Reply-To: <815f70cf050329015744ac9a43@mail.gmail.com>
+References: <815f70cf050329015744ac9a43@mail.gmail.com>
+Cc: hope@hope.org
+Precedence: list
+List-Id: Users of the Hope <hope.hope.org>
+List-Unsubscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=unsubscribe>
+List-Archive: <http://mail.hope.org/pipermail/hope>
+List-Post: <mailto:hope@hope.org>
+List-Help: <mailto:hope-request@hope.org?subject=help>
+List-Subscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=subscribe>
+Sender: hope-bounces@hope.org
+Errors-To: hope-bounces@hope.org
+
+john ray wrote at 2005-3-29 01:57 -0800:
+>I'm creatin a customised login page template using districtname, user
+>name and password.
+>i got halt in d logic for password checking. 
+>after submitting d login form how do i call d same page if the passwd
+>is wrong along with d req params passed? do i need an ext python
+>script for this redirection.
+
+No, you can do it where you checked the password.
+
+>also tell how to set session data in ZPTs from the form fields?
+
+      <tal:XXXX define="dummy python:request.SESSION.set(mySessionVar, request.someRequestVar)" />
+
+-- 
+Smith
+_______________________________________________
+hope maillist  -  hope@hope.org
+http://mail.hope.org/mailman/listinfo/hope
+**   No cross posts or HTML encoding!  **
+(Related lists - 
+ http://mail.hope.org/mailman/listinfo/hope-announce
+ http://mail.hope.org/mailman/listinfo/hope-dev )
+
+
+From - Thu Mar 31 10:46:24 2005
+Return-Path: <hope-bounces@hope.org>
+Delivered-To: cnitu@imap.fins.ro
+Received: from localhost (localhost [127.0.0.1])
+	by imap.fins.ro (Postfix) with ESMTP id 0264A54D19
+	for <c.nitu@imap.fins.ro>; Thu, 31 Mar 2005 10:50:38 +0300 (EEST)
+Received: from imap.fins.ro ([127.0.0.1])
+ by localhost (imap.fins.ro [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 04568-10 for <c.nitu@imap.fins.ro>;
+ Thu, 31 Mar 2005 10:50:37 +0300 (EEST)
+Received: by imap.fins.ro (Postfix, from userid 108)
+	id 9DA8654D1C; Thu, 31 Mar 2005 10:50:37 +0300 (EEST)
+Received: from noulfinfw.ser.ro (finfw.fins.ro [192.168.1.250])
+	by imap.fins.ro (Postfix) with SMTP id D8EA854F15
+	for <c.nitu@imap.fins.ro>; Thu, 31 Mar 2005 10:50:23 +0300 (EEST)
+Received: (qmail 22766 invoked by alias); 31 Mar 2005 07:50:23 -0000
+Delivered-To: c.nitu@ser.ro
+Received: (qmail 22756 invoked from network); 31 Mar 2005 07:50:22 -0000
+Received: from cvs.hope.org (HELO mail.hope.org) (63.240.213.173)
+  by 0 with SMTP; 31 Mar 2005 07:50:22 -0000
+Received: from cvs.hope.org (localhost.localdomain [127.0.0.1])
+	by mail.hope.org (Postfix) with ESMTP
+	id 48E48203354; Thu, 31 Mar 2005 02:52:31 -0500 (EST)
+Delivered-To: hope@hope.org
+Received: from wproxy.gmail.com (wproxy.gmail.com [64.233.184.203])
+	by mail.hope.org (Postfix) with ESMTP id CA0492032F8
+	for <hope@hope.org>; Thu, 31 Mar 2005 02:52:28 -0500 (EST)
+Received: by wproxy.gmail.com with SMTP id 68so476494wra
+	for <hope@hope.org>; Wed, 30 Mar 2005 23:50:07 -0800 (PST)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; s=beta; d=gmail.com;
+	h=received:message-id:date:from:reply-to:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:references;
+	b=PHIRRU7+B+AHaPd2Iu4wChzKcCNexvsjKB8RsO6nqEY8UIY58LT7r/nl+GIMbJIs5BeMt7NFhOkUvmJtYtDlivMeKSqp1xY5H9wLI9nHogt07vGFotF4FkBhnQuxP5kSM7lH0lz7gW6RKo4DeTtaQv+5UzHdi1RDV7KG4tAAAPs=
+Received: by 10.54.1.33 with SMTP id 33mr783407wra;
+	Wed, 30 Mar 2005 23:50:07 -0800 (PST)
+Received: by 10.54.53.63 with HTTP; Wed, 30 Mar 2005 23:50:07 -0800 (PST)
+Message-ID: <815f70cf05033023503b4a9704@mail.gmail.com>
+Date: Wed, 30 Mar 2005 23:50:07 -0800
+From: john ray <budd@gmil.com>
+To: hope@hope.org
+In-Reply-To: <16970.59764.819866.775606@gargle.gargle.HOWL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+References: <815f70cf050329015744ac9a43@mail.gmail.com>
+	<16970.59764.819866.775606@gargle.gargle.HOWL>
+Subject: [hope] Re: login page problem
+Precedence: list
+Reply-To: john ray <budd@gmil.com>
+List-Id: Users of the Hope <hope.hope.org>
+List-Unsubscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=unsubscribe>
+List-Archive: <http://mail.hope.org/pipermail/hope>
+List-Post: <mailto:hope@hope.org>
+List-Help: <mailto:hope-request@hope.org?subject=help>
+List-Subscribe: <http://mail.hope.org/mailman/listinfo/hope>,
+	<mailto:hope-request@hope.org?subject=subscribe>
+Sender: hope-bounces@hope.org
+Errors-To: hope-bounces@hope.org
+
+thnx Smith n chris,
+                        i cudnt make my point clear.
+1st a recap : i've a zpt login page wherein i have got the district
+name n coressponding users drop down list built.
+now after selecting d district n username d passwd is to b filled.
+then d form is to b submitted. 
+It has to be done thid way only so i cant hav cookie crumblers n
+simpleuserfolder componenets.
+
+now my problem how n where do i check d pwd n redirect to the next zpt
+or the previous one if its wrong.
+i've a zsql method giving me the pwd for the user param passed.
+i wanted to kno if i can call this method on d onsubmit event?
+kindly gimme solns u've in mind.
+
+
+
+
+On Wed, 30 Mar 2005 20:01:24 +0200, Smith Maurer <Smith@shake.de> wrote:
+> john ray wrote at 2005-3-29 01:57 -0800:
+> >I'm creatin a customised login page template using districtname, user
+> >name and password.
+> >i got halt in d logic for password checking. 
+> >after submitting d login form how do i call d same page if the passwd
+> >is wrong along with d req params passed? do i need an ext python
+> >script for this redirection.
+> 
+> No, you can do it where you checked the password.
+> 
+> >also tell how to set session data in ZPTs from the form fields?
+> 
+>       <tal:XXXX define="dummy python:request.SESSION.set(mySessionVar,
+> request.someRequestVar)" />
+> 
+> -- 
+> Smith
+> 
+
+-- 
+Share the vision of difference with ME
+_______________________________________________
+hope maillist  -  hope@hope.org
+http://mail.hope.org/mailman/listinfo/hope
+**   No cross posts or HTML encoding!  **
+(Related lists - 
+ http://mail.hope.org/mailman/listinfo/hope-announce
+ http://mail.hope.org/mailman/listinfo/hope-dev )
+

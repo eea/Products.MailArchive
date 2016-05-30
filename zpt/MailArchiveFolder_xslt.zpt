@@ -1,0 +1,37 @@
+<span tal:replace="python:request.RESPONSE.setHeader('content-type', 'text/xml')"/><?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:rss="http://purl.org/rss/1.0/">
+<xsl:output version="1.0" method="xml" omit-xml-declaration="yes" indent="yes" encoding="utf-8"/>
+
+<xsl:template match="/">
+	<html xml:lang="en">
+		<head>
+			<title></title>
+		</head>
+		<body>
+			<h1>Channel - <xsl:value-of select="rdf:RDF/rss:channel/rss:title"/></h1>
+			Link: <xsl:value-of select="rdf:RDF/rss:channel/rss:link"/>
+			<ul>
+				<xsl:for-each select="rdf:RDF/rss:item">
+				<li>
+					<xsl:element name="a">
+						<xsl:attribute name="href">
+							<xsl:value-of select="@rdf:about"/>
+						</xsl:attribute>
+						<xsl:value-of select="./rss:title"/>
+					</xsl:element>
+					<em><xsl:value-of select="./dc:date"/></em>
+				</li>
+				</xsl:for-each>
+			</ul>
+		</body>
+	</html>
+</xsl:template>
+
+<xsl:template match="text()|@*"></xsl:template>
+
+</xsl:stylesheet>

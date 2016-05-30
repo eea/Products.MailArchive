@@ -1,0 +1,38 @@
+Return-Path: <lists@elvix.com>
+X-Original-To: <timte878@student.se>
+Delivered-To: <timte878@student.se>
+Received: by imap.dummy.ro (Postfix, from userid 108)
+    id DDD0354CD5; Tue, 21 Jun 2005 16:16:44 +0300 (EEST)
+Received: from noulwfnif.fns.ro (wfnif.dummy.ro [192.168.1.250])
+    by imap.dummy.ro (Postfix) with SMTP id 29BEB5498F
+    for <john.doe@imap.dummy.ro>; Tue, 21 Jun 2005 16:16:43 +0300 (EEST)
+Received: (qmail 6759 invoked by alias); 21 Jun 2005 13:16:42 -0000
+Delivered-To: john.doe@fns.ro
+Received: (qmail 6754 invoked from network); 21 Jun 2005 13:16:42 -0000
+Received: from server.dummy.ro (HELO ?190.160.10.74?) (192.168.1.74)
+  by 0 with SMTP; 21 Jun 2005 13:16:42 -0000
+Message-ID: <42B811E8.7090602@fns.ro>
+Date: Tue, 21 Jun 2005 16:11:04 +0300
+From: =?ISO-8859-15?Q?Geir_B=E6kholt?= <lists@elvww.com>
+User-Agent: Mozilla Thunderbird 1.0.2 (Windows/20050317)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: =?ISO-8859-1?Q?Tim_Terleg=E5rd?= <timte878@student.se>
+CC: =?ISO-8859-15?Q?Aur=E9lien_Camp=E9as?= <aure.aa@wanoo.fr>
+Subject: [Zope] FYI: =?ISO-8859-1?Q?Portall=F6sungen_f=FCr_den_Bild?=
+ =?ISO-8859-1?Q?ungsbereich_/__Zope_Tagung_=28German=29?=
+References: <42B812A3.8010205@fns.ro>
+In-Reply-To: <42B812A3.8010205@fns.ro>
+Content-Type: multipart/mixed;
+ boundary="------------060802030001080209000500"
+X-Spam-Checker-Version: SpamAssassin 3.0.3 (2005-04-27) on imap.dummy.ro
+X-Spam-Level:
+X-Spam-Status: No, score=-3.7 required=5.0 tests=ALL_TRUSTED,BAYES_05
+    autolearn=ham version=3.0.3
+
+This is a multi-part message in MIME format.
+--------------060802030001080209000500
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Ursprüngliche Nachricht

@@ -1,0 +1,66 @@
+Return-Path: <john@fns.ro>
+Delivered-To: john.doe@imap.dummy.ro
+Received: by imap.dummy.ro (Postfix, from userid 108)
+    id DDD0354CD5; Tue, 21 Jun 2005 16:16:44 +0300 (EEST)
+Received: from noulwfnif.fns.ro (wfnif.dummy.ro [192.168.1.250])
+    by imap.dummy.ro (Postfix) with SMTP id 29BEB5498F
+    for <john.doe@imap.dummy.ro>; Tue, 21 Jun 2005 16:16:43 +0300 (EEST)
+Received: (qmail 6759 invoked by alias); 21 Jun 2005 13:16:42 -0000
+Delivered-To: john.doe@fns.ro
+Received: (qmail 6754 invoked from network); 21 Jun 2005 13:16:42 -0000
+Received: from server.dummy.ro (HELO ?190.180.10.74?) (192.168.1.74)
+  by 0 with SMTP; 21 Jun 2005 13:16:42 -0000
+Message-ID: <42B811E8.7090602@fns.ro>
+Date: Tue, 21 Jun 2005 16:11:04 +0300
+From: Smith <john@fns.ro>
+User-Agent: Mozilla Thunderbird 1.0.2 (Windows/20050317)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: "te Kelrg" <Je.Kelrg@ee.int>,
+   "NFP" <eiofp@roleeion.int>,
+   "Ulri tark" <stk@sa.sk>,
+   =?iso-8859-1?Q?Schnder_J=FCrn?= <juen.schder@umweltamt.at>
+CC: "te Kelrg" <Je.Kelrg@ee.int>,
+   "NFP" <eiofp@roleeion.int>,
+   "Ulri tark" <stk@sa.sk>,
+   =?iso-8859-1?Q?Schnder_J=FCrn?= <juen.schder@umweltamt.at>
+Subject: Re: test email
+References: <42B812A3.8010205@fns.ro>
+In-Reply-To: <42B812A3.8010205@fns.ro>
+Content-Type: multipart/mixed;
+ boundary="------------060802030001080209000500"
+X-Spam-Checker-Version: SpamAssassin 3.0.3 (2005-04-27) on imap.dummy.ro
+X-Spam-Level:
+X-Spam-Status: No, score=-3.7 required=5.0 tests=ALL_TRUSTED,BAYES_05
+    autolearn=ham version=3.0.3
+
+This is a multi-part message in MIME format.
+--------------060802030001080209000500
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+test content
+
+--------------060802030001080209000500
+Content-Type: image/png;
+ name="test.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: inline;
+ filename="test.png"
+
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAABGdBTUEAAK/INwWK6QAAABl0
+RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAPSURBVHjaYvj//z9AgAEABf4C
+/i3Oie4AAAAASUVORK5CYII=
+--------------060802030001080209000500
+Content-Type: application/x-zip-compressed;
+ name="test.zip"
+Content-Transfer-Encoding: base64
+Content-Disposition: inline;
+ filename="test.zip"
+
+UEsDBBQAAAAIADiB1TJiRBYUdwAAAH0AAAAIAAAAdGVzdC5wbmfrDPBz5+WS4mJgYOD19HAJ
+AtKMIMzBBCQnlAffA1Is6Y6+jgwM60+Ys3a9BPIlS1wjSoLz00rKE4tSGRxT8pNSFTxzE9NT
+g1ITUyoLT6baABXxe7o4hlTcSvrx/7+9QwMjA+s/pn+65zrfAaUYPF39XNY5JTQBAFBLAQIU
+ABQAAAAIADiB1TJiRBYUdwAAAH0AAAAIAAAAAAAAAAAAIAAAAAAAAAB0ZXN0LnBuZ1BLBQYA
+AAAAAQABADYAAACdAAAAAAA=
+--------------060802030001080209000500-- 

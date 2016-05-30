@@ -1,0 +1,142 @@
+<marker>
+From keresztes_m@yahoo.com Tue Jun 21 12:55:12 2005
+X-RocketYMUMID: AMYnvs4AACu5QrfjWgUnhQwCSNA
+X-Apparently-To: antonsaispe@yahoo.com via 206.190.39.198; Tue, 21 Jun 2005 02:52:26 -0700
+X-Originating-IP: [193.226.140.49]
+Return-Path: <rlug-bounce@lug.ro>
+Authentication-Results: mta346.mail.scd.yahoo.com  from=lug.ro; domainkeys=fail (bad syntax)
+Received: from 193.226.140.49  (EHLO mail.lug.ro) (193.226.140.49)  by mta346.mail.scd.yahoo.com with SMTP; Tue, 21 Jun 2005 02:52:15 -0700
+Received: from mail (localhost [127.0.0.1]) by mail.lug.ro (Postfix) with ESMTP id 22DB77D001B23; Tue, 21 Jun 2005 12:51:16 +0300 (EEST)
+Received: with ECARTIS (v1.0.0; list rlug); Tue, 21 Jun 2005 12:51:15 +0300 (EEST)
+Delivered-To: rlug@lug.ro
+Received: from localhost (localhost [127.0.0.1])    by mail.lug.ro (Postfix) with ESMTP id 57A557D001B26    for <rlug@lug.ro>; Tue, 21 Jun 2005 12:51:15 +0300 (EEST)
+Received: from mail.lug.ro ([193.226.140.49])   by localhost (mail [193.226.140.49]) (amavisd-new, port 10024)  with ESMTP id 21864-10 for <rlug@lug.ro>;   Tue, 21 Jun 2005 12:51:08 +0300 (EEST)
+Received: from web30808.mail.mud.yahoo.com (web30808.mail.mud.yahoo.com [68.142.200.151])   by mail.lug.ro (Postfix) with SMTP id EA2A37D001B23 for <rlug@lug.ro>; Tue, 21 Jun 2005 12:51:07 +0300 (EEST)
+Received: (qmail 66312 invoked by uid 60001); 21 Jun 2005 09:51:06 -0000
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;  s=s1024; d=yahoo.com;  h=Message-ID:Received:Date:From:Subject:To:MIME-Version:Content-Type:Content-Transfer-Encoding;  b=NONDgzL45FQxJTvcWC+4Y+PFKoTf/MPxThdHpSPtPo1TyzVp3YSGw+fP3D4kSRGkNkJEfzB3tX3v1zBmc8pjVMZRXBfrcAm1okPznarQdshBnisMsfWt7urwpV73/fDOjGvaa90Sb3IQDCaj9WQ2hUe84OqVer7CZlsXAfirnk4=  ;
+Message-ID: <20050621095106.66310.qmail@web30808.mail.mud.yahoo.com>
+Received: from [80.96.43.2] by web30808.mail.mud.yahoo.com via HTTP; Tue, 21 Jun 2005 02:51:06 PDT
+Date: Tue, 21 Jun 2005 02:51:06 -0700 (PDT)
+From: Miklos Keresztes <keresztes_m@yahoo.com>
+Subject: [rlug] ***SPAM*** seg. fault. din drakxtools 
+To: rlug@lug.ro
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: by lug.ro's inebriated penguins
+X-Spam-Status: Yes, hits=3.0 tagged_above=0.1 required=2.0 tests=AWL,   BAYES_50, FORGED_YAHOO_RCVD, HTML_20_30, HTML_MESSAGE
+X-Spam-Level: **
+X-Spam-Flag: YES
+X-archive-position: 40551
+X-ecartis-version: Ecartis v1.0.0
+Sender: rlug-bounce@lug.ro
+Errors-To: rlug-bounce@lug.ro
+X-original-sender: keresztes_m@yahoo.com
+Precedence: bulk
+Reply-To: rlug@lug.ro
+List-help: <http://www.lug.ro/mlist/>
+List-unsubscribe: <mailto:ecartis@lug.ro?subject=unsubscribe%20rlug>
+List-software: Ecartis version 1.0.0
+List-Id: rlug <rlug.mail>
+X-List-ID: rlug <rlug.mail>
+X-list: rlug
+X-FetchYahoo: version 2.8.6 MsgId 1652_3864386_54106_3108_464_0_98525_-1_0
+
+Salut,
+Pe un mandrake 10.1 dupa o aplicare partiala (datorita unor probleme de retea) a unor upgrade-uri de securitate si bug-fixing, toate aplicatiile din pachetul drakxtools afiseaza un mesaj de segmentation fault la pornire.
+Am reinstalat pachetul de la zero dar tot nu merge mesajul.
+
+
+---------------------------------
+Yahoo! Mail
+ Stay connected, organized, and protected. Take the tour
+
+
+--- 
+Detalii despre listele noastre de mail: http://www.lug.ro/
+
+
+From timarum@gmail.com Tue Jun 21 13:05:14 2005
+X-RocketYMUMID: AMYnvs4AADpcQrfmcgxVACVSBT0
+X-Apparently-To: antonsaispe@yahoo.com via 206.190.39.198; Tue, 21 Jun 2005 03:05:38 -0700
+X-Originating-IP: [193.226.140.49]
+Return-Path: <rlug-bounce@lug.ro>
+Authentication-Results: mta151.mail.re2.yahoo.com  from=lug.ro; domainkeys=fail (bad syntax)
+Received: from 193.226.140.49  (EHLO mail.lug.ro) (193.226.140.49)  by mta151.mail.re2.yahoo.com with SMTP; Tue, 21 Jun 2005 03:05:38 -0700
+Received: from mail (localhost [127.0.0.1]) by mail.lug.ro (Postfix) with ESMTP id 3C4317D001B26; Tue, 21 Jun 2005 13:04:34 +0300 (EEST)
+Received: with ECARTIS (v1.0.0; list rlug); Tue, 21 Jun 2005 13:04:33 +0300 (EEST)
+Delivered-To: rlug@lug.ro
+Received: from localhost (localhost [127.0.0.1])    by mail.lug.ro (Postfix) with ESMTP id 641167D001B29    for <rlug@lug.ro>; Tue, 21 Jun 2005 13:04:33 +0300 (EEST)
+Received: from mail.lug.ro ([193.226.140.49])   by localhost (mail [193.226.140.49]) (amavisd-new, port 10024)  with ESMTP id 29242-08 for <rlug@lug.ro>;   Tue, 21 Jun 2005 13:04:18 +0300 (EEST)
+Received: from wproxy.gmail.com (wproxy.gmail.com [64.233.184.195]) by mail.lug.ro (Postfix) with ESMTP id 232C27D001B26    for <rlug@lug.ro>; Tue, 21 Jun 2005 13:03:12 +0300 (EEST)
+Received: by wproxy.gmail.com with SMTP id 68so1285490wra        for <rlug@lug.ro>; Tue, 21 Jun 2005 03:03:08 -0700 (PDT)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;        s=beta; d=gmail.com;        h=received:message-id:date:from:reply-to:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;        b=smJO+vgTrV09ZLYvL+QUXE6d1r8ZtI83FPwC6zswC/nGpx3roACku8Lw/XBnp9I5OJXezZXlaCpJmUN2WRDqDblF9/cgnRkSBi38uGEI9wv51J7O32GfZGQWJl6a+I/6DGBQxGJE6ZNdqN9/E2wjusgKoJabBixRR+y/HQ1XsRU=
+Received: by 10.54.34.4 with SMTP id h4mr3070560wrh;        Tue, 21 Jun 2005 03:03:07 -0700 (PDT)
+Received: by 10.54.14.42 with HTTP; Tue, 21 Jun 2005 03:03:07 -0700 (PDT)
+Message-ID: <c2627fd2050621030318624eb4@mail.gmail.com>
+Date: Tue, 21 Jun 2005 13:03:07 +0300
+From: Mike <timarum@gmail.com>
+To: rlug@lug.ro
+Subject: [rlug] Re: ***SPAM*** seg. fault. din drakxtools
+In-Reply-To: <20050621095106.66310.qmail@web30808.mail.mud.yahoo.com>
+Mime-Version: 1.0
+Content-type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+References: <20050621095106.66310.qmail@web30808.mail.mud.yahoo.com>
+X-Virus-Scanned: by lug.ro's inebriated penguins
+X-archive-position: 40553
+X-ecartis-version: Ecartis v1.0.0
+Sender: rlug-bounce@lug.ro
+Errors-To: rlug-bounce@lug.ro
+X-original-sender: timarum@gmail.com
+Precedence: bulk
+Reply-To: rlug@lug.ro
+List-help: <http://www.lug.ro/mlist/>
+List-unsubscribe: <mailto:ecartis@lug.ro?subject=unsubscribe%20rlug>
+List-software: Ecartis version 1.0.0
+List-Id: rlug <rlug.mail>
+X-List-ID: rlug <rlug.mail>
+X-list: rlug
+X-FetchYahoo: version 2.8.6 MsgId 1339_3871541_54792_3278_753_0_98528_-1_0
+X-FetchYahoo-Content-Transfer-Encoding-Autoconverted: from quoted-printable
+ to 8bit
+
+ Hmm ... verifica intai daca nu ai fost spart/gaurit/virusat...
+ Vezi daca nu mai sunt comenzi care dau segfault.
+
+On 6/21/05, Miklos Keresztes <keresztes_m@yahoo.com> wrote:
+> Salut,
+> Pe un mandrake 10.1 dupa o aplicare partiala (datorita unor probleme de retea) a unor upgrade-uri de securitate si bug-fixing, toate aplicatiile din pachetul drakxtools afiseaza un mesaj de segmentation fault la pornire.
+> Am reinstalat pachetul de la zero dar tot nu merge mesajul.
+> 
+> 
+> 
+> ---------------------------------
+> Yahoo! Mail
+>  Stay connected, organized, and protected. Take the tour
+> 
+> 
+> ---
+> Detalii despre listele noastre de mail: http://www.lug.ro/
+> 
+> 
+>
+
+---
+Detalii despre listele noastre de mail: http://www.lug.ro/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

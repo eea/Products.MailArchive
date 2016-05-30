@@ -1,0 +1,99 @@
+<span tal:replace="structure here/standard_html_header" />
+
+<tal:block tal:define="skey python:request.get('skey', 'subject');
+						rkey python:request.get('rkey', '');
+						items python:here.sortMboxMsgs(skey, rkey);
+						id python:request.get('id', None);
+						msg python:here.getMsg(id);
+						url here/absolute_url">
+<tal:block tal:condition="msg">
+<tal:block tal:define="msg_from python:msg[0];
+				msg_to python:msg[1];
+				msg_cc python:msg[2];
+				msg_subject python:msg[3];
+				msg_date python:msg[4];
+				msg_body python:msg[5];
+				msg_atts python:msg[6];
+				msgsprevnext python:here.getPrevNext(id, skey, rkey);
+				msg_prev python:msgsprevnext[0];
+				msg_next python:msgsprevnext[1]">
+	<h1 tal:content="msg_subject" />
+	<ul>
+		<li tal:condition="python:msg_prev!=-1">
+			<span i18n:translate="" tal:omit-tag="">Previous message</span>:
+			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
+		</li>
+		<li tal:condition="python:msg_next!=-1">
+			<span i18n:translate="" tal:omit-tag="">Next message</span>:
+			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
+		</li>
+		<li>
+			<strong i18n:translate="">Sort messages by</strong>:
+			<a tal:condition="python:skey != 'thread'" tal:attributes="href string:${url}/?skey=thread" i18n:translate="">[ thread ]</a>
+			<a tal:condition="python:skey != 'subject'" tal:attributes="href string:${url}/?skey=subject" i18n:translate="">[ subject ]</a>
+			<a tal:condition="python:skey != 'date'" tal:attributes="href string:${url}/?skey=date" i18n:translate="">[ date ]</a>
+			<a tal:condition="python:skey != 'author'" tal:attributes="href string:${url}/?skey=author" i18n:translate="">[ author ]</a>
+		</li>
+		<li>
+			<a tal:attributes="href here/get_mailarchivefolder_path"><strong i18n:translate="">Mail archive folder</strong></a>
+		</li>
+	</ul>
+				<table class="datatable"> 
+				<tr><th scope="row" class="scope-row">From</th><td>
+			<span tal:replace="structure python:msg_from[0]" /> <em tal:content="structure python:here.antispam(msg_from[1])" /><br />
+				</td></tr>
+				<tr tal:condition="python:len(msg_to)>0">
+			<th scope="row" class="scope-row">To</th>
+			<td><tal:block repeat="to msg_to">
+					<span tal:replace="structure python:to[0]" />&nbsp;<em tal:content="structure python:here.antispam(to[1])" />,
+				</tal:block>
+			</td>
+		</tr>
+				<tr tal:condition="python:len(msg_cc)>0">
+			<th scope="row" class="scope-row">Cc</th>
+			<td><tal:block repeat="cc msg_cc">
+					<span tal:replace="structure python:cc[0]" />&nbsp;<em tal:content="structure python:here.antispam(cc[1])" />,
+				</tal:block>
+			</td>
+		</tr>
+				<tr><th scope="row" class="scope-row">Date</th><td tal:content="python:here.tupleToDate(msg_date)" /></tr>
+				<tr><th scope="row" class="scope-row">Subject</th><td tal:content="msg_subject" /></tr>
+				</table>
+	<div style="border-top: 1px dotted black; border-bottom: 1px dotted black;" tal:content="structure msg_body" />
+	<div style="font-weight:bold" tal:condition="python:len(msg_atts) > 0">Download attachments:</div>
+	<tal:block repeat="attachment msg_atts"
+				condition="python:msg_atts is not None">
+		<a tal:define="title python:attachment[0]; quoted_title python:attachment[1];"
+			tal:attributes="href string:${id}+++${quoted_title}"
+			tal:content="title"/><br/>
+	</tal:block>
+	<ul>
+		<li tal:condition="python:msg_prev!=-1">
+			<span i18n:translate="" tal:omit-tag="">Previous message</span>:
+			<a tal:define="item_id python:here.get_msg_index(msg_prev)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_prev)" />
+		</li>
+		<li tal:condition="python:msg_next!=-1">
+			<span i18n:translate="" tal:omit-tag="">Next message</span>:
+			<a tal:define="item_id python:here.get_msg_index(msg_next)" tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}" tal:content="python:here.get_msg_subject(msg_next)" />
+		</li>
+		<li>
+			<strong i18n:translate="">Sort messages by</strong>:
+			<a tal:condition="python:skey != 'thread'" tal:attributes="href string:${url}/?skey=thread" i18n:translate="">[ thread ]</a>
+			<a tal:condition="python:skey != 'subject'" tal:attributes="href string:${url}/?skey=subject" i18n:translate="">[ subject ]</a>
+			<a tal:condition="python:skey != 'date'" tal:attributes="href string:${url}/?skey=date" i18n:translate="">[ date ]</a>
+			<a tal:condition="python:skey != 'author'" tal:attributes="href string:${url}/?skey=author" i18n:translate="">[ author ]</a>
+		</li>
+		<li>
+			<a tal:attributes="href here/get_mailarchivefolder_path"><strong i18n:translate="">Mail archive folder</strong></a>
+		</li>
+	</ul>
+</tal:block>
+</tal:block>
+<tal:block tal:condition="python:msg is None">
+	<h1 i18n:translate="">Invalid message id</h1>
+	<p><span i18n:translate="" tal:omit-tag="">A message with this id was not found in the archive. Return to </span>
+		 <a tal:attributes="href here/getMailArhiveURL" i18n:translate="">archive</a></p>
+</tal:block>
+</tal:block>
+
+<span tal:replace="structure here/standard_html_footer" />

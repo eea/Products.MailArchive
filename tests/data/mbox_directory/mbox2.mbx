@@ -1,0 +1,37 @@
+From MAILER-DAEMON Tue Jun 21 20:34:19 2005
+Date: 21 Jun 2005 20:34:19 +0200
+From: Mail System Internal Data <MAILER-DAEMON@mammoth.eea.eu.int>
+Subject: DON'T DELETE THIS MESSAGE -- FOLDER INTERNAL DATA
+Message-ID: <1119378859@mammoth.eea.eu.int>
+X-IMAP: 1119363558 0000000109 NonJunk Junk
+Status: RO
+
+This text is part of the internal format of your mail folder, and is not
+a real message.  It is created automatically by the mail system software.
+If deleted, important folder data will be lost, and it will be re-created
+with the data reset to initial values.
+
+From - Mon Jan 1 00:00:00 1965
+Received: (qmail 21554 invoked by uid 0); 11 Sep 2003 08:14:48 -0000
+Received: from ffw.finet.ru (HELO f.fw.ru) (?0olPrjPxr848DGOQokYqbA4hP6OPqhMR?@190.161.2.234)
+  by i.ff.ro with SMTP; 11 Sep 2003 08:14:48 -0000
+Received: (qmail 4044 invoked by alias); 11 Sep 2003 08:14:45 -0000
+Delivered-To: smith@joe.ro
+Received: (qmail 4040 invoked by uid 0); 11 Sep 2003 08:14:44 -0000
+Received: from john.doeser.utu.ro (HELO dcila) (192.168.1.47)
+  by fiw.finet.ru with SMTP; 11 Sep 2003 08:14:44 -0000
+Message-ID: <000901c3783d$4643ea20$2f01a8c0@dchla>
+From: "Dros Chila" <john.doe@ser.utu.ro>
+To: "Corl" <smith@joe.ro>
+Subject: msvcr70.dll 
+Date: Thu, 11 Sep 2003 11:18:25 +0300
+MIME-Version: 1.0
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2800.1106
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+Content-transfer-encoding: 8bit
+Content-type: text/html; charset=windows-1252
+
+asasasas
+

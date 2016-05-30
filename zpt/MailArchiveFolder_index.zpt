@@ -1,0 +1,33 @@
+<span tal:replace="structure here/standard_html_header" />
+
+<h1 tal:content="here/title_or_id" />
+
+<span tal:replace="structure here/index_header"/>
+<span tal:replace="python:here.updateArchives(1)"/>
+
+<table class="datatable">
+    <tr>
+	<th scope="col">Archive</th>
+	<th scope="col">Period</th>
+	<th scope="col">#Messages</th>
+	<th scope="col" tal:condition="here/allow_zip">Download</th>
+    </tr>
+
+    <tal:block define="archives here/getArchives" repeat="archive archives">
+	<tr>
+	<td><a tal:attributes="href string:${archive/absolute_url}?skey=date&amp;rkey=1" tal:content="archive/title_or_id" /></td>
+	<td>
+		<span tal:replace="python:here.tupleToShortDate(archive.starting)" /> -
+		<span tal:replace="python:here.tupleToShortDate(archive.ending)" />
+	</td>
+	<td class="number" tal:content="archive/count_mbox_msgs" />
+	<td tal:condition="here/allow_zip">
+            <a tal:define="zip string:${archive/id}.zip" tal:attributes="href string:${zip}">
+		<span tal:replace="string:${archive/id}.zip" />
+	<!-- <span tal:replace="python:here.showSizeKb(archive.getMboxSize())"/> Kb ] --></a>
+        </td>
+    </tr>
+    </tal:block>
+</table>
+<span tal:replace="structure here/index_footer"/>
+<span tal:replace="structure here/standard_html_footer" />
