@@ -10,10 +10,9 @@ VERSION = open(os.path.join(*PATH)).read().strip()
 setup(name=NAME,
       version=VERSION,
       description="Browse a mail archive in Unix MBOX format",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description=open("README.rst").read(),
       classifiers=[
-           "Framework :: Zope",
+           "Framework :: Zope2",
            "Programming Language :: Python",
            "Topic :: Software Development :: Libraries :: Python Modules",
         ],
