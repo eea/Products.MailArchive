@@ -194,12 +194,9 @@ class MailArchiveFolder(Folder, Utils):
             return
         self._v_last_update = self.get_time()
 
-        print 'updateArchives', 1
-
         #Local filesystem mboxes
         path = self.getPath()
         if self.valid_directory(path):
-            print 'updateArchives', 2
             ids = self.objectIds(['MailArchive']) #zope archives
             mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
             self._delete_archives(ids, [mb[1] for mb in mboxes])
@@ -216,8 +213,6 @@ class MailArchiveFolder(Folder, Utils):
                     buf.append(mbox)
             self._reload_archives(ids, buf)
 
-        print 'updateArchives', 3
-
         #IMAP maillboxes
         imap_client_ob = self.create_imap_client()
         mboxes = imap_client_ob.listMailboxes(self.mbox_ignore)
@@ -226,15 +221,7 @@ class MailArchiveFolder(Folder, Utils):
         ids = self.objectIds(['MailArchiveIMAP'])
         self._delete_archives(ids, mboxes)
 
-        buf = []
-        for mbox in mboxes:
-            print 'mbox', mbox
-            if hasattr(self, mbox):
-                # Read it again no matter what
-                buf.append(mbox)
-            else:
-                buf.append(mbox)
-        self._reload_archives_imap(ids, buf, imap_client_ob)
+        self._reload_archives_imap(ids, mboxes, imap_client_ob)
 
         self.kill_imap_client(imap_client_ob)
 

@@ -38,7 +38,6 @@ class imap_client(object):
 
     def connOpen(self):
         #open connection and login
-        print 'connOpen'
         try:
             self.__imap_connection = imaplib.IMAP4_SSL(self.__imap_servername)
             rv, data = self.__imap_connection.login(self.__imap_username, self.__imap_password)
@@ -53,7 +52,6 @@ class imap_client(object):
 
     def connClose(self):
         #logout and close connection
-        print 'connClose'
         try: self.__imap_connection.logout()
         except: pass
         self.__imap_connection = None
