@@ -2,60 +2,83 @@
 <span tal:replace="structure here/manage_tabs"/>
 
 <p class="form-help">
-    To change property values, edit the values and click "Save Changes".
-    Upon saving changes, the archive will be reloaded.
+	To change property values, edit the values and click "Save Changes". Upon saving changes, the archive will be reloaded.
 </p>
 
-<form action="manageProperties" method="post" name="frmProperties">
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-        <th>Title</th>
-        <td>
-            <input type="text" size="45" name="title:utf8:ustring" tal:attributes="value here/title" />
-        </td>
-    </tr>
-    <tr>
-        <th>Path</th>
-        <td>
-            <input type="text" name="path" size="45" tal:attributes="value here/getPath" /><em>(to archive directory)</em>
-            <p tal:condition="python: not here.validPath()">Invalid path</p>
-        </td>
-    </tr>
-    <tr>
-        <th>Allow download of archive</th>
-        <td><input type="checkbox" name="allow_zip" tal:condition="python:here.allow_zip" CHECKED />
-            <input type="checkbox" name="allow_zip" tal:condition="python:not here.allow_zip" />
-        </td>
-    </tr>
-    <tr>
-        <th>Ignore archives</th>
-        <td><textarea cols="30" rows="5" name="mbox_ignore"
-                tal:content="python:here.list_to_lines(here.mbox_ignore)"></textarea>
-    </tr>
-    <tr>
-        <th></th>
-        <td><em>These are all the files from <strong tal:content="here/getPath" /> directory.<br>
-        Files marked with * have been recognized as mbox files.</em></td>
-    </tr>
-    <tr>
-        <th>Mailboxes</th>
-        <td><textarea cols="30" rows="5" disabled="disabled"
-            tal:content="python:here.list_to_lines(here.listMailboxes())"></textarea></td>
-    </tr>
-    <tr>
-        <th>Header</th>
-        <td>
-            <textarea cols="60" rows="5" name="index_header" tal:content="here/index_header"></textarea>
-        </td>
-    </tr>
-    <tr>
-        <th>Footer</th>
-        <td>
-            <textarea cols="60" rows="5" name="index_footer" tal:content="here/index_footer"></textarea>
-        </td>
-    </tr>
+<form action="manageProperties" method="post" name="frmProperties" tal:define="validPath here/validPath;
+	imap_settings here/has_imap_settings;
+	imap_client_ob here/create_imap_client;
+	valid_imap_conn python:here.valid_imap_conn(imap_client_ob);">
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+	<tr>
+		<th width="20%"><label for="title">Title</label></th>
+		<td><input type="text" size="45" id="title" name="title:utf8:ustring" tal:attributes="value here/title" /></td>
+	</tr>
+	<tr>
+		<th><label for="allow_zip">Allow download of archive</label></th>
+		<td><input type="checkbox" id="allow_zip" name="allow_zip" tal:attributes="checked here/allow_zip" /></td>
+	</tr>
+	<tr>
+		<th valign="top"><label for="mbox_ignore">Ignore archives</label></th>
+		<td><textarea cols="30" rows="5" id="mbox_ignore" name="mbox_ignore" tal:content="python:here.list_to_lines(here.mbox_ignore)"></textarea>
+	</tr>
+	<tr><td colspan="2"><h3>Local filesystem</h3></td></tr>
+	<tr>
+		<th><label for="path">Archive directory path</label></th>
+		<td>
+			<input type="text" id="path" name="path" size="45" tal:attributes="value here/getPath" />
+			<span tal:condition="python: not validPath" style="font-weight:bold;color:#f00;">Invalid path!</span>
+		</td>
+	</tr>
+	<tr tal:condition="validPath">
+		<th valign="top">Mailboxes</th>
+		<td>
+			<em>These are all the files from <strong tal:content="here/getPath" /> directory.<br />Files marked with * have been recognized as mbox files.</em><br />
+			<textarea cols="30" rows="5" name="mailboxes_fs" id="mailboxes_fs" disabled="disabled" tal:content="python:here.list_to_lines(here.listMailboxes())"></textarea>
+		</td>
+	</tr>
+	<tr><td colspan="2"><h3>IMAP</h3></td></tr>
+	<tal:block tal:condition="imap_settings">
+	<tr>
+		<th><label for="imap_servername">Server name</label></th>
+		<td><input type="text" size="30" id="imap_servername" name="imap_servername" tal:attributes="value here/imap_servername" /></td>
+	</tr>
+	<tr>
+		<th><label for="imap_username">Username</label></th>
+		<td><input type="text" size="30" id="imap_username" name="imap_username" tal:attributes="value here/imap_username" /></td>
+	</tr>
+	<tr>
+		<th><label for="imap_password">Password</label></th>
+		<td><input type="text" size="30" id="imap_password" name="imap_password" tal:attributes="value here/imap_password" /></td>
+	</tr>
+	<tr tal:condition="python:not valid_imap_conn">
+		<th></th>
+		<td><span style="font-weight:bold;color:#f00;">Invalid connection values!</span></td>
+	</tr>
+	<tr tal:condition="valid_imap_conn">
+		<th valign="top">Mailboxes</th>
+		<td>
+			<em>These are all the inboxes (name and message counter) for the specified account.</em><br />
+			<textarea cols="30" rows="5" name="mailboxes_imap" id="mailboxes_imap" disabled="disabled" tal:content="python:here.show_imap_mailboxes_ex(imap_client_ob)"></textarea>
+		</td>
+	</tr>
+	</tal:block>
+	<tr tal:condition="python:not imap_settings">
+		<th></th>
+		<td>IMAP settings missing. <a href="manageIMAPSettings"><strong>Click to upgrade!</strong></a></td>
+	</tr>
+	<tr><td colspan="2"><h3>Appearance</h3></td></tr>
+	<tr>
+		<th valign="top"><label for="index_header">Header</label></th>
+		<td><textarea cols="60" rows="5" id="index_header" name="index_header" tal:content="here/index_header"></textarea></td>
+	</tr>
+	<tr>
+		<th valign="top"><label for="index_footer">Footer</label></th>
+		<td><textarea cols="60" rows="5" id="index_footer" name="index_footer" tal:content="here/index_footer"></textarea></td>
+	</tr>
 </table>
 <input name="Save" type="submit" id="Save" value="Save changes" />
+<tal:block tal:replace="python:here.kill_imap_client(imap_client_ob)" />
 </form>
 
 <span tal:replace="structure here/manage_page_footer"/>

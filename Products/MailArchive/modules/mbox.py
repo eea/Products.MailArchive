@@ -24,6 +24,7 @@ import mailbox
 import sys
 import os.path
 import re
+import email
 
 from mbox_email import mbox_email
 from mbox_filters import mbox_filters
@@ -162,12 +163,78 @@ class mbox(mbox_filters):
         if r: t.reverse()
         return [val for (key, val) in t]
 
+    def get_unique_id_OLD(self, msg):
+        #returns a unique id for this message based on Message-ID
+        # BUG:
+        # - this fails for messages like Message-ID: <1363282668.6978.YahooMailNeo@web160104.mail.bf1.yahoo.com>
+        # - always returns YahooMailNeo as ID and messages are lost
+        msg_id = msg.getMessageID()
+        try:
+            m = re.search('([\w]*)@', msg_id)
+            return m.group(1) or msg_id
+        except:
+            return msg_id
+
     def get_unique_id(self, msg):
         #returns a unique id for this message based on Message-ID
+        #for a value like <1363282668.6978.YahooMailNeo@web160104.mail.bf1.yahoo.com>
+        #1363282668.6978.YahooMailNeo will be returned
         msg_id = msg.getMessageID()
-        m = re.search('([\w]*)@', msg_id)
-        return m.group(1) or msg.getMessageID()
-        
+        try:
+            m = re.search('([\w\.]*)@', msg_id)
+            return m.group(1) or msg_id
+        except:
+            return msg_id
+
+class mbox_imap(mbox):
+
+    def __init__(self, imap_client_ob, mailbox_name):
+        self.mailbox_name = mailbox_name
+        self.size = -1
+        self.last_modified = -1
+        self.cache = {}
+        self.starting = None
+        self.ending = None
+        mbox_filters.__dict__['__init__'](self)
+        self.process_mbox(imap_client_ob)
+
+    def process_mbox(self, imap_client_ob):
+        #open an IMAP mailbox
+        self.cache = {}
+        messages = imap_client_ob.getMailboxMessages(self.mailbox_name)
+        starting, ending = None, None
+        idx = 1
+        for msg in messages:
+            m = mbox_email(msg.as_string())
+            d = email.utils.parsedate(msg['Date'])
+            s = m.getSubject()
+            (result, reason) = self.run_rules(s)
+            if result:
+                if s == '': s = '(no subject)'
+                from_addr = m.getFrom()
+                f = from_addr[0]
+                if not f: f = from_addr[1]
+                index = m.getMessageID()
+                #we use the full Message-ID in order to be able to query for it in the mailbox
+                start, stop = 0, 0
+                self.cache[index] = (
+                    index, start, stop-start,
+                    s, d, f, m.getMessageID(), m.getInReplyTo(), m.getTo(), m.getCC()
+                )
+                #process starting, ending
+                if starting is None: starting = d
+                else:
+                    if d < starting: starting = d
+                if ending is None: ending = d
+                else:
+                    if d > ending: ending = d
+            idx += 1
+        self.starting, self.ending = starting, ending
+
+    def get_mbox_msg(self, index, imap_client_ob):
+        #given the message index in messages list returns the message body
+        return imap_client_ob.getMailBoxMessageBody(self.mailbox_name, index)
+
 def main():
     b = mbox(sys.argv[1])
     print b.cache

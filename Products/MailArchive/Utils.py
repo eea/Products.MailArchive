@@ -120,7 +120,10 @@ class Utils(object):
         return isfile(path)
 
     def get_files(self, path):
-        return listdir(path)
+        if self.valid_directory(path):
+            return listdir(path)
+        else:
+            return []
 
     #def delete_file(self, path):
     #    unlink(path)

@@ -30,7 +30,7 @@ from AccessControl.Permissions import view_management_screens, view
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 #Product imports
-from modules.mbox import mbox
+from modules.mbox import mbox, mbox_imap
 from modules.mbox_email import mbox_email
 
 _marker = []
@@ -141,3 +141,38 @@ class MailArchive(Folder, mbox):
     message_html = PageTemplateFile('zpt/MailArchive_message', globals())
 
 InitializeClass(MailArchive)
+
+
+def addMailArchiveIMAP(self, imap_client_ob, id='', title='', mailbox_name='', REQUEST=None):
+    """ """
+    ob = MailArchiveIMAP(imap_client_ob, id, title, mailbox_name)
+    if len(ob.cache.keys()) > 0:
+        self._setObject(id, ob)
+    if REQUEST:
+        return self.manage_main(self, REQUEST, update_menu=1)
+
+class MailArchiveIMAP(mbox_imap, MailArchive):
+    """ """
+
+    def __init__(self, imap_client_ob, id, title, mailbox_name):
+        #constructor
+        self.id = id
+        self.title = title
+        mbox_imap.__dict__['__init__'](self, imap_client_ob, mailbox_name)
+
+    security = ClassSecurityInfo()
+
+    security.declareProtected(view, 'getMsg')
+    def getMsg(self, id=None):
+        #returns the body of the given message id
+        r = None
+        if id is not None:
+            imap_client_ob = self.create_imap_client()
+            m = mbox_email(self.get_mbox_msg(id, imap_client_ob))
+            if m.getMessageID():
+                r = (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
+                        m.getContent(), m.getAttachments())
+            self.kill_imap_client(imap_client_ob)
+        return r
+
+InitializeClass(MailArchiveIMAP)

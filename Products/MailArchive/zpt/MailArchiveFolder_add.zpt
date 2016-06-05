@@ -6,46 +6,58 @@
 
 <h3>Add MailArchive Folder</h3>
 
-<p>This proccess can take several minutes according to the number and size of the
-    files that you are loading.</p>
-    
+<p>This proccess can take several minutes according to the number and size of the files that you are loading.</p>
+
 <form action="manage_addMailArchiveFolder" method="post" name="frmAdd">
-<table>
-    <tr>
-        <th>Id</th>
-        <td valign="top"><input type="text" name="id" size="35"></td>
-    </tr>
-    <tr>
-        <th>Title</th>
-        <td valign="top"><input type="text" name="title:utf8:ustring" size="35"></td>
-    </tr>
-    <tr>
-        <th>Path</th>
-        <td valign="top"><input type="text" name="path" size="35"></td>
-    </tr>
-    <tr>
-        <th>Allow download of archive</th>
-        <td><input type="checkbox" name="allow_zip" />
-        </td>
-    </tr>
-    <tr>
-        <th>Header</th>
-        <td>
-            <textarea cols="60" rows="5" name="index_header"></textarea>
-        </td>
-    </tr>
-    <tr>
-        <th>Footer</th>
-        <td>
-            <textarea cols="60" rows="5" name="index_footer">&lt;div style="text-align: center"&gt;
-&lt;a href="index_rdf" type="application/rss+xml"&gt;Syndicate this site with RDF&lt;/a&gt;
-&lt;/div&gt;</textarea>
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><input type="submit" value=" Submit "></td>
-    </tr>
+<table border="0" cellpadding="2" cellspacing="2">
+	<tr>
+		<th><label for="id">Id</label></th>
+		<td valign="top"><input type="text" id="id" name="id" size="35" /></td>
+	</tr>
+	<tr>
+		<th><label for="title">Title</label></th>
+		<td valign="top"><input type="text" id="title" name="title:utf8:ustring" size="35" /></td>
+	</tr>
+	<tr>
+		<th><label for="allow_zip">Allow download of archive</th>
+		<td><input type="checkbox" id="allow_zip" name="allow_zip" /></td>
+	</tr>
+	<tr>
+		<th valign="top"><label for="index_header">Header</label></th>
+		<td>
+			<textarea cols="60" rows="5" id="index_header" name="index_header"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th valign="top"><label for="index_footer">Footer</label></th>
+		<td>
+			<textarea cols="60" rows="5" id="index_footer" name="index_footer">&lt;div style="text-align: center"&gt;
+	&lt;a href="index_rdf" type="application/rss+xml"&gt;Syndicate this site with RDF&lt;/a&gt;
+	&lt;/div&gt;</textarea>
+		</td>
+	</tr>
+	<tr><td colspan="2"><h3>Local filesystem</h3></td></tr>
+	<tr>
+		<th><label for="path">Archive directory path</label></th>
+		<td valign="top"><input type="text" id="path" name="path" size="35" value="" /></td>
+	</tr>
+	<tr><td colspan="2"><h3>IMAP</h3></td></tr>
+	<tr>
+		<th><label for="imap_servername">Server name</label></th>
+		<td><input type="text" size="30" id="imap_servername" name="imap_servername" value="" /></td>
+	</tr>
+	<tr>
+		<th><label for="imap_username">Username</label></th>
+		<td><input type="text" size="30" id="imap_username" name="imap_username" value="" /></td>
+	</tr>
+	<tr>
+		<th><label for="imap_password">Password</label></th>
+		<td><input type="text" size="30" id="imap_password" name="imap_password" value="" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" value=" Submit " /></td>
+	</tr>
 </table>
 </form>
 
