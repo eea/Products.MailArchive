@@ -154,6 +154,8 @@ def addMailArchiveIMAP(self, imap_client_ob, id='', title='', mailbox_name='', R
 class MailArchiveIMAP(mbox_imap, MailArchive):
     """ """
 
+    meta_type = 'MailArchiveIMAP'
+
     def __init__(self, imap_client_ob, id, title, mailbox_name):
         #constructor
         self.id = id

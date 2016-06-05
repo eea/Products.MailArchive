@@ -172,10 +172,10 @@ class MailArchiveFolder(Folder, Utils):
     def _add_archives_imap(self, mboxes, imap_client_ob):
         """ add mailboxes for imap """
         for mb in mboxes:
-            #try:
-            addMailArchiveIMAP(self, imap_client_ob, mb, '', mb)
-            #except:
-            #    pass
+            try:
+                addMailArchiveIMAP(self, imap_client_ob, mb, '', mb)
+            except:
+                pass
 
     security.declarePrivate('_reload_archives_imap')
     def _reload_archives_imap(self, zobjs, mboxes, imap_client_ob):
@@ -220,7 +220,6 @@ class MailArchiveFolder(Folder, Utils):
         #get zope archives and remove mailboxes that no longer exists
         ids = self.objectIds(['MailArchiveIMAP'])
         self._delete_archives(ids, mboxes)
-
         self._reload_archives_imap(ids, mboxes, imap_client_ob)
 
         self.kill_imap_client(imap_client_ob)
