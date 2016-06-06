@@ -4,8 +4,7 @@ import os
 from setuptools import setup, find_packages
 
 NAME = 'Products.MailArchive'
-PATH = NAME.split('.') + ['version.txt']
-VERSION = open(os.path.join(*PATH)).read().strip()
+VERSION = '1.2'
 
 setup(name=NAME,
       version=VERSION,
