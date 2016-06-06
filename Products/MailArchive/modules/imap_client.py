@@ -57,6 +57,14 @@ class imap_client(object):
         self.__imap_connection = None
         self.__imap_flg = False
 
+    def isMailboxAllowed(self, name, ignore_list):
+        r = True
+        for x in ignore_list:
+            if name.startswith(x):
+                r = False
+                break
+        return r
+
     def listMailboxes(self, ignore_list):
         r = []
         if self.connValid():
@@ -65,7 +73,7 @@ class imap_client(object):
                 for item in data:
                     flags, delimiter, mailbox_name = MAILBOXES_PATTERN.match(item).groups()
                     mailbox_name = mailbox_name.strip('"')
-                    if mailbox_name not in ignore_list:
+                    if self.isMailboxAllowed(mailbox_name, ignore_list):
                         r.append(mailbox_name)
         return r
 
@@ -77,7 +85,7 @@ class imap_client(object):
                 for item in data:
                     flags, delimiter, mailbox_name = MAILBOXES_PATTERN.match(item).groups()
                     mailbox_name = mailbox_name.strip('"')
-                    if mailbox_name not in ignore_list:
+                    if self.isMailboxAllowed(mailbox_name, ignore_list):
                         mailbox_counter = self.selectMailbox(mailbox_name)
                         r.append({'name': mailbox_name, 'counter': mailbox_counter})
         return r
