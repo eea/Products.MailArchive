@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.2 (2016-06-06)
+----------------
+* Feature: Turn MailArchive into an IMAP client
+  - add support for IMAP accounts
+  - fixed encoding problems
+  - fixed attachments download
+  - cleanup
+  [chiridra refs #72719]
+
 1.1 (2016-05-30)
 ----------------
 * Initial release
