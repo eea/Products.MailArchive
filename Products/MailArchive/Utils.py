@@ -20,7 +20,7 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-
+import string
 import time
 from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
@@ -29,6 +29,12 @@ import urllib
 from Products.PythonScripts.standard import url_quote, html_quote
 
 from Products.PythonScripts.standard import html_quote
+
+bad_chars = '.`~!?/@#$%^\'",<>|\\+=&*;:()[]{}'
+
+good_chars= '------------------------------'
+
+TRANSMAP = string.maketrans(bad_chars, good_chars)
 
 class Utils(object):
 
@@ -199,3 +205,11 @@ class Utils(object):
     def urlUnquote(self, value):
         #transform escapes in single characters
         return urllib.unquote(value)
+
+    def cleanupMboxId(self, id=''):
+        #clean up an id given by the user
+        if isinstance(id, unicode): x = id.encode('utf-8')
+        else: x = str(id)
+        x = x.strip(' -')
+        x = x.translate(TRANSMAP)
+        return x.strip(' -')

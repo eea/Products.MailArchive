@@ -172,8 +172,10 @@ class MailArchiveFolder(Folder, Utils):
     def _add_archives_imap(self, mboxes, imap_client_ob):
         """ add mailboxes for imap """
         for mb in mboxes:
+            #make sure we have a valid ID
+            mb_id = self.cleanupMboxId(mb)
             try:
-                addMailArchiveIMAP(self, imap_client_ob, mb, '', mb)
+                addMailArchiveIMAP(self, imap_client_ob, mb_id, '', mb)
             except:
                 pass
 

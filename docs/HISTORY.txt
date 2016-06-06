@@ -3,8 +3,10 @@ Changelog
 
 1.3 (2016-06-06)
 ----------------
-
-* remove version.txt [nituacor]
+* Removed version.txt
+  [nituacor]
+* Fixed mbox zope id.
+  [chiridra refs #72719]
 
 1.2 (2016-06-06)
 ----------------
