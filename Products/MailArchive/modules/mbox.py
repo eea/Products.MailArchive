@@ -24,10 +24,10 @@ import mailbox
 import sys
 import os.path
 import re
-import email
 
 from mbox_email import mbox_email
 from mbox_filters import mbox_filters
+from Products.MailArchive.Utils import Utils
 
 SPAM = 0
 KEEP = 1
@@ -52,7 +52,7 @@ def get_start_stop(msg):
     return start, stop
 
 
-class mbox(mbox_filters):
+class mbox(mbox_filters, Utils):
 
     def __init__(self, path):
         self.path = path
@@ -178,6 +178,7 @@ class mbox(mbox_filters):
     def get_unique_id(self, msg):
         #returns a unique id for this message based on Message-ID
         #for a value like <1363282668.6978.YahooMailNeo@web160104.mail.bf1.yahoo.com>
+        # <CA+b1K2njiA9UEMeZC=QD359iW=0XJd3OuHfBwWFOhVoN954cew@mail.gmail.com>
         #1363282668.6978.YahooMailNeo will be returned
         msg_id = msg.getMessageID()
         try:
@@ -206,11 +207,11 @@ class mbox_imap(mbox):
         idx = 1
         for msg in messages:
             m = mbox_email(msg.as_string())
-            d = email.utils.parsedate(msg['Date'])
-            s = m.getSubject()
+            d = m.getDateTimeEx()
+            s = m.getSubjectEx()
             (result, reason) = self.run_rules(s)
             if result:
-                if s == '': s = '(no subject)'
+                if s == '' or s == u'': s = u'(no subject)'
                 from_addr = m.getFrom()
                 f = from_addr[0]
                 if not f: f = from_addr[1]

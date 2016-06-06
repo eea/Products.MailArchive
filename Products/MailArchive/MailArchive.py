@@ -172,8 +172,8 @@ class MailArchiveIMAP(mbox_imap, MailArchive):
             imap_client_ob = self.create_imap_client()
             m = mbox_email(self.get_mbox_msg(id, imap_client_ob))
             if m.getMessageID():
-                r = (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
-                        m.getContent(), m.getAttachments())
+                r = (m.getFrom(), m.getTo(), m.getCC(), m.getSubjectEx(), m.getDateTime(), \
+                        m.getContentEx(), m.getAttachments())
             self.kill_imap_client(imap_client_ob)
         return r
 

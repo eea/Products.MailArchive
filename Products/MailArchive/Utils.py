@@ -25,6 +25,7 @@ import time
 from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
 from os import listdir
+from Products.PythonScripts.standard import url_quote, html_quote
 
 from Products.PythonScripts.standard import html_quote
 
@@ -159,3 +160,28 @@ class Utils(object):
         l_tmp = l_tmp.replace('\'', '&apos;')
         l_tmp = l_tmp.replace('>', '&gt;')
         return l_tmp
+
+    def urlEncode(self, s):
+        #encode a string using url_encode
+        return url_quote(s)
+
+    def htmlEncode(self, s):
+        #encode a string using html_quote
+        return html_quote(s)
+
+    def toUnicode(self, s):
+        #convert to unicode
+        if not isinstance(s, unicode): return unicode(s, 'utf-8')
+        else: return s
+
+    def toUnicodeEx(self, s):
+        #convert to unicode
+        if isinstance(s, unicode): return s
+        else:
+            try:
+                return unicode(s, 'utf-8')
+            except:
+                try:
+                    return unicode(s, 'latin-1')
+                except:
+                    return s
