@@ -4,6 +4,7 @@
 						rkey python:request.get('rkey', '');
 						items python:here.sortMboxMsgs(skey, rkey);
 						id python:request.get('id', None);
+						encoded_id python:here.urlEncode(id);
 						msg python:here.getMsg(id);
 						url here/absolute_url">
 <tal:block tal:condition="msg">
@@ -64,7 +65,7 @@
 	<tal:block repeat="attachment msg_atts"
 				condition="python:msg_atts is not None">
 		<a tal:define="title python:attachment[0]; quoted_title python:attachment[1];"
-			tal:attributes="href string:${id}+++${quoted_title}"
+			tal:attributes="href string:${url}/download_html?id=${encoded_id}&name=${quoted_title}"
 			tal:content="title"/><br/>
 	</tal:block>
 	<ul>

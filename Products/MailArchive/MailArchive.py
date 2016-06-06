@@ -91,11 +91,14 @@ class MailArchive(Folder, mbox):
         """ return the absolute path to this MailArchive """
         return self.absolute_url()
 
+    def getMboxMsg(self, id):
+        return self.get_mbox_msg(id)
+
     security.declareProtected(view, 'getMsg')
     def getMsg(self, id=None):
         #returns the body of the given message id
         if id is not None:
-            m = mbox_email(self.get_mbox_msg(id))
+            m = mbox_email(self.getMboxMsg(id))
             if m.getMessageID():
                 return (m.getFrom(), m.getTo(), m.getCC(), m.getSubject(), m.getDateTime(), \
                         m.getContent(), m.getAttachments())
@@ -125,7 +128,7 @@ class MailArchive(Folder, mbox):
             msg = info[0]
             att = info[1]
             if msg is not None:
-                m = mbox_email(self.get_mbox_msg(msg))
+                m = mbox_email(self.getMboxMsg(msg))
                 data = m.getAttachment(att)
                 self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(att))
                 return File(att, '', data).__of__(self)
@@ -139,6 +142,16 @@ class MailArchive(Folder, mbox):
 
     security.declareProtected('View', 'message_html')
     message_html = PageTemplateFile('zpt/MailArchive_message', globals())
+
+    security.declareProtected('View', 'message_html')
+    def download_html(self, id, name, REQUEST=None, RESPONSE=None):
+        """ """
+        id = self.urlUnquote(id)
+        name = self.toUnicode(self.urlUnquote(name))
+        m = mbox_email(self.getMboxMsg(id))
+        data = m.getAttachment(name)
+        self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(name))
+        return File(name, '', data).__of__(self)
 
 InitializeClass(MailArchive)
 
@@ -164,13 +177,19 @@ class MailArchiveIMAP(mbox_imap, MailArchive):
 
     security = ClassSecurityInfo()
 
+    def getMboxMsg(self, id):
+        imap_client_ob = self.create_imap_client()
+        r = self.get_mbox_msg(id, imap_client_ob)
+        self.kill_imap_client(imap_client_ob)
+        return r
+
     security.declareProtected(view, 'getMsg')
     def getMsg(self, id=None):
         #returns the body of the given message id
         r = None
         if id is not None:
             imap_client_ob = self.create_imap_client()
-            m = mbox_email(self.get_mbox_msg(id, imap_client_ob))
+            m = mbox_email(self.getMboxMsg(id))
             if m.getMessageID():
                 r = (m.getFrom(), m.getTo(), m.getCC(), m.getSubjectEx(), m.getDateTime(), \
                         m.getContentEx(), m.getAttachments())
