@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.3 (2016-06-06)
+----------------
+
+* remove version.txt [nituacor]
+
 1.2 (2016-06-06)
 ----------------
 * Feature: Turn MailArchive into an IMAP client
