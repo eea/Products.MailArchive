@@ -29,9 +29,8 @@ from os.path import join
 from email.Utils import parseaddr, parsedate, getaddresses
 from email.Header import decode_header
 
-
 from cleanhtml import HTMLCleaner
-import urllib
+from Products.MailArchive.Utils import Utils
 
 charset_table = {
      "window-1252": "cp1252",
@@ -82,7 +81,14 @@ def to_entities_quote(str):
             res.append(ch)
     return ''.join(res)
 
-class mbox_email:
+def decode_string(str):
+    bytes, encoding = decode_header(str)[0]
+    if encoding:
+        return bytes.decode(encoding)
+    else:
+        return bytes
+
+class mbox_email(Utils):
     """ wrapper for email """
 
     def __init__(self, msg):
@@ -128,8 +134,14 @@ class mbox_email:
         data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
         return to_entities_quote(data)
 
+    def getSubjectEx(self):
+        return decode_string(self._msg.get('subject', u''))
+
     def getDateTime(self):
         return parsedate(self._msg.get('date', None))
+
+    def getDateTimeEx(self):
+        return email.utils.parsedate(self._msg['Date'])
 
     def getInReplyTo(self):
         return self._msg.get('In-Reply-To', '')
@@ -145,7 +157,7 @@ class mbox_email:
         for part in self._msg.walk():
             ct_type = part.get_content_type()
             if ct_type in ['text/plain', 'text/html']:
-                p = part.get_payload(decode=1)
+                p = part.get_payload(decode=True)
                 charset = self._msg.get_param("charset")
                 if charset is None:
                     charset = "Latin-1"
@@ -170,6 +182,37 @@ class mbox_email:
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
 
+    def getContentEx(self):
+        """ Walks through the message until it finds one that
+            is either text/plain or text/html
+        """
+        payloads = []
+        for part in self._msg.walk():
+            ct_type = part.get_content_type()
+            if ct_type in ['text/plain', 'text/html']:
+                p = part.get_payload(decode=True)
+                charset = part.get_content_charset()
+                if charset is None:
+                    # We cannot know the character set, so return decoded "something"
+                    p = part.get_payload(decode=True)
+                else:
+                    p = unicode(p, str(charset), 'ignore')
+                    if ct_type == 'text/html':
+                        mycleaner = HTMLCleaner()
+                        try:
+                            p = mycleaner.clean(p)
+                        except:
+                            pass
+                        p = p.replace('@', '&#64;')
+                    else:
+                        p = p.replace('@', '&#64;')
+                        p = p.replace('\n', '<br />')
+                        p = p.replace('\r', '')
+                        p =  extractUrl(p)
+                        p = u'''<div style="font-family: 'Courier New', monospace; white-space: pre-wrap">%s</div>''' % p
+                payloads.append(p)
+                return u''.join(payloads)
+
     def getAttachments(self):
         atts = []
         for part in self._msg.walk():
@@ -177,7 +220,8 @@ class mbox_email:
                 continue
             filename = part.get_filename()
             if filename:
-                atts.append((filename, urllib.quote(filename)))
+                filename = decode_string(filename)
+                atts.append((filename, self.urlQuote(self.toUtf8(filename))))
             #if not filename:
             #    ext = mimetypes.guess_extension(part.get_type())
             #    if not ext:
@@ -192,7 +236,7 @@ class mbox_email:
         for part in self._msg.walk():
             if part.get_content_maintype() == 'multipart':
                 continue
-            in_email = part.get_filename() or ''
+            in_email = decode_string(part.get_filename()) or ''
             if filename == in_email or clean(filename) == clean(in_email):
-                return part.get_payload(decode=1)
+                return part.get_payload(decode=True)
         return None

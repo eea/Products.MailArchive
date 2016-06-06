@@ -30,17 +30,19 @@ from AccessControl import Unauthorized
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 #Product imports
-from MailArchive import addMailArchive
+from MailArchive import addMailArchive, addMailArchiveIMAP
 from Utils import Utils
+from modules.imap_client import imap_client
 
 _marker = []
 
 manage_addMailArchiveFolderForm = PageTemplateFile('zpt/MailArchiveFolder_add', globals())
-def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0,
-                                index_header='', index_footer='', REQUEST=None):
+def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0, index_header='', index_footer='',
+    imap_servername='', imap_username='', imap_password='', REQUEST=None):
     """ Add a new MailArchiveFolder object """
 
-    ob = MailArchiveFolder(id, title, path, allow_zip, index_header, index_footer)
+    ob = MailArchiveFolder(id, title, path, allow_zip, index_header, index_footer,
+        imap_servername, imap_username, imap_password)
     self._setObject(id, ob)
     if REQUEST is not None:
         return self.manage_main(self, REQUEST, update_menu=1)
@@ -63,11 +65,12 @@ class MailArchiveFolder(Folder, Utils):
 
     security = ClassSecurityInfo()
 
-    def __init__(self, id, title, path, allow_zip, index_header, index_footer):
+    def __init__(self, id, title, path, allow_zip, index_header, index_footer,
+        imap_servername, imap_username, imap_password):
         self.id = id
         self.title = title
         self._path = path
-    
+
         #We don't really care about the download of the mailboxes.
         #The mbox format is little used outside the Unix community.
         self.allow_zip = 0  #allow_zip
@@ -75,7 +78,12 @@ class MailArchiveFolder(Folder, Utils):
         self.index_header = index_header
         self.index_footer = index_footer
         self._v_last_update = 0
-    
+
+        #imap
+        self.imap_servername = imap_servername
+        self.imap_username = imap_username
+        self.imap_password = imap_password
+
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
         self._v_last_update = 0
@@ -87,6 +95,12 @@ class MailArchiveFolder(Folder, Utils):
             self.index_footer = ''
         if not hasattr(self, 'mbox_ignore'):
             self.mbox_ignore = ['Trash','Sent','Sent-Items']
+        if not hasattr(self, 'imap_servername'):
+            self.imap_servername = ''
+        if not hasattr(self, 'imap_username'):
+            self.imap_username = ''
+        if not hasattr(self, 'imap_password'):
+            self.imap_password = ''
 
     security.declareProtected(view, 'get_mailarchivefolder_path')
     def get_mailarchivefolder_path(self, p=0):
@@ -99,12 +113,12 @@ class MailArchiveFolder(Folder, Utils):
     security.declareProtected(view_management_screens, 'validPath')
     def validPath(self):
         return self.valid_directory(self._path)
-    
+
     security.declareProtected(view, 'getArchives')
     def getArchives(self):
         """ returns the archives list sorted by the 'starting' property
             - the date of the first message in the mbox file """
-        l = [(x.starting, x) for x in self.objectValues('MailArchive')]
+        l = [(x.starting, x) for x in self.objectValues(['MailArchive', 'MailArchiveIMAP'])]
         l.sort()
         l.reverse()
         return [val for (key, val) in l]
@@ -140,12 +154,34 @@ class MailArchiveFolder(Folder, Utils):
             This function is called when a new MailArchiveFolder
             instance is created.
         """
-        path = self.getPath()
-        if not self.valid_directory(path):
-            return
 
-        mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
-        self._add_archives(mboxes)
+        #Local filesystem mboxes
+        path = self.getPath()
+        if self.valid_directory(path):
+            mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
+            self._add_archives(mboxes)
+
+        #IMAP mailboxes
+        imap_client_ob = self.create_imap_client()
+        mboxes = imap_client_ob.listMailboxes(self.mbox_ignore)
+        self._add_archives_imap(mboxes, imap_client_ob)
+
+        self.kill_imap_client(imap_client_ob)
+
+    security.declarePrivate('_add_archives_imap')
+    def _add_archives_imap(self, mboxes, imap_client_ob):
+        """ add mailboxes for imap """
+        for mb in mboxes:
+            try:
+                addMailArchiveIMAP(self, imap_client_ob, mb, '', mb)
+            except:
+                pass
+
+    security.declarePrivate('_reload_archives_imap')
+    def _reload_archives_imap(self, zobjs, mboxes, imap_client_ob):
+        """ reload archives for imap """
+        [self.manage_delObjects(mbox) for mbox in mboxes if mbox in zobjs]
+        self._add_archives_imap(mboxes, imap_client_ob)
 
     security.declareProtected(view, 'updateArchives')
     def updateArchives(self, delay=1):
@@ -156,28 +192,37 @@ class MailArchiveFolder(Folder, Utils):
         """
         if delay and self._v_last_update > self.get_time() - 600:
             return
-        
         self._v_last_update = self.get_time()
 
+        #Local filesystem mboxes
         path = self.getPath()
-        if not self.valid_directory(path):
-            return
+        if self.valid_directory(path):
+            ids = self.objectIds(['MailArchive']) #zope archives
+            mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
+            self._delete_archives(ids, [mb[1] for mb in mboxes])
 
-        ids = self.objectIds('MailArchive') #zope archives
-        mboxes, others = self.get_mboxes(path, self.mbox_ignore)    #mbox archives
-        self._delete_archives(ids, [mb[1] for mb in mboxes])
-        
-        buf = []
-        for mbox in mboxes:
-            if hasattr(self, mbox[1]):
-                m = getattr(self, mbox[1])
-                # If the mailbox file already exists on the filesystem and
-                # it hasn't changed, then don't read it again
-                if m.size != self.get_mbox_size(mbox[0]) and m.last_modified != self.get_last_modif(mbox[0]):
+            buf = []
+            for mbox in mboxes:
+                if hasattr(self, mbox[1]):
+                    m = getattr(self, mbox[1])
+                    # If the mailbox file already exists on the filesystem and
+                    # it hasn't changed, then don't read it again
+                    if m.size != self.get_mbox_size(mbox[0]) and m.last_modified != self.get_last_modif(mbox[0]):
+                        buf.append(mbox)
+                else:
                     buf.append(mbox)
-            else:
-                buf.append(mbox)
-        self._reload_archives(ids, buf)
+            self._reload_archives(ids, buf)
+
+        #IMAP maillboxes
+        imap_client_ob = self.create_imap_client()
+        mboxes = imap_client_ob.listMailboxes(self.mbox_ignore)
+
+        #get zope archives and remove mailboxes that no longer exists
+        ids = self.objectIds(['MailArchiveIMAP'])
+        self._delete_archives(ids, mboxes)
+        self._reload_archives_imap(ids, mboxes, imap_client_ob)
+
+        self.kill_imap_client(imap_client_ob)
 
     security.declareProtected(view_management_screens, 'listMailboxes')
     def listMailboxes(self):
@@ -210,16 +255,84 @@ class MailArchiveFolder(Folder, Utils):
     #    else:
     #        return getattr(self, id)
 
+    #IMAP API
+    security.declareProtected(view_management_screens, 'has_imap_settings')
+    def has_imap_settings(self):
+        return hasattr(self, 'imap_servername')
+
+    security.declareProtected(view_management_screens, 'manageIMAPSettings')
+    def manageIMAPSettings(self, REQUEST=None, RESPONSE=None):
+        """ Run this for upgrading with imap functionality """
+        if not self.has_imap_settings():
+            self.imap_servername = ''
+            self.imap_username = ''
+            self.imap_password = ''
+            self._p_changed = 1
+        if REQUEST is not None:
+            return MessageDialog(title = 'Upgraded',
+                message = "The IMAP settings %s have been set!" % self.id,
+                action = './manage_main',
+                )
+
+    def create_imap_client(self):
+        imap_client_ob = imap_client(self.imap_servername, self.imap_username, self.imap_password)
+        imap_client_ob.connOpen()
+        return imap_client_ob
+
+    def kill_imap_client(self, imap_client_ob):
+        imap_client_ob.connClose()
+        imap_client_ob = None
+
+    security.declareProtected(view_management_screens, 'valid_imap_conn')
+    def valid_imap_conn(self, imap_client_ob=None):
+        flg_close = 0
+        if imap_client_ob is None: flg_close, imap_client_ob = 1, self.create_imap_client()
+        r = imap_client_ob.connValid()
+        if flg_close: self.kill_imap_client(imap_client_ob)
+        return r
+
+    security.declareProtected(view, 'list_imap_mailboxes')
+    def list_imap_mailboxes(self, imap_client_ob=None, ignore_list=[]):
+        #returns a list of available mailboxes
+        #(e.g. ['INBOX', 'INBOX.Drafts', ..]
+        flg_close = 0
+        if imap_client_ob is None: flg_close, imap_client_ob = 1, self.create_imap_client()
+        r = imap_client_ob.listMailboxes(ignore_list)
+        if flg_close: self.kill_imap_client(imap_client_ob)
+        return r
+
+    security.declareProtected(view, 'show_imap_mailboxes')
+    def show_imap_mailboxes(self, imap_client_ob=None):
+        return self.list_to_lines(self.list_imap_mailboxes(imap_client_ob))
+
+    security.declareProtected(view, 'list_imap_mailboxes_ex')
+    def list_imap_mailboxes_ex(self, imap_client_ob=None, ignore_list=[]):
+        #returns a list of available mailboxes and the number of messages
+        #(e.g. [{'name': 'INBOX', 'counter': 457}, {'name': INBOX.Drafts', 'counter': 0}, ..]
+        flg_close = 0
+        if imap_client_ob is None: flg_close, imap_client_ob = 1, self.create_imap_client()
+        r = imap_client_ob.listMailboxesEx(ignore_list)
+        if flg_close: self.kill_imap_client(imap_client_ob)
+        return r
+
+    security.declareProtected(view, 'show_imap_mailboxes_ex')
+    def show_imap_mailboxes_ex(self, imap_client_ob=None):
+        return self.list_to_lines(['%s (%s)' % (x['name'], x['counter']) for x in self.list_imap_mailboxes_ex(imap_client_ob)])
+
+    #ZMI
     security.declareProtected(view_management_screens, 'manageProperties')
     def manageProperties(self, title='', path='', mbox_ignore=[], index_header='', index_footer='',
-             allow_zip=0, REQUEST=None):
+             allow_zip=0, imap_servername='', imap_username='', imap_password='', REQUEST=None):
         """ save properties """
         self.title = title
-        self._path = path
+        self._path = path.strip()
         self.allow_zip = allow_zip
         self.mbox_ignore = self.lines_to_list(mbox_ignore)
         self.index_header = index_header
         self.index_footer = index_footer
+        self.imap_servername = imap_servername.strip()
+        self.imap_username = imap_username.strip()
+        self.imap_password = imap_password.strip()
         self.updateArchives(0)
         self._p_changed = 1
         if REQUEST is not None:
@@ -235,13 +348,13 @@ class MailArchiveFolder(Folder, Utils):
 
     security.declareProtected(view_management_screens, 'properties_html')
     properties_html = PageTemplateFile('zpt/MailArchiveFolder_props', globals())
-    
+
     security.declareProtected(view, 'index_html')
     index_html = PageTemplateFile('zpt/MailArchiveFolder_index', globals())
 
     security.declareProtected(view, 'index_xslt')
     index_xslt = PageTemplateFile('zpt/MailArchiveFolder_xslt', globals())
-    
+
     security.declareProtected(view, 'index_rdf')
     def index_rdf(self, REQUEST=None, RESPONSE=None):
         """ """

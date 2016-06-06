@@ -79,7 +79,7 @@
 	<td tal:content="structure python:here.get_msg_from(tuple[1])" />
 	<td>
 		<tal:block tal:repeat="x python:range(0, tuple[0])"> ------ </tal:block>
-		<a tal:define="item_id python:here.get_msg_index(tuple[1])"
+		<a tal:define="item_id python:here.urlEncode(here.get_msg_index(tuple[1]))"
 			tal:attributes="href string:${url}/message_html?skey=${skey}&amp;rkey=${rkey}&amp;id=${item_id}"
 			tal:content="python:here.get_msg_subject(tuple[1])" />
 	</td>

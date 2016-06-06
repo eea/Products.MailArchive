@@ -25,6 +25,8 @@ import time
 from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
 from os import listdir
+import urllib
+from Products.PythonScripts.standard import url_quote, html_quote
 
 from Products.PythonScripts.standard import html_quote
 
@@ -96,7 +98,7 @@ class Utils(object):
         return int(p_size/1024 + 1)
 
     def quote_attachment(self, name):
-        return name.replace(' ', '_')
+        return self.toUtf8(name).replace(' ', '_')
 
     def antispam(self, addr):
         """ All email adresses will be obfuscated. """
@@ -120,7 +122,10 @@ class Utils(object):
         return isfile(path)
 
     def get_files(self, path):
-        return listdir(path)
+        if self.valid_directory(path):
+            return listdir(path)
+        else:
+            return []
 
     #def delete_file(self, path):
     #    unlink(path)
@@ -156,3 +161,41 @@ class Utils(object):
         l_tmp = l_tmp.replace('\'', '&apos;')
         l_tmp = l_tmp.replace('>', '&gt;')
         return l_tmp
+
+    def urlEncode(self, s):
+        #encode a string using url_encode
+        return url_quote(s)
+
+    def htmlEncode(self, s):
+        #encode a string using html_quote
+        return html_quote(s)
+
+    def toUtf8(self, s):
+        #convert to utf-8
+        if isinstance(s, unicode): return s.encode('utf-8')
+        else: return str(s)
+
+    def toUnicode(self, s):
+        #convert to unicode
+        if not isinstance(s, unicode): return unicode(s, 'utf-8')
+        else: return s
+
+    def toUnicodeEx(self, s):
+        #convert to unicode
+        if isinstance(s, unicode): return s
+        else:
+            try:
+                return unicode(s, 'utf-8')
+            except:
+                try:
+                    return unicode(s, 'latin-1')
+                except:
+                    return s
+
+    def urlQuote(self, value):
+        #escapes single characters
+        return urllib.quote(value)
+
+    def urlUnquote(self, value):
+        #transform escapes in single characters
+        return urllib.unquote(value)
