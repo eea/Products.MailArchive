@@ -8,9 +8,9 @@ What is MailArchive?
 --------------------
 
     MailArchive is a product that can let the browse a mail archive in
-    Unix MBOX format. The product resyncronises every ten minutes when
-    the mail files change. It is therefore maintenance free. The product
-    is tested on Zope 2.12, but can be made to work on Zope 2.6.
+    Unix MBOX format or connect to an IMAP account. The product resyncronises
+    every ten minutes when the mail files change. It is therefore maintenance free.
+    The product is tested on Zope 2.12, but can be made to work on Zope 2.6.
 
 
 How to use it
@@ -18,8 +18,9 @@ How to use it
 
     First you install Products.MailArchive in the Products folder
     and restart Zope. You will now be able to create objects of
-    the type "MailArchiveFolder" The form will ask you four fields:
-    the id, title, path to mail archive directory on the local disk.
+    the type "MailArchiveFolder" The form will ask you for some fields:
+    the id, title, path to mail archive directory on the local disk,
+    IMAP connection values.
     You need the "Add MailArchiveFolder" permission in order to add a
     MailArchiveFolder. Upon creation of this object, all the MBOX files
     inside this mail directory will be added to Zope.
@@ -29,9 +30,7 @@ How to use it
 Dependencies
 ------------
 
-    If you use Zope 2.6 with Python 2.1, you need the email-package and
-    HTMLParser.py for Python. Download and install it (maybe as root)
-    with the same python-binary you use for running your Zope-Server.
+    This package works with Zope 2.12 and Python 2.7.
 
 How to test it
 --------------
