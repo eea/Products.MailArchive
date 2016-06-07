@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.5 (2016-06-07)
+----------------
+* fix pypi issues
+* typos
+
 1.4 (2016-06-07)
 ----------------
 * cron job method added [chiridra refs #72719]
