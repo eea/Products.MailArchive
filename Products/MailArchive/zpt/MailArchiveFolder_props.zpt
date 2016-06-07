@@ -76,6 +76,18 @@
 		<th valign="top"><label for="index_footer">Footer</label></th>
 		<td><textarea cols="60" rows="5" id="index_footer" name="index_footer" tal:content="here/index_footer"></textarea></td>
 	</tr>
+	<tr><td colspan="2"><h3>Cache</h3></td></tr>
+	<tr>
+		<th width="20%"><label for="cron_key">Cron acces key</label></th>
+		<td>
+			<input type="text" size="45" id="cron_key" name="cron_key" tal:attributes="value here/cron_key" />
+			<em>The cron job URL: <strong><tal:block tal:replace="string:${here/absolute_url}/cron_update_archives?key=${here/cron_key}" /></em>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="update_cache">I want to also the mailboxes</label></th>
+		<td><input type="checkbox" id="update_cache" name="update_cache" /></td>
+	</tr>
 </table>
 <input name="Save" type="submit" id="Save" value="Save changes" />
 <tal:block tal:replace="python:here.kill_imap_client(imap_client_ob)" />

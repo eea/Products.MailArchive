@@ -3,7 +3,6 @@
 <h1 tal:content="here/title_or_id" />
 
 <span tal:replace="structure here/index_header"/>
-<span tal:replace="python:here.updateArchives(1)"/>
 
 <table class="datatable">
 	<tr>

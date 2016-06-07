@@ -20,6 +20,8 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
+import logging
+
 #Zope imports
 from OFS.Folder import Folder
 from OFS.Image import File
@@ -33,6 +35,8 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from MailArchive import addMailArchive, addMailArchiveIMAP
 from Utils import Utils
 from modules.imap_client import imap_client
+
+logger = logging.getLogger('Products.MailArchive')
 
 _marker = []
 
@@ -84,6 +88,9 @@ class MailArchiveFolder(Folder, Utils):
         self.imap_username = imap_username
         self.imap_password = imap_password
 
+        #cron
+        self.cron_key = ''
+
     def __setstate__(self,state):
         MailArchiveFolder.inheritedAttribute("__setstate__") (self, state)
         self._v_last_update = 0
@@ -101,6 +108,8 @@ class MailArchiveFolder(Folder, Utils):
             self.imap_username = ''
         if not hasattr(self, 'imap_password'):
             self.imap_password = ''
+        if not hasattr(self, 'cron_key'):
+            self.cron_key = ''
 
     security.declareProtected(view, 'get_mailarchivefolder_path')
     def get_mailarchivefolder_path(self, p=0):
@@ -185,16 +194,16 @@ class MailArchiveFolder(Folder, Utils):
         [self.manage_delObjects(mbox) for mbox in mboxes if mbox in zobjs]
         self._add_archives_imap(mboxes, imap_client_ob)
 
-    security.declareProtected(view, 'updateArchives')
+    security.declarePrivate('updateArchives')
     def updateArchives(self, delay=1):
-        """ Update the mail archives
-            Only check the mailboxes every 10th minute.
-            FIXME: To be called from MailArchiveFolder_index.zpt
-                (preferably while the user sees the list)
-        """
-        if delay and self._v_last_update > self.get_time() - 600:
+        ### Update the mail archives
+        ### Only check the mailboxes every 12 hours.
+        ### This is called when properties are changed or via a cronjob.
+        if delay and self._v_last_update > self.get_time() - 43200: #12 hours
             return
         self._v_last_update = self.get_time()
+
+        logger.info('START updateArchives')
 
         #Local filesystem mboxes
         path = self.getPath()
@@ -225,6 +234,8 @@ class MailArchiveFolder(Folder, Utils):
         self._reload_archives_imap(ids, mboxes, imap_client_ob)
 
         self.kill_imap_client(imap_client_ob)
+
+        logger.info('DONE updateArchives')
 
     security.declareProtected(view_management_screens, 'listMailboxes')
     def listMailboxes(self):
@@ -324,7 +335,8 @@ class MailArchiveFolder(Folder, Utils):
     #ZMI
     security.declareProtected(view_management_screens, 'manageProperties')
     def manageProperties(self, title='', path='', mbox_ignore=[], index_header='', index_footer='',
-             allow_zip=0, imap_servername='', imap_username='', imap_password='', REQUEST=None):
+             allow_zip=0, imap_servername='', imap_username='', imap_password='',
+             cron_key='', update_cache='', REQUEST=None):
         """ save properties """
         self.title = title
         self._path = path.strip()
@@ -335,7 +347,9 @@ class MailArchiveFolder(Folder, Utils):
         self.imap_servername = imap_servername.strip()
         self.imap_username = imap_username.strip()
         self.imap_password = imap_password.strip()
-        self.updateArchives(0)
+        self.cron_key = cron_key.strip()
+        if update_cache: #update cache if wanted
+            self.updateArchives(0)
         self._p_changed = 1
         if REQUEST is not None:
             return MessageDialog(title = 'Edited',
@@ -401,6 +415,16 @@ class MailArchiveFolder(Folder, Utils):
             return '\n'.join(l_rdf)
         else:
             RESPONSE.setStatus('NotFound')
+            return RESPONSE
+
+    security.declareProtected(view, 'cron_update_archives')
+    def cron_update_archives(self, key, REQUEST=None, RESPONSE=None):
+        """ """
+        if key == self.cron_key:
+            self.updateArchives(0)
+            return 'OK: Archives updated [%s]' % self.absolute_url()
+        else:
+            RESPONSE.setStatus(404)
             return RESPONSE
 
 InitializeClass(MailArchiveFolder)
