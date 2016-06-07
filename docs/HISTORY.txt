@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.4 (2016-06-07)
+----------------
+* cron job method added [chiridra refs #72719]
+* do not call update archives from front end [chiridra refs #72719]
+* added flag for forcing arhive update after save in Properties tab [chiridra refs #72719]
+
+
 1.3 (2016-06-06)
 ----------------
 * Removed version.txt
