@@ -1,27 +1,37 @@
-<span tal:replace="structure here/standard_html_header" />
+<metal:use-macro use-macro="context/main_template/macros/master">
+	<!-- <span tal:replace="structure here/standard_html_header" /> -->
+	<div tal:replace="structure provider:plone.htmlhead" />
 
-<h1 tal:content="here/title_or_id" />
+	<metal:fill-slot fill-slot="content-core">
 
-<span tal:replace="structure here/index_header"/>
+		<h1 tal:content="here/title_or_id" />
 
-<table class="datatable">
-	<tr>
-		<th scope="col">Archive</th>
-		<th scope="col">Period</th>
-		<th scope="col">#Messages</th>
-		<th scope="col" tal:condition="here/allow_zip">Download</th>
-	</tr>
-	<tr tal:repeat="archive here/getArchives">
-		<td><a tal:attributes="href string:${archive/absolute_url}?skey=date&amp;rkey=1" tal:content="archive/title_or_id" /></td>
-		<td><span tal:replace="python:here.tupleToShortDate(archive.starting)" /> - <span tal:replace="python:here.tupleToShortDate(archive.ending)" /></td>
-		<td class="number" tal:content="archive/count_mbox_msgs" />
-		<td tal:condition="here/allow_zip">
-			<a tal:define="zip string:${archive/id}.zip" tal:attributes="href string:${zip}">
-				<span tal:replace="string:${archive/id}.zip" /> <!-- <span tal:replace="python:here.showSizeKb(archive.getMboxSize())"/> Kb ] -->
-			</a>
-		</td>
-	</tr>
-</table>
+		<span tal:replace="structure here/index_header"/>
 
-<span tal:replace="structure here/index_footer"/>
-<span tal:replace="structure here/standard_html_footer" />
+		<table class="datatable">
+			<tr>
+				<th scope="col">Archive</th>
+				<th scope="col">Period</th>
+				<th scope="col">#Messages</th>
+				<th scope="col" tal:condition="here/allow_zip">Download</th>
+			</tr>
+			<tr tal:repeat="archive here/getArchives">
+				<td><a tal:attributes="href string:${archive/absolute_url}?skey=date&amp;rkey=1" tal:content="archive/title_or_id" /></td>
+				<td><span tal:replace="python:here.tupleToShortDate(archive.starting)" /> - <span tal:replace="python:here.tupleToShortDate(archive.ending)" /></td>
+				<td class="number" tal:content="archive/count_mbox_msgs" />
+				<td tal:condition="here/allow_zip">
+					<a tal:define="zip string:${archive/id}.zip" tal:attributes="href string:${zip}">
+						<span tal:replace="string:${archive/id}.zip" /> <!-- <span tal:replace="python:here.showSizeKb(archive.getMboxSize())"/> Kb ] -->
+					</a>
+				</td>
+			</tr>
+		</table>
+
+	</metal:fill-slot>
+
+	<!-- <span tal:replace="structure here/index_footer"/> -->
+	<!-- <span tal:replace="structure here/standard_html_footer" /> -->
+	<footer id="portal-footer-wrapper" i18n:domain="plone">
+      <div tal:replace="structure provider:plone.portalfooter" />
+    </footer>
+</metal:use-macro>
