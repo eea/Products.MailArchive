@@ -16,7 +16,7 @@
 #Rights Reserved.
 #
 #Contributor(s):
-#  Original Code: 
+#  Original Code:
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
@@ -50,13 +50,13 @@ def manage_addMailArchiveFolder(self, id, title='', path='', allow_zip=0, index_
     self._setObject(id, ob)
     if REQUEST is not None:
         return self.manage_main(self, REQUEST, update_menu=1)
-    
+
 class MailArchiveFolder(Folder, Utils):
     """ """
     meta_type = 'MailArchiveFolder'
     product_name = 'MailArchive'
     icon='misc_/MailArchive/cabinet.gif'
-    
+
     manage_options = (
         Folder.manage_options[:2]
         +
@@ -78,7 +78,7 @@ class MailArchiveFolder(Folder, Utils):
         #We don't really care about the download of the mailboxes.
         #The mbox format is little used outside the Unix community.
         self.allow_zip = 0  #allow_zip
-        self.mbox_ignore = ['Trash','Sent','Sent-Items'] 
+        self.mbox_ignore = ['Trash','Sent','Sent-Items']
         self.index_header = index_header
         self.index_footer = index_footer
         self._v_last_update = 0
@@ -249,7 +249,7 @@ class MailArchiveFolder(Folder, Utils):
 
     #We don't really care about the download of the mailboxes.
     #The mbox format is little used outside the Unix community.
-    
+
     #def _getOb(self, id, default=_marker):
     #    if id.endswith(".zip"):
     #        if not self.allow_zip:

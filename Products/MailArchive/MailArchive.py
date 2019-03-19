@@ -16,7 +16,7 @@
 #Rights Reserved.
 #
 #Contributor(s):
-#  Original Code: 
+#  Original Code:
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
@@ -151,6 +151,7 @@ class MailArchive(Folder, mbox):
         m = mbox_email(self.getMboxMsg(id))
         data = m.getAttachment(name)
         self.REQUEST.RESPONSE.setHeader('Content-Disposition', 'attachment;filename=%s' % self.quote_attachment(name))
+        self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/octet-stream')
         return File(name, '', data).__of__(self)
 
 InitializeClass(MailArchive)
