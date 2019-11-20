@@ -20,21 +20,25 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-import string
+from __future__ import absolute_import
+#from string import maketrans
 import time
 from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
 from os import listdir
-import urllib
+import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 from Products.PythonScripts.standard import url_quote, html_quote
 
 from Products.PythonScripts.standard import html_quote
+from six.moves import map
+import six
+from six.moves import range
 
 bad_chars = '.`~!?/@#$%^\'",<>|\\+=&*;:()[]{}'
 
 good_chars= '------------------------------'
 
-TRANSMAP = string.maketrans(bad_chars, good_chars)
+TRANSMAP = str.maketrans(bad_chars, good_chars)
 
 class Utils(object):
 
@@ -71,7 +75,7 @@ class Utils(object):
         elif value == '':
             return []
         else:
-            return filter(lambda x:x!='', value.split('\r\n'))
+            return [x for x in value.split('\r\n') if x!='']
 
     def list_to_lines(self, values):
         """Takes a list of values and returns a value for a textarea control"""
@@ -84,7 +88,7 @@ class Utils(object):
     def remove_duplicates(self, l):
         d = {}
         [ d.setdefault(i,None) for i in l ]
-        return d.keys()
+        return list(d.keys())
 
     #We don't really care about the download of the mailboxes.
     #The mbox format is little used outside the Unix community.
@@ -108,7 +112,7 @@ class Utils(object):
 
     def antispam(self, addr):
         """ All email adresses will be obfuscated. """
-        buf = map(None, addr)
+        buf = list(addr)
         for i in range(0, len(addr), choice((2,3,4))):
             buf[i] = '&#%d;' % ord(buf[i])
         return '<a href="mailto:%s">%s</a>' % (''.join(buf), ''.join(buf))
@@ -178,37 +182,37 @@ class Utils(object):
 
     def toUtf8(self, s):
         #convert to utf-8
-        if isinstance(s, unicode): return s.encode('utf-8')
+        if isinstance(s, six.text_type): return s.encode('utf-8')
         else: return str(s)
 
     def toUnicode(self, s):
         #convert to unicode
-        if not isinstance(s, unicode): return unicode(s, 'utf-8')
+        if not isinstance(s, six.text_type): return six.text_type(s, 'utf-8')
         else: return s
 
     def toUnicodeEx(self, s):
         #convert to unicode
-        if isinstance(s, unicode): return s
+        if isinstance(s, six.text_type): return s
         else:
             try:
-                return unicode(s, 'utf-8')
+                return six.text_type(s, 'utf-8')
             except:
                 try:
-                    return unicode(s, 'latin-1')
+                    return six.text_type(s, 'latin-1')
                 except:
                     return s
 
     def urlQuote(self, value):
         #escapes single characters
-        return urllib.quote(value)
+        return six.moves.urllib.parse.quote(value)
 
     def urlUnquote(self, value):
         #transform escapes in single characters
-        return urllib.unquote(value)
+        return six.moves.urllib.parse.unquote(value)
 
     def cleanupMboxId(self, id=''):
         #clean up an id given by the user
-        if isinstance(id, unicode): x = id.encode('utf-8')
+        if isinstance(id, six.text_type): x = id.encode('utf-8')
         else: x = str(id)
         x = x.strip(' -')
         x = x.translate(TRANSMAP)

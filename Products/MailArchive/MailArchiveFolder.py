@@ -20,21 +20,19 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
+from __future__ import absolute_import
 import logging
-
-#Zope imports
 from OFS.Folder import Folder
 from OFS.Image import File
-from Globals import InitializeClass, MessageDialog
+from AccessControl.class_init import InitializeClass
+from App.Dialogs import MessageDialog
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view_management_screens, view
 from AccessControl import Unauthorized
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-
-#Product imports
-from MailArchive import addMailArchive, addMailArchiveIMAP
-from Utils import Utils
-from modules.imap_client import imap_client
+from .MailArchive import addMailArchive, addMailArchiveIMAP
+from .Utils import Utils
+from .modules.imap_client import imap_client
 
 logger = logging.getLogger('Products.MailArchive')
 
@@ -55,7 +53,7 @@ class MailArchiveFolder(Folder, Utils):
     """ """
     meta_type = 'MailArchiveFolder'
     product_name = 'MailArchive'
-    icon='misc_/MailArchive/cabinet.gif'
+    zmi_icon = 'fa fa-mail-bulk '
 
     manage_options = (
         Folder.manage_options[:2]

@@ -1,27 +1,34 @@
 Changelog
 =========
 
-1.5 (2016-06-07)
-----------------
-* fix pypi issues
-* typos
+1.6-dev0 - (unreleased)
+---------------------------
+* Feature: added support for Python 3 and Plone 5.2
+  [alecghica refs #110155]
 
-1.4 (2016-06-07)
-----------------
-* cron job method added [chiridra refs #72719]
-* do not call update archives from front end [chiridra refs #72719]
-* added flag for forcing arhive update after save in Properties tab [chiridra refs #72719]
+1.5 - (2016-06-07)
+---------------------------
+* Fixed pypi issues
+* Fixed typos
 
+1.4 - (2016-06-07)
+---------------------------
+* Feature: cron job method added
+  [chiridra refs #72719]
+* Feature: do not call update archives from front end
+  [chiridra refs #72719]
+* Feature: added flag for forcing arhive update after save in Properties tab
+  [chiridra refs #72719]
 
-1.3 (2016-06-06)
-----------------
+1.3 - (2016-06-06)
+---------------------------
 * Removed version.txt
   [nituacor]
 * Fixed mbox zope id.
   [chiridra refs #72719]
 
-1.2 (2016-06-06)
-----------------
+1.2 - (2016-06-06)
+---------------------------
 * Feature: Turn MailArchive into an IMAP client
   - add support for IMAP accounts
   - fixed encoding problems
@@ -29,7 +36,7 @@ Changelog
   - cleanup
   [chiridra refs #72719]
 
-1.1 (2016-05-30)
-----------------
+1.1 - (2016-05-30)
+---------------------------
 * Initial release
 

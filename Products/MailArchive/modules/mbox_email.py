@@ -22,15 +22,17 @@
 #  Soren Roug, EEA
 
 
+from __future__ import absolute_import
 import email
 import re
 import codecs
 from os.path import join
-from email.Utils import parseaddr, parsedate, getaddresses
-from email.Header import decode_header
+from email.utils import parseaddr, parsedate, getaddresses
+from email.header import decode_header
 
-from cleanhtml import HTMLCleaner
+from .cleanhtml import HTMLCleaner
 from Products.MailArchive.Utils import Utils
+import six
 
 charset_table = {
      "window-1252": "cp1252",
@@ -44,9 +46,9 @@ def to_unicode(s, encoding):
     if encoding:
         encoding = encoding.lower()
         charset  = charset_table.get(encoding, encoding)
-        return unicode(s, charset, 'replace')
+        return six.text_type(s, charset, 'replace')
     else:
-        return unicode(s, 'ascii', 'replace')
+        return six.text_type(s, 'ascii', 'replace')
 
 
 def extractUrl(msg):
@@ -163,7 +165,7 @@ class mbox_email(Utils):
                     charset = "Latin-1"
                 charset = charset.lower()
                 charset = charset_table.get(charset, charset)
-                p = unicode(p, charset)
+                p = six.text_type(p, charset)
                 if ct_type == 'text/html':
                     mycleaner = HTMLCleaner()
                     try:
@@ -196,7 +198,7 @@ class mbox_email(Utils):
                     # We cannot know the character set, so return decoded "something"
                     p = part.get_payload(decode=True)
                 else:
-                    p = unicode(p, str(charset), 'ignore')
+                    p = six.text_type(p, str(charset), 'ignore')
                     if ct_type == 'text/html':
                         mycleaner = HTMLCleaner()
                         try:

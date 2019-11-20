@@ -20,14 +20,17 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
+from __future__ import absolute_import
+from __future__ import print_function
 import mailbox
 import sys
 import os.path
 import re
 
-from mbox_email import mbox_email
-from mbox_filters import mbox_filters
+from .mbox_email import mbox_email
+from .mbox_filters import mbox_filters
 from Products.MailArchive.Utils import Utils
+from six.moves import map
 
 SPAM = 0
 KEEP = 1
@@ -68,7 +71,7 @@ class mbox(mbox_filters, Utils):
         #open a MBOX file and process all its content
         self.cache = {}
         mb = mailbox.PortableUnixMailbox (open(self.path,'rb'))
-        msg = mb.next()
+        msg = next(mb)
         starting, ending = None, None
         while msg is not None:
             document = msg.fp.read()
@@ -95,7 +98,7 @@ class mbox(mbox_filters, Utils):
                     if ending is None: ending = d
                     else:
                         if d > ending: ending = d
-                msg = mb.next()
+                msg = next(mb)
         self.starting, self.ending = starting, ending
         mb = None
 
@@ -128,7 +131,7 @@ class mbox(mbox_filters, Utils):
     def __get_mbox_thread(self, msgs, node, depth):
         tree = []
         l = [msg for msg in msgs if msg[7] == node]
-        map(msgs.remove, l)
+        list(map(msgs.remove, l))
         for msg in l:
             tree.append((depth, msg))
             tree.extend(self.__get_mbox_thread(msgs, msg[6], depth+1))
@@ -143,11 +146,11 @@ class mbox(mbox_filters, Utils):
 
     def get_mbox_msgs(self):
         #returns the list of messages
-        return self.cache.values()
+        return list(self.cache.values())
 
     def count_mbox_msgs(self):
         #returns the number of messages
-        return len(self.cache.keys())
+        return len(list(self.cache.keys()))
 
     def sort_mbox_msgs(self, n, r):
         #returns a sorted list of messages
@@ -238,8 +241,8 @@ class mbox_imap(mbox):
 
 def main():
     b = mbox(sys.argv[1])
-    print b.cache
-    print b.sort_mbox_msgs(3)
+    print(b.cache)
+    print(b.sort_mbox_msgs(3))
 
 if __name__ == '__main__':
     main ()
