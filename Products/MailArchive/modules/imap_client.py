@@ -25,7 +25,7 @@ import imaplib
 import re
 import email
 
-MAILBOXES_PATTERN = re.compile(r'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)')
+MAILBOXES_PATTERN = re.compile(b'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)')
 
 class imap_client(object):
 
@@ -73,6 +73,7 @@ class imap_client(object):
             if rv=='OK':
                 for item in data:
                     flags, delimiter, mailbox_name = MAILBOXES_PATTERN.match(item).groups()
+                    mailbox_name = mailbox_name.decode('utf-8')
                     mailbox_name = mailbox_name.strip('"')
                     if self.isMailboxAllowed(mailbox_name, ignore_list):
                         r.append(mailbox_name)
