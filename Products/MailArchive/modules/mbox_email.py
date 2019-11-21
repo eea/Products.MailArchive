@@ -42,14 +42,15 @@ charset_table = {
      "x-unknown": "Latin-1",
 }
 
-def to_unicode(s, encoding):
+def to_unicode(my_str, encoding):
     if encoding:
         encoding = encoding.lower()
         charset  = charset_table.get(encoding, encoding)
-        return six.text_type(s, charset, 'replace')
+        return six.text_type(my_str, charset, 'replace')
     else:
-        return six.text_type(s, 'ascii', 'replace')
-
+        if isinstance(my_str, six.text_type):
+            my_str = my_str.encode('utf-8')
+        return six.text_type(my_str, 'ascii', 'replace')
 
 def extractUrl(msg):
     """ Functions to identify and extract URLs"""
@@ -83,17 +84,21 @@ def to_entities_quote(str):
             res.append(ch)
     return ''.join(res)
 
-def decode_string(str):
-    bytes, encoding = decode_header(str)[0]
-    if encoding:
-        return bytes.decode(encoding)
+def decode_string(my_str):
+    if my_str:
+        bytes, encoding = decode_header(my_str)[0]
+        if encoding:
+            return bytes.decode(encoding)
+        else:
+            return bytes
     else:
-        return bytes
+        return my_str
 
 class mbox_email(Utils):
     """ wrapper for email """
 
     def __init__(self, msg):
+        msg = msg.decode('utf-8')
         self._msg = email.message_from_string(msg)
 
     def codecs_lookup(self, encoding):

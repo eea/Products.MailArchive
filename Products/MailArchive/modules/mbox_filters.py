@@ -23,14 +23,9 @@
 #Thanks to Noah Spurrier for his code
 
 from __future__ import absolute_import
-import string
 import re
 from os.path import join
-
-# XXX Python3
-#import Globals
 from App.Common import package_home
-
 from six.moves import map
 
 BLACKWORDS = 'BLACKWORDS'
@@ -44,7 +39,7 @@ class mbox_filters:
     def __init__(self):
         file_path = join(package_home(globals()) ,BLACKWORDS)
         buf = open(file_path).readlines()
-        blackword_list = list(map(string.strip, buf))
+        blackword_list = list(map(str.strip, buf))
         self.blackword_pattern_list = self.compile_pattern_list([i for i in blackword_list if i != ''])
 
     def compile_pattern_list (self, string_list):

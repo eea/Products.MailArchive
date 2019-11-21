@@ -24,6 +24,9 @@ from __future__ import absolute_import
 import imaplib
 import re
 import email
+import logging
+
+logger = logging.getLogger('Products.MailArchive')
 
 MAILBOXES_PATTERN = re.compile(b'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)')
 
@@ -114,7 +117,12 @@ class imap_client(object):
                     if rv != 'OK':
                         #ERROR getting message: skip it
                         continue
-                    r.append(email.message_from_string(msg[0][1]))
+                    try:
+                        msg_str = msg[0][1].decode('utf-8')
+                        r.append(email.message_from_string(msg_str))
+                    except UnicodeDecodeError:
+                        logger.error("Message not imported: %s" % msg[0][1])
+                        pass
         return r
 
     def getMailBoxMessageBody(self, mailbox_name, msg_id):

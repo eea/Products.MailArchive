@@ -182,8 +182,9 @@ class Utils(object):
 
     def toUtf8(self, s):
         #convert to utf-8
-        if isinstance(s, six.text_type): return s.encode('utf-8')
-        else: return str(s)
+        if isinstance(s, six.text_type): 
+            s = s.encode('utf-8')
+        return s.decode('utf-8')
 
     def toUnicode(self, s):
         #convert to unicode
