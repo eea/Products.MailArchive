@@ -214,6 +214,7 @@ class Utils(object):
         #clean up an id given by the user
         if isinstance(id, six.text_type): x = id.encode('utf-8')
         else: x = str(id)
+        x = x.decode('utf-8')
         x = x.strip(' -')
         x = x.translate(TRANSMAP)
         return x.strip(' -')
