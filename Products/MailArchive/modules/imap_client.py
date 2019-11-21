@@ -86,6 +86,7 @@ class imap_client(object):
             if rv=='OK':
                 for item in data:
                     flags, delimiter, mailbox_name = MAILBOXES_PATTERN.match(item).groups()
+                    mailbox_name = mailbox_name.decode('utf-8')
                     mailbox_name = mailbox_name.strip('"')
                     if self.isMailboxAllowed(mailbox_name, ignore_list):
                         mailbox_counter = self.selectMailbox(mailbox_name)
