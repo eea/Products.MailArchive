@@ -183,7 +183,8 @@ class MailArchiveFolder(Folder, Utils):
             mb_id = self.cleanupMboxId(mb)
             try:
                 addMailArchiveIMAP(self, imap_client_ob, mb_id, '', mb)
-            except:
+            except Exception as err:
+                logger.error('Adding mailbox for IMAP failed: %s' % str(err))
                 pass
 
     security.declarePrivate('_reload_archives_imap')

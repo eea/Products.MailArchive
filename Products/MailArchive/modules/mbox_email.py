@@ -29,7 +29,6 @@ import codecs
 from os.path import join
 from email.utils import parseaddr, parsedate, getaddresses
 from email.header import decode_header
-
 from .cleanhtml import HTMLCleaner
 from Products.MailArchive.Utils import Utils
 import six
@@ -98,7 +97,9 @@ class mbox_email(Utils):
     """ wrapper for email """
 
     def __init__(self, msg):
-        msg = msg.decode('utf-8')
+#        if not isinstance(msg, six.text_type):
+#            print("DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+#            msg = msg.decode('utf-8')
         self._msg = email.message_from_string(msg)
 
     def codecs_lookup(self, encoding):
