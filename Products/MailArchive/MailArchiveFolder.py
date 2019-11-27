@@ -52,7 +52,7 @@ class MailArchiveFolder(Folder, Utils):
     """ """
     meta_type = 'MailArchiveFolder'
     product_name = 'MailArchive'
-    zmi_icon = 'fa fa-mail-bulk '
+    zmi_icon = 'fa fa-mail-bulk'
 
     manage_options = (
         Folder.manage_options[:2]
