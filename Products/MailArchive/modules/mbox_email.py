@@ -21,8 +21,6 @@
 #    Dragos Chirila (Finsiel Romania)
 #  Soren Roug, EEA
 
-
-from __future__ import absolute_import
 import email
 import re
 import codecs

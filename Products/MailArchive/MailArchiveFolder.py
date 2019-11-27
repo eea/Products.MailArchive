@@ -20,7 +20,6 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-from __future__ import absolute_import
 import logging
 from OFS.Folder import Folder
 from OFS.Image import File

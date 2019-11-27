@@ -20,15 +20,12 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-from __future__ import absolute_import
-#from string import maketrans
 import time
 from random import choice
 from os.path import join, getmtime, isdir, isfile, getsize
 from os import listdir
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 from Products.PythonScripts.standard import url_quote, html_quote
-
 from Products.PythonScripts.standard import html_quote
 from six.moves import map
 import six

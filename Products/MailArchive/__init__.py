@@ -20,10 +20,7 @@
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 
-
-from __future__ import absolute_import
 from App.ImageFile import ImageFile
-
 from . import MailArchiveFolder
 
 def initialize(context):

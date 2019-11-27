@@ -22,7 +22,6 @@
 #
 #Thanks to Noah Spurrier for his code
 
-from __future__ import absolute_import
 import re
 from os.path import join
 from App.Common import package_home

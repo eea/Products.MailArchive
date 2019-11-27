@@ -1,11 +1,9 @@
-from __future__ import absolute_import
 import os, sys
 if __name__ == '__main__':
     exec(compile(open(os.path.join(sys.path[0], 'framework.py'), "rb").read(), os.path.join(sys.path[0], 'framework.py'), 'exec'))
     
 from Testing import ZopeTestCase
 import email
-
 from Products.MailArchive.modules.mbox_email import mbox_email
 
 MSG_PATH = os.path.join(INSTANCE_HOME, r'Products/MailArchive/tests/data')

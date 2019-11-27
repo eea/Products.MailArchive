@@ -24,8 +24,7 @@
 #
 # $Id: cleanhtml.py 2783 2004-12-08 16:40:38Z roug $
 #
-from __future__ import absolute_import
-from __future__ import print_function
+
 import string
 import six.moves.html_entities
 from six.moves.html_parser import HTMLParser
