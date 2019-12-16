@@ -98,7 +98,7 @@ class mbox_email(Utils):
 #        if not isinstance(msg, six.text_type):
 #            print("DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 #            msg = msg.decode('utf-8')
-        self._msg = email.message_from_string(msg)
+        self._msg = email.message_from_string(msg.decode('utf-8'))
 
     def codecs_lookup(self, encoding):
         if encoding is not None:
