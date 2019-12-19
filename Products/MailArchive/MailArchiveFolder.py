@@ -32,6 +32,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from .MailArchive import addMailArchive, addMailArchiveIMAP
 from .Utils import Utils
 from .modules.imap_client import imap_client
+from zope.interface import alsoProvides
+from plone.protect.interfaces import IDisableCSRFProtection
+
 
 logger = logging.getLogger('Products.MailArchive')
 
@@ -417,7 +420,11 @@ class MailArchiveFolder(Folder, Utils):
 
     security.declareProtected(view, 'cron_update_archives')
     def cron_update_archives(self, key, REQUEST=None, RESPONSE=None):
-        """ """
+        """ cron update method
+        """
+        if REQUEST is not None:
+            alsoProvides(REQUEST, IDisableCSRFProtection)
+
         if key == self.cron_key:
             self.updateArchives(0)
             return 'OK: Archives updated [%s]' % self.absolute_url()
