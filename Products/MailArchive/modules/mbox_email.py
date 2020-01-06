@@ -95,8 +95,8 @@ class mbox_email(Utils):
     """ wrapper for email """
 
     def __init__(self, msg):
-#        if not isinstance(msg, six.text_type):
-#            msg = msg.decode('utf-8')
+        if not isinstance(msg, six.text_type):
+            msg = msg.decode('utf-8')
         self._msg = email.message_from_string(msg)
 
     def codecs_lookup(self, encoding):
