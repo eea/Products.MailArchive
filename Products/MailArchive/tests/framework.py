@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# ZopeTestCase 
+# ZopeTestCase
 #
 # COPY THIS FILE TO YOUR 'tests' DIRECTORY.
 #
@@ -12,14 +12,14 @@
 # instance's Products and lib/python directories respectively.
 #
 # If you explicitly set INSTANCE_HOME prior to running the tests,
-# auto-detection is disabled and the specified path will be used 
+# auto-detection is disabled and the specified path will be used
 # instead.
 #
 # If the 'tests' directory contains a custom_zodb.py file, INSTANCE_HOME
 # will be adjusted to use it.
 #
-# If you set the ZEO_INSTANCE_HOME environment variable a ZEO setup 
-# is assumed, and you can attach to a running ZEO server (via the 
+# If you set the ZEO_INSTANCE_HOME environment variable a ZEO setup
+# is assumed, and you can attach to a running ZEO server (via the
 # instance's custom_zodb.py).
 #
 ##############################################################################
@@ -36,6 +36,10 @@
 #     framework()
 #
 ##############################################################################
+
+import os
+import sys
+import Testing
 
 __version__ = '0.2.3'
 
@@ -64,14 +68,16 @@ if 'Testing' not in sys.modules:
             zope_home = os.path.dirname(os.path.dirname(p))
             sys.path[:1] = [p0, p, zope_home]
             break
-        p, d = s and ('','') or os.path.split(p)
+        p, d = s and ('', '') or os.path.split(p)
     else:
-        print('Unable to locate Testing package.', end=' ')
+        print('Unable to locate Testing package.')
         print('You might need to set SOFTWARE_HOME.')
         sys.exit(1)
 
-import Testing, unittest
-exec(compile(open(os.path.join(os.path.dirname(Testing.__file__), 'common.py'), "rb").read(), os.path.join(os.path.dirname(Testing.__file__), 'common.py'), 'exec'))
+exec(compile(open(os.path.join(os.path.dirname(Testing.__file__), 'common.py'),
+                  "rb").read(),
+             os.path.join(os.path.dirname(Testing.__file__), 'common.py'),
+             'exec'))
 
 # Include ZopeTestCase support
 #
@@ -80,7 +86,7 @@ if 1:   # Create a new scope
     p = os.path.join(os.path.dirname(Testing.__file__), 'ZopeTestCase')
 
     if not os.path.isdir(p):
-        print('Unable to locate ZopeTestCase package.', end=' ')
+        print('Unable to locate ZopeTestCase package.')
         print('You might need to install ZopeTestCase.')
         sys.exit(1)
 
@@ -89,7 +95,8 @@ if 1:   # Create a new scope
 
     f = 0
     if os.path.exists(ztc_common_global):
-        exec(compile(open(ztc_common_global, "rb").read(), ztc_common_global, 'exec'))
+        exec(compile(open(ztc_common_global, "rb").read(), ztc_common_global,
+                     'exec'))
         f = 1
     if os.path.exists(ztc_common):
         exec(compile(open(ztc_common, "rb").read(), ztc_common, 'exec'))
@@ -99,9 +106,4 @@ if 1:   # Create a new scope
         print('Unable to locate %s.' % ztc_common)
         sys.exit(1)
 
-# Debug
-#
-#print 'SOFTWARE_HOME: %s' % os.environ.get('SOFTWARE_HOME', 'Not set')
-#print 'INSTANCE_HOME: %s' % os.environ.get('INSTANCE_HOME', 'Not set')
 sys.stdout.flush()
-
