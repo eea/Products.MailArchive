@@ -4,12 +4,17 @@ import os
 from setuptools import setup, find_packages
 
 NAME = 'Products.MailArchive'
-VERSION = '1.6'
+PATH = NAME.split('.') + ['version.txt']
+VERSION = open(os.path.join(*PATH)).read().strip()
 
 setup(name=NAME,
       version=VERSION,
       description="Browse a mail archive in Unix MBOX format",
-      long_description=open("README.rst").read(),
+      long_description_content_type="text/x-rst",
+      long_description=(
+          open("README.rst").read() + "\n" +
+          open("CHANGELOG.rst").read()
+      ),
       classifiers=[
            "Framework :: Zope2",
            "Programming Language :: Python",

@@ -1,5 +1,7 @@
-include *.txt *.rst
-recursive-include Products *
-recursive-include docs *
-global-exclude *py[co]
+include *.md *.rst *.txt
+graft docs
+graft Products
+global-exclude *pyc
 global-exclude *~
+global-exclude *.un~
+global-include *.mo

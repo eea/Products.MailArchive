@@ -1,22 +1,22 @@
-#The contents of this file are subject to the Mozilla Public
-#License Version 1.1 (the "License"); you may not use this file
-#except in compliance with the License. You may obtain a copy of
-#the License at http://www.mozilla.org/MPL/
+# The contents of this file are subject to the Mozilla Public
+# License Version 1.1 (the "License"); you may not use this file
+# except in compliance with the License. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
 #
-#Software distributed under the License is distributed on an "AS
-#IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
-#implied. See the License for the specific language governing
-#rights and limitations under the License.
+# Software distributed under the License is distributed on an "AS
+# IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+# implied. See the License for the specific language governing
+# rights and limitations under the License.
 #
-#The Original Code is MailArchive 0.5
+# The Original Code is MailArchive 0.5
 #
-#The Initial Owner of the Original Code is European Environment
-#Agency (EEA).  Portions created by Finsiel Romania are
-#Copyright (C) 2000 by European Environment Agency.  All
-#Rights Reserved.
+# The Initial Owner of the Original Code is European Environment
+# Agency (EEA).  Portions created by Finsiel Romania are
+# Copyright (C) 2000 by European Environment Agency.  All
+# Rights Reserved.
 #
-#Contributor(s):
-#  Original Code: 
+# Contributor(s):
+#  Original Code:
 #    Cornel Nitu (Finsiel Romania)
 #    Dragos Chirila (Finsiel Romania)
 #  Soren Roug, EEA
@@ -24,7 +24,6 @@
 import email
 import re
 import codecs
-from os.path import join
 from email.utils import parseaddr, parsedate, getaddresses
 from email.header import decode_header
 from .cleanhtml import HTMLCleaner
@@ -32,28 +31,31 @@ from Products.MailArchive.Utils import Utils
 import six
 
 charset_table = {
-     "window-1252": "cp1252",
-     "windows-1252": "cp1252",
-     "nil": "Latin-1",
-     "default_charset": "Latin-1",
-     "x-unknown": "Latin-1",
+    "window-1252": "cp1252",
+    "windows-1252": "cp1252",
+    "nil": "Latin-1",
+    "default_charset": "Latin-1",
+    "x-unknown": "Latin-1",
 }
+
 
 def to_unicode(my_str, encoding):
     if encoding:
         encoding = encoding.lower()
-        charset  = charset_table.get(encoding, encoding)
+        charset = charset_table.get(encoding, encoding)
         return six.text_type(my_str, charset, 'replace')
     else:
         if isinstance(my_str, six.text_type):
             my_str = my_str.encode('utf-8')
         return six.text_type(my_str, 'ascii', 'replace')
 
+
 def extractUrl(msg):
     """ Functions to identify and extract URLs"""
     strg = re.sub(r'(?P<url>http[s]?://[-_&;,?:~=%#+/.0-9a-zA-Z]+)',
                   r'<a rel="nofollow" href="\g<url>">\g<url></a>', msg)
     return strg.strip()
+
 
 def to_entities(str):
     res = []
@@ -64,6 +66,7 @@ def to_entities(str):
         else:
             res.append(ch)
     return ''.join(res)
+
 
 def to_entities_quote(str):
     res = []
@@ -81,6 +84,7 @@ def to_entities_quote(str):
             res.append(ch)
     return ''.join(res)
 
+
 def decode_string(my_str):
     if my_str:
         bytes, encoding = decode_header(my_str)[0]
@@ -90,6 +94,7 @@ def decode_string(my_str):
             return bytes
     else:
         return my_str
+
 
 class mbox_email(Utils):
     """ wrapper for email """
@@ -114,14 +119,16 @@ class mbox_email(Utils):
         buf = getaddresses(self._msg.get_all('to', ''))
         for i in buf:
             header = decode_header(i[0])
-            data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
+            data = ''.join([to_unicode(s, enc) for s, enc in header
+                            if self.codecs_lookup(enc)])
             res.append((to_entities_quote(data), i[1]))
         return res
-            
+
     def getFrom(self):
         buf = parseaddr(self._msg.get('from', ''))
         header = decode_header(buf[0])
-        data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
+        data = ''.join([to_unicode(s, enc) for s, enc in header if
+                        self.codecs_lookup(enc)])
         return (to_entities_quote(data), buf[1])
 
     def getCC(self):
@@ -129,14 +136,16 @@ class mbox_email(Utils):
         buf = getaddresses(self._msg.get_all('cc', ''))
         for i in buf:
             header = decode_header(i[0])
-            data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
+            data = ''.join([to_unicode(s, enc) for s, enc in header if
+                            self.codecs_lookup(enc)])
             res.append((to_entities_quote(data), i[1]))
         return res
 
     def getSubject(self):
         buf = self._msg.get('subject', '')
         header = decode_header(buf)
-        data = ''.join([to_unicode(s, enc) for s, enc in header if self.codecs_lookup(enc)])
+        data = ''.join([to_unicode(s, enc) for s, enc in header if
+                        self.codecs_lookup(enc)])
         return to_entities_quote(data)
 
     def getSubjectEx(self):
@@ -174,7 +183,7 @@ class mbox_email(Utils):
                     try:
                         p = mycleaner.clean(p)
                         p = to_entities(p)
-                    except:
+                    except Exception:
                         p = to_entities_quote(p)
                     p = p.replace('@', '&#64;')
                 else:
@@ -182,7 +191,7 @@ class mbox_email(Utils):
                     p = p.replace('@', '&#64;')
                     p = p.replace('\n', '<br />')
                     p = p.replace('\r', '')
-                    p =  extractUrl(p)
+                    p = extractUrl(p)
                     p = '''<div style="font-family: 'Courier New', monospace; white-space: pre-wrap">%s</div>''' % p
                 payloads.append(p.encode('ascii'))
                 return "".join(payloads)
@@ -198,7 +207,8 @@ class mbox_email(Utils):
                 p = part.get_payload(decode=True)
                 charset = part.get_content_charset()
                 if charset is None:
-                    # We cannot know the character set, so return decoded "something"
+                    # We cannot know the character set,
+                    # so return decoded "something"
                     p = part.get_payload(decode=True)
                 else:
                     p = six.text_type(p, str(charset), 'ignore')
@@ -206,14 +216,14 @@ class mbox_email(Utils):
                         mycleaner = HTMLCleaner()
                         try:
                             p = mycleaner.clean(p)
-                        except:
+                        except Exception:
                             pass
                         p = p.replace('@', '&#64;')
                     else:
                         p = p.replace('@', '&#64;')
                         p = p.replace('\n', '<br />')
                         p = p.replace('\r', '')
-                        p =  extractUrl(p)
+                        p = extractUrl(p)
                         p = u'''<div style="font-family: 'Courier New', monospace; white-space: pre-wrap">%s</div>''' % p
                 payloads.append(p)
                 return u''.join(payloads)
@@ -227,13 +237,6 @@ class mbox_email(Utils):
             if filename:
                 filename = decode_string(filename)
                 atts.append((filename, self.urlQuote(self.toUtf8(filename))))
-            #if not filename:
-            #    ext = mimetypes.guess_extension(part.get_type())
-            #    if not ext:
-            #        # Use a generic bag-of-bits extension
-            #        ext = '.bin'
-            #        filename = 'unknown%03d%s' % (counter, ext)
-            #counter += 1
         return atts
 
     def getAttachment(self, filename):
