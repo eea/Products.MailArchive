@@ -5,6 +5,8 @@ Changelog
 ---------------------------
 * Feature: added support for Python 3 and Plone 5.2
   [alecghica refs #110155]
+* Feature: updated Jenkins pipeline
+  [alecghica refs #110159]
 
 1.5 - (2016-06-07)
 ---------------------------

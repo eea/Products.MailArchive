@@ -102,26 +102,34 @@ pipeline {
 
           "Plone4": {
             node(label: 'docker') {
+              catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                 sh '''docker run -i --rm --name="$BUILD_TAG-plone4" -e GIT_BRANCH="$BRANCH_NAME" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plone-test:4 -v -vv -s $GIT_NAME'''
+              }
              }
 
           },
 
           "Plone5 & Python2": {
             node(label: 'docker') {
+              catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                 sh '''docker run -i --rm --name="$BUILD_TAG-plone5" -e GIT_BRANCH="$BRANCH_NAME" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plone-test:5 -v -vv -s $GIT_NAME'''
+              }
              }
           },
 
           "Plone5 & Python3": {
             node(label: 'docker') {
+              catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                 sh '''docker run -i --rm --name="$BUILD_TAG-python3" -e GIT_BRANCH="$BRANCH_NAME" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plone-test:5-python3 -v -vv -s $GIT_NAME'''
+              }
             }
           },
 
           "PloneSaaS": {
             node(label: 'docker') {
+              catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                 sh '''docker run -i --rm --name="$BUILD_TAG-python3" -e GIT_BRANCH="$BRANCH_NAME" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plonesaas-devel -v -vv -s $GIT_NAME'''
+              }
             }
           }
         )
