@@ -118,7 +118,7 @@ pipeline {
           "PloneSaaS": {
             node(label: 'docker') {
               catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                sh '''docker run -i --rm --name="$BUILD_TAG-plonesaas" -e GIT_BRANCH="$BRANCH_NAME" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plonesaas-devel -v -vv -s $GIT_NAME'''
+                sh '''docker run -i --rm --name="$BUILD_TAG-plonesaas" -e GIT_NAME="$GIT_NAME" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/plonesaas-devel /debug.sh bin/test --test-path /plone/instance/src/$GIT_NAME -v -vv -s $GIT_NAME'''
               }
             }
           }
