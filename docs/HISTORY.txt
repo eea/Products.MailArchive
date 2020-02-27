@@ -1,7 +1,17 @@
 Changelog
 =========
 
-1.6-dev0 - (unreleased)
+2.0 - (2020-02-25)
+---------------------------
+* Change: Develop #110159
+  [alecghica]
+
+1.9 - (2020-02-14)
+---------------------------
+* Change: Implement automatic release
+  [valentinab25]
+
+1.6 - (2020-02-14)
 ---------------------------
 * Feature: added support for Python 3 and Plone 5.2
   [alecghica refs #110155]
@@ -12,6 +22,8 @@ Changelog
 ---------------------------
 * Fixed pypi issues
 * Fixed typos
+* Turn MailArchive into an IMAP client
+  [chiridra]
 
 1.4 - (2016-06-07)
 ---------------------------

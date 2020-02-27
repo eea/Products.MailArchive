@@ -3,7 +3,7 @@ pipeline {
 
   environment {
         GIT_NAME = "Products.MailArchive"
-        GIT_HISTORYFILE = "CHANGELOG.rst"
+        GIT_HISTORYFILE = "docs/HISTORY.txt"
         SONARQUBE_TAGS = "plone5demo.eionet.europa.eu"
     }
 
