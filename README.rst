@@ -1,6 +1,16 @@
 ===========
 MailArchive
 ===========
+ 
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/Products.MailArchive/develop&subject=develop
+  :target: https://ci.eionet.europa.eu/job/eea/job/Products.MailArchive/job/develop/display/redirect
+  :alt: Develop
+.. image:: https://ci.eionet.europa.eu/buildStatus/icon?job=eea/Products.MailArchive/master&subject=master
+  :target: https://ci.eionet.europa.eu/job/eea/job/Products.MailArchive/job/master/display/redirect
+  :alt: Master
+.. image:: https://img.shields.io/github/v/release/eea/Products.MailArchive
+  :target: https://eggrepo.eea.europa.eu/d/Products.MailArchive/
+  :alt: Release
 
 .. Contents ::
 
