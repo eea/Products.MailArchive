@@ -32,6 +32,9 @@ from .Utils import Utils
 from .modules.imap_client import imap_client
 from zope.interface import alsoProvides
 from plone.protect.interfaces import IDisableCSRFProtection
+import email
+from email.policy import default
+import os
 
 
 logger = logging.getLogger('Products.MailArchive')
@@ -500,5 +503,58 @@ class MailArchiveFolder(Folder, Utils):
             RESPONSE.setStatus(404)
             return RESPONSE
 
+    security.declareProtected(view, 'cron_export_mails')
+
+    def cron_export_mails(self, key, export=None, REQUEST=None,
+                          RESPONSE=None):
+        """ Cron export mails as eml files to outpath/mailarchive.
+            Accepts export query parameter representing mailbox id(s)
+        """
+
+        if REQUEST is not None:
+            alsoProvides(REQUEST, IDisableCSRFProtection)
+
+        if key == self.cron_key:
+            outpath = f"{self.getPath()}/mailarchive"
+            if not outpath:
+                outpath = f"{os.environ.get('CLIENT_HOME')}/mailarchive"
+            mboxes = self.getArchives()
+            if  export:
+                if not isinstance(export, list):
+                    export = [export]
+                mboxes = [mb for mb in mboxes if mb.title_or_id() in export]
+            if not mboxes:
+                return 'ERROR: No mailboxes found'
+            for mbox in mboxes:
+                dir_path = f'{outpath}/{mbox.title_or_id()}'
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+                messages = mbox.sortMboxMsgs('thread', '')
+                for message in messages:
+                    if message[0] == 0:
+                        subject = self.toUnicodeEx(
+                            mbox.get_msg_subject(message[1]))[:254]
+                        subject = self.slugify(subject)
+                        subj_dir_path = f'{dir_path}/{subject}'
+                        if not os.path.exists(subj_dir_path):
+                            os.makedirs(subj_dir_path)
+
+                    m_id = mbox.get_msg_id(message[1])
+                    msg = email.message_from_bytes(mbox.getMboxMsg(m_id),
+                                                   policy=default)
+                    m_date = self.tupleToShortDate(mbox.get_msg_date(
+                        message[1]))
+                    m_subj = self.toUnicodeEx(
+                        mbox.get_msg_subject(message[1]))[:150]
+                    m_author = self.toUnicodeEx(mbox.get_msg_from(message[1]))
+                    f_name = f'{m_date}_{m_subj}_{m_author}'
+                    f_name = self.slugify(f_name)
+                    fp = f'{subj_dir_path}/{f_name}.eml'
+                    mbox.save_to_eml_file(msg, save_to_file_path=fp)
+
+            return 'OK: EML files created here: [%s]' % outpath
+        else:
+            RESPONSE.setStatus(404)
+            return RESPONSE
 
 InitializeClass(MailArchiveFolder)

@@ -31,6 +31,10 @@ from Products.PythonScripts.standard import url_quote
 from Products.PythonScripts.standard import html_quote
 import six
 from six.moves import range
+import unicodedata
+import re
+import email
+from email.policy import default
 
 bad_chars = '.`~!?/@#$%^\'",<>|\\+=&*;:()[]{}'
 
@@ -101,6 +105,36 @@ class Utils(object):
         d = {}
         [d.setdefault(i, None) for i in l]
         return list(d.keys())
+
+    def slugify(self, value, allow_unicode=False):
+        """
+        Taken from
+        https://github.com/django/django/blob/master/django/utils/text.py
+        Convert to ASCII if 'allow_unicode' is False.
+        Convert spaces or repeated dashes to single dashes.
+        Remove characters that aren't alphanumerics,
+        underscores, or hyphens. Convert to lowercase. Also strip leading and
+        trailing whitespace, dashes, and underscores.
+        """
+        value = str(value)
+        if allow_unicode:
+            value = unicodedata.normalize('NFKC', value)
+        else:
+            value = unicodedata.normalize(
+                'NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub(r'[^\w\s-]', '', value.lower())
+        return re.sub(r'[-\s]+', '-', value).strip('-_')
+
+    def save_to_eml_file(self, msg, save_to_file_path):
+        """ Save msg to file """
+        try:
+            with open(
+                save_to_file_path, "w",
+                    encoding="utf-8", errors="replace") as fp:
+                gen = email.generator.Generator(fp, policy=default)
+                gen.flatten(msg)
+        except Exception as e:
+            raise Exception(f"Error saving email to EML file: {e}")
 
     # We don't really care about the download of the mailboxes.
     # The mbox format is little used outside the Unix community.
