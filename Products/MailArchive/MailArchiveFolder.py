@@ -515,9 +515,9 @@ class MailArchiveFolder(Folder, Utils):
             alsoProvides(REQUEST, IDisableCSRFProtection)
 
         if key == self.cron_key:
-            outpath = f"{self.getPath()}/mailarchive"
+            outpath = '{}/mailarchive'.format(self.getPath())
             if not outpath:
-                outpath = f"{os.environ.get('CLIENT_HOME')}/mailarchive"
+                outpath = '{}/mailarchive'.format(os.environ.get('CLIENT_HOME'))
             mboxes = self.getArchives()
             if  export:
                 if not isinstance(export, list):
@@ -526,7 +526,7 @@ class MailArchiveFolder(Folder, Utils):
             if not mboxes:
                 return 'ERROR: No mailboxes found'
             for mbox in mboxes:
-                dir_path = f'{outpath}/{mbox.title_or_id()}'
+                dir_path = '{}/{}'.format(outpath, mbox.title_or_id())
                 if not os.path.exists(dir_path):
                     os.makedirs(dir_path)
                 messages = mbox.sortMboxMsgs('thread', '')
@@ -535,7 +535,7 @@ class MailArchiveFolder(Folder, Utils):
                         subject = self.toUnicodeEx(
                             mbox.get_msg_subject(message[1]))[:254]
                         subject = self.slugify(subject)
-                        subj_dir_path = f'{dir_path}/{subject}'
+                        subj_dir_path = '{}/{}'.format(dir_path, subject)
                         if not os.path.exists(subj_dir_path):
                             os.makedirs(subj_dir_path)
 
@@ -547,9 +547,9 @@ class MailArchiveFolder(Folder, Utils):
                     m_subj = self.toUnicodeEx(
                         mbox.get_msg_subject(message[1]))[:150]
                     m_author = self.toUnicodeEx(mbox.get_msg_from(message[1]))
-                    f_name = f'{m_date}_{m_subj}_{m_author}'
+                    f_name = '{}_{}_{}'.format(m_date, m_subj, m_author)
                     f_name = self.slugify(f_name)
-                    fp = f'{subj_dir_path}/{f_name}.eml'
+                    fp = '{}/{}.eml'.format(subj_dir_path, f_name)
                     mbox.save_to_eml_file(msg, save_to_file_path=fp)
 
             return 'OK: EML files created here: [%s]' % outpath

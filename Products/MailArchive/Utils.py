@@ -134,7 +134,8 @@ class Utils(object):
                 gen = email.generator.Generator(fp, policy=default)
                 gen.flatten(msg)
         except Exception as e:
-            raise Exception(f"Error saving email to EML file: {e}")
+            raise Exception(
+                'Error saving email to EML file: {}'.format(str(e)))
 
     # We don't really care about the download of the mailboxes.
     # The mbox format is little used outside the Unix community.
